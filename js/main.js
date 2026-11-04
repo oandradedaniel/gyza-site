@@ -308,7 +308,8 @@
       const req = $$('input[required]', f);
       let ok = true;
       req.forEach(i => {
-        const bad = !i.value.trim() || (i.type === 'email' && !/^\S+@\S+\.\S+$/.test(i.value));
+        const bad = !i.value.trim() || (i.type === 'email' && !/^\S+@\S+\.\S+$/.test(i.value))
+          || (i.name === 'whatsapp' && i.value.replace(/\D/g, '').length < 10);
         i.classList.toggle('is-error', bad);
         if (bad) ok = false;
       });
@@ -333,6 +334,16 @@
       window.open(`https://wa.me/5547992606871?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
     });
     $$('input[required]', f).forEach(i => i.addEventListener('input', () => i.classList.remove('is-error')));
+    // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
+    const tel = $('input[name="whatsapp"]', f);
+    tel.maxLength = 15;
+    tel.addEventListener('input', () => {
+      const n = tel.value.replace(/\D/g, '').slice(0, 11);
+      const corte = n.length > 10 ? 7 : 6;            // celular com 9 dígitos ou fixo com 8
+      tel.value = n.length <= 2 ? (n ? `(${n}` : '')
+        : n.length <= corte ? `(${n.slice(0, 2)}) ${n.slice(2)}`
+        : `(${n.slice(0, 2)}) ${n.slice(2, corte)}-${n.slice(corte)}`;
+    });
     // "Outros" abre um campo curto para descrever
     const outros = $('[data-outros]', f), campo = $('.field--outros', f);
     outros.addEventListener('change', () => {

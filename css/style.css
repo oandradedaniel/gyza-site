@@ -446,7 +446,12 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .nav { gap: 16px; padding-left: 18px; }
   .nav__links { display: none; }
   .nav__logo svg { width: 74px; }
-  .hero__mark { width: 120vw; bottom: 4vh; }
+  /* celular: a abertura acompanha o conteúdo e o nome fica logo abaixo do botão, encoberto pela seção clara */
+  .hero { height: auto; min-height: 0; padding-bottom: calc(120vw * 200.45 / 750 * 1.02 + 30px); }
+  .hero__title { font-size: min(7.4vw, 32px); letter-spacing: -.045em; }
+  .hero__content { padding-top: 132px; }
+  .hero__mark { width: 120vw; bottom: 2vw; }
+  .servicos { margin-top: -18px; }
   .orcamento__inner { grid-template-columns: 1fr; }
   .orcamento__copy { position: static; }
   .form__row { grid-template-columns: 1fr; }

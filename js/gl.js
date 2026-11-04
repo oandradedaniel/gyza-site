@@ -83,6 +83,9 @@ const glassFrag = /* glsl */`
   uniform float uTime;
   uniform float uGlow;
   uniform float uWhite;
+  uniform float uDim;
+  uniform float uFade;
+  uniform float uSweep;
   varying vec3 vN;
   varying vec3 vNv;
   varying vec3 vP;
@@ -132,8 +135,13 @@ const glassFrag = /* glsl */`
              + band * vec3(0.55, 0.7, 1.0);
     if (uBack > 0.5) col *= 0.5;
     col *= 0.55 + 0.45 * max(uGlow, 0.35);
+    // fatias que recuam ficam um pouco mais apagadas
+    col *= 1.0 - 0.3 * uDim;
+    // brilho que percorre a fatia ativa quando ela muda (faixa inclinada, de baixo para cima)
+    float sy = vP.y + vP.x * 0.12 - uSweep;
+    col += exp(-sy * sy / 0.011) * vec3(0.42, 0.58, 0.95) * step(-50.0, uSweep) * (uBack > 0.5 ? 0.45 : 1.0);
 
-    float a = uBack > 0.5 ? 0.92 : 0.8;
+    float a = (uBack > 0.5 ? 0.92 : 0.8) * uFade * (1.0 - 0.1 * uDim);
     if (uRefl > 0.5) {
       a *= 0.32 * smoothstep(uFloor - 1.6, uFloor, vP.y);
     }
@@ -160,6 +168,7 @@ const edgeFrag = /* glsl */`
   uniform float uFloor;
   uniform vec3 uColor;
   uniform float uSoft;
+  uniform float uA;
   varying float vZ;
   varying float vY;
   varying vec3 vNv;
@@ -169,6 +178,7 @@ const edgeFrag = /* glsl */`
     // nítida só na frente; atrás a aresta aparece como um brilho desfocado pelo vidro
     float a = uSoft > 0.5 ? (1.0 - k) * 0.22 * core : mix(0.0, 1.0, k) * core;
     if (uRefl > 0.5) a *= 0.25 * smoothstep(uFloor - 1.4, uFloor, vY);
+    a *= uA;
     gl_FragColor = vec4(uColor * (0.7 + k), a);
   }
 `;
@@ -231,7 +241,7 @@ function pyramid() {
 
   const uniforms = (extra = {}) => ({
     uBg: { value: rt.texture }, uEnv: { value: env }, uStudio: { value: STUDIO }, uRes: { value: res },
-    uBack: { value: 0 }, uGlow: { value: 0 }, uWhite: { value: 0 }, uRefl: { value: 0 }, uFloor: { value: FLOOR }, uTime: { value: 0 },
+    uBack: { value: 0 }, uGlow: { value: 0 }, uDim: { value: 0 }, uFade: { value: 0 }, uSweep: { value: -99 }, uWhite: { value: 0 }, uRefl: { value: 0 }, uFloor: { value: FLOOR }, uTime: { value: 0 },
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, { value: v }])),
   });
   const mats = [];
@@ -247,7 +257,7 @@ function pyramid() {
   const edgeMat = (refl, soft = 0) => {
     const m = new THREE.ShaderMaterial({
       vertexShader: edgeVert, fragmentShader: edgeFrag,
-      uniforms: { uNear: { value: 9.3 }, uFar: { value: 11.6 }, uRefl: { value: refl }, uFloor: { value: FLOOR }, uSoft: { value: soft }, uColor: { value: new THREE.Color(0x8fb0f0) } },
+      uniforms: { uNear: { value: 9.3 }, uFar: { value: 11.6 }, uRefl: { value: refl }, uFloor: { value: FLOOR }, uSoft: { value: soft }, uA: { value: 0 }, uColor: { value: new THREE.Color(0x8fb0f0) } },
       transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
     });
     edgeMats.push(m);
@@ -255,8 +265,9 @@ function pyramid() {
   };
 
   // arestas como tubos finos, para brilharem de verdade
-  const softEdge = edgeMat(0, 1);
   function edges(geo, mat) {
+    const softEdge = edgeMat(0, 1);
+    const own = [mat, softEdge];
     const grp = new THREE.Group();
     const p = new THREE.EdgesGeometry(geo).attributes.position;
     const a = new THREE.Vector3(), b = new THREE.Vector3();
@@ -270,6 +281,7 @@ function pyramid() {
         grp.add(tube);
       });
     }
+    grp.userData.mats = own;
     return grp;
   }
 
@@ -286,8 +298,12 @@ function pyramid() {
     // aresta acompanha a camada: azul na ponta, quase branca na base
     const e = i === 0 ? em : edgeMat(0);
     if (i) e.uniforms.uColor.value.lerp(new THREE.Color(0xe6ecf7), WHITE[i]);
-    s.group.add(b, fr, edges(s.geo, e));
-    s.glow = 0; s.lift = 0;
+    const eg = edges(s.geo, e);
+    s.group.add(b, fr, eg);
+    s.edgeMats = eg.userData.mats;
+    // molas por fatia: elevação, escala, brilho, recuo, entrada
+    s.sp = { lift: { x: 0, v: 0 }, grow: { x: 1, v: 0 }, glow: { x: 0, v: 0 }, dim: { x: 0, v: 0 }, app: { x: reduce ? 1 : 0, v: 0 } };
+    s.off = 0; s.grow = 1;
     main.add(s.group);
   });
 
@@ -346,10 +362,9 @@ function pyramid() {
   });
   const v3 = new THREE.Vector3();
   const grow = calls.map(() => 0);
-  function placeCalls(y, step) {
+  function placeCalls(y, active, dt) {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     const side = w * (w < 600 ? 0.7 : 0.78);   // a linha sai para a lateral direita
-    const active = Math.round(step);
     // base da pirâmide na tela (para o rótulo do celular)
     let baseY = 0;
     for (let k = 0; k < 4; k++) {
@@ -364,11 +379,13 @@ function pyramid() {
       const a = faceAng(k) + y;
       const s = slices[i];
       const faceD = (half * (1 - s.mid / H)) * (s.grow || 1) + 0.02;
-      v3.set(Math.sin(a) * faceD, main.position.y + s.mid, Math.cos(a) * faceD).project(camera);
+      v3.set(Math.sin(a) * faceD, main.position.y + s.mid + s.off, Math.cos(a) * faceD).project(camera);
       const x = (v3.x * 0.5 + 0.5) * w, py = (-v3.y * 0.5 + 0.5) * h;
       // só a frente ativa aparece, e só quando a face já está de frente
       const target = i === active ? Math.max(0, Math.min(1, (Math.cos(a) - 0.9) / 0.08)) : 0;
-      grow[i] = lerp(grow[i], target, target > grow[i] ? 0.07 : 0.2);
+      // suavização independente da taxa de quadros: a linha se desenha junto com o giro e recolhe rápido
+      grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * (target > grow[i] ? 7 : 16)));
+      const drawn = 1 - Math.pow(1 - grow[i], 3);
       el.style.transform = `translate(${x}px, ${py}px)`;
       el.style.opacity = Math.min(1, grow[i] * 3).toFixed(3);
       if (w < 600) {
@@ -382,27 +399,40 @@ function pyramid() {
         const end = Math.min(side, w - txtW - 18 - 12);
         el.style.setProperty('--len', `${Math.max(24, end - x)}px`);
       }
-      el.style.setProperty('--grow', grow[i].toFixed(3));
+      el.style.setProperty('--grow', drawn.toFixed(3));
     }
   }
 
   let visible = false;
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(canvas);
+  let introAt = null;                                  // a pirâmide monta quando a seção aparece
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.01 }).observe(canvas);
 
-  const clock = new THREE.Clock();
-  let rot = Math.PI / 4;
-  renderer.setAnimationLoop(() => {
-    if (!visible) return;
-    const t = reduce ? 0 : clock.getElapsedTime();
+  // mola amortecida, estável em qualquer taxa de quadros; sem movimento, vai direto ao alvo
+  const spring = (o, target, dt, k, zeta) => {
+    if (reduce) { o.x = target; o.v = 0; return; }
+    const c = 2 * Math.sqrt(k) * zeta, n = Math.max(1, Math.ceil(dt / 0.008)), h = dt / n;
+    for (let j = 0; j < n; j++) { o.v += (k * (target - o.x) - c * o.v) * h; o.x += o.v * h; }
+  };
+  const ROT0 = Math.PI / 4;
+  const rot = { x: reduce ? ROT0 : ROT0 + 0.9, v: 0 };   // entra girando e assenta na face da Marca
+  let lastT = 0, prevAct = -1, sweepAt = -1, step = 0;
+  renderer.setAnimationLoop(time => {
+    if (!visible) { lastT = 0; return; }
+    const now = time / 1000;
+    const dt = lastT ? Math.min(0.05, now - lastT) : 1 / 60;
+    lastT = now;
+    if (introAt === null) introAt = now;
+    const t = reduce ? 0 : now;
     const p = window.__pyr || 0;
-    if (!dragging) { vel *= 0.92; drag += vel; drag = lerp(drag, 0, 0.035); }
+    if (!dragging) { vel *= Math.pow(0.92, dt * 60); drag += vel; drag = lerp(drag, 0, 1 - Math.pow(1 - 0.035, dt * 60)); }
     // uma face por frente: gira 90 graus a cada quarto da rolagem
     // cada frente gira no começo do seu trecho de rolagem e depois fica parada
     const q = Math.min(3.999, p * 4), k = Math.floor(q), f = q - k;
     const ease = x => x * x * (3 - 2 * x);
-    const step = k === 0 ? 0 : k - 1 + ease(Math.min(1, f / 0.4));
-    rot = lerp(rot, Math.PI / 4 - step * Math.PI / 2, 0.12);
-    const y = OPT ? OPT.rotY : rot + drag + Math.sin(t * 0.5) * 0.05;
+    step = k === 0 ? 0 : k - 1 + ease(Math.min(1, f / 0.4));
+    // mola da rotação: acelera, chega e assenta com um respiro mínimo
+    spring(rot, ROT0 - step * Math.PI / 2, dt, 70, 0.86);
+    const y = OPT ? OPT.rotY : rot.x + drag + Math.sin(t * 0.5) * 0.05;
     const bob = Math.sin(t * 0.8) * 0.05;
 
     main.rotation.y = y;
@@ -411,13 +441,33 @@ function pyramid() {
     mats.forEach(m => { m.uniforms.uTime.value = t; });
     const dist = camera.position.length();
     edgeMats.forEach(m => { m.uniforms.uNear.value = dist - 0.9; m.uniforms.uFar.value = dist + 1.2; });
-    const act = OPT ? -1 : Math.round(step);
+    // fatia ativa = a que está de frente de fato (segue a rotação com mola, não o alvo)
+    const act = OPT ? -1 : Math.max(0, Math.min(3, Math.round((ROT0 - rot.x) / (Math.PI / 2))));
+    if (act !== prevAct) { if (prevAct >= 0 && !reduce) sweepAt = now; prevAct = act; }
+    const sw = sweepAt >= 0 ? (now - sweepAt) / 0.95 : 2;
+    if (sw >= 1) sweepAt = -1;
     slices.forEach((s, i) => {
-      s.glow = OPT ? OPT.glow[i] : lerp(s.glow, i === act ? 1 : 0, 0.08);
-      // a fatia ativa se projeta para fora, sem sair da linha das outras
-      s.grow = lerp(s.grow || 1, i === act ? 1.07 : 1, 0.08);
+      const S = s.sp;
+      // entrada: de cima para baixo, uma fatia depois da outra
+      spring(S.app, reduce || now - introAt > 0.12 + i * 0.17 ? 1 : 0, dt, 38, 0.62);
+      spring(S.glow, i === act ? 1 : 0, dt, 90, 0.9);
+      spring(S.dim, act >= 0 && i !== act ? 1 : 0, dt, 70, 0.95);
+      spring(S.grow, i === act ? 1.07 : 1, dt, 110, 0.72);
+      // a ativa sobe um pouco; as de cima afastam para cima e as de baixo para baixo, abrindo a fenda
+      spring(S.lift, act < 0 ? 0 : i === act ? 0.025 : i < act ? 0.065 : -0.035, dt, 80, 0.8);
+      s.off = S.lift.x + (1 - S.app.x) * 0.9;
+      s.grow = S.grow.x * (1 - 0.012 * S.dim.x);
+      s.glow = OPT ? OPT.glow[i] : S.glow.x;
+      s.group.position.y = s.off;
       s.group.scale.set(s.grow, 1, s.grow);
-      s.back.uniforms.uGlow.value = s.front.uniforms.uGlow.value = s.glow;
+      const fade = Math.max(0, Math.min(1, S.app.x * 1.6));
+      const sweepY = sw < 1 && i === act
+        ? main.position.y + s.off + lerp(s.y0 - 0.15, s.y1 + 0.15, 1 - Math.pow(1 - sw, 2.2)) : -99;
+      for (const m of [s.back, s.front]) {
+        const u = m.uniforms;
+        u.uGlow.value = s.glow; u.uDim.value = S.dim.x; u.uFade.value = fade; u.uSweep.value = sweepY;
+      }
+      for (const m of [...s.edgeMats]) m.uniforms.uA.value = fade * (1 - 0.35 * S.dim.x);
     });
     if (OPT) {
       // ponto mais à direita de cada fatia, na meia altura, em pixels do canvas
@@ -440,7 +490,7 @@ function pyramid() {
         }
         return best;
       });
-    } else placeCalls(y, step);
+    } else placeCalls(y, act, dt);
 
     renderer.setRenderTarget(rt);
     renderer.setClearColor(0x000000, 0);

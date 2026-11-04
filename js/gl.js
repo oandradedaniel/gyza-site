@@ -295,6 +295,12 @@ function pyramid() {
     renderer.getDrawingBufferSize(res);
     rt.setSize(res.x, res.y);
     camera.aspect = w / h;
+    // no celular a câmera chega mais perto: pirâmide maior na tela
+    if (!OPT) {
+      const near = w < 600;
+      camera.position.set(0, near ? 0.2 : 0.55, near ? 8.4 : 10.4);
+      camera.lookAt(0, near ? -0.55 : 0.05, 0);
+    }
     camera.updateProjectionMatrix();
   };
   resize();

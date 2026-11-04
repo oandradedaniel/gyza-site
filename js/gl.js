@@ -10,52 +10,66 @@ const env = new THREE.TextureLoader().load('assets/img/glass-env.jpg');
 env.colorSpace = THREE.NoColorSpace;
 env.wrapS = THREE.RepeatWrapping;
 
-/* ---------- texturas de apoio ---------- */
+/* ---------- texturas de apoio ----------
+   Calculadas em código e enviadas como DataTexture. Nada de canvas 2D: o WebKit (Safari)
+   trata canvas desenhado e lido como possível "impressão digital" e aciona a proteção avançada. */
+const clamp01 = x => Math.max(0, Math.min(1, x));
+const hex = c => c.map(v => v / 255);
+function dataTex(w, h, fn) {
+  const d = new Uint8Array(w * h * 4);
+  const px = [0, 0, 0, 0];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    fn(x + 0.5, y + 0.5, px);
+    const i = (y * w + x) * 4;
+    d[i] = clamp01(px[0]) * 255; d[i + 1] = clamp01(px[1]) * 255; d[i + 2] = clamp01(px[2]) * 255; d[i + 3] = clamp01(px[3]) * 255;
+  }
+  const t = new THREE.DataTexture(d, w, h, THREE.RGBAFormat);
+  t.colorSpace = THREE.NoColorSpace;
+  t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter;
+  t.generateMipmaps = false; t.needsUpdate = true;
+  return t;
+}
+// gradiente de 3 paradas, sem pré-multiplicar o alfa (como o canvas fazia)
+const lerp4 = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
+const grad3 = (c0, c1, c2, k) => k < 0.5 ? lerp4(c0, c1, k * 2) : lerp4(c1, c2, (k - 0.5) * 2);
+
+// feixe diagonal: um perfil horizontal azul, claro no meio
 function beamTex() {
-  const c = document.createElement('canvas');
-  c.width = 256; c.height = 8;
-  const g = c.getContext('2d');
-  const gr = g.createLinearGradient(0, 0, 256, 0);
-  gr.addColorStop(0, 'rgba(63,107,255,0)');
-  gr.addColorStop(0.5, 'rgba(170,200,255,0.9)');
-  gr.addColorStop(1, 'rgba(63,107,255,0)');
-  g.fillStyle = gr;
-  g.fillRect(0, 0, 256, 8);
-  return new THREE.CanvasTexture(c);
+  const c0 = [63 / 255, 107 / 255, 1, 0], c1 = [170 / 255, 200 / 255, 1, 0.9];
+  return dataTex(256, 8, (x, y, o) => { const c = grad3(c0, c1, c0, x / 256); o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = c[3]; });
 }
 
+// estúdio refletido no vidro: fundo quase preto, faixas de luz e a luz de cima
 function studio() {
-  const c = document.createElement('canvas');
-  c.width = 1024; c.height = 512;
-  const g = c.getContext('2d');
-  g.fillStyle = '#020309'; g.fillRect(0, 0, 1024, 512);
-  const strip = (x, w, col) => {
-    const gr = g.createLinearGradient(x, 0, x + w, 0);
-    gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(0.5, col); gr.addColorStop(1, 'rgba(0,0,0,0)');
-    g.fillStyle = gr; g.fillRect(x, 40, w, 360);
-  };
-  strip(120, 70, 'rgba(120,170,255,1)');
-  strip(300, 26, 'rgba(230,240,255,1)');
-  strip(640, 110, 'rgba(60,110,255,1)');
-  strip(860, 30, 'rgba(200,225,255,1)');
-  const top = g.createLinearGradient(0, 0, 0, 120);
-  top.addColorStop(0, 'rgba(170,200,255,.9)'); top.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = top; g.fillRect(0, 0, 1024, 120);
-  const t = new THREE.CanvasTexture(c);
+  const W = 512, H = 256, K = 0.5;   // metade da resolução antiga: o reflexo é suave
+  const bg = [2 / 255, 3 / 255, 9 / 255];
+  const strips = [[120, 70, [120, 170, 255]], [300, 26, [230, 240, 255]], [640, 110, [60, 110, 255]], [860, 30, [200, 225, 255]]];
+  const t = dataTex(W, H, (x, yRow, o) => {
+    const X = x / K, Y = (H - yRow) / K;                 // linha 0 da textura fica embaixo (v = 0)
+    let r = bg[0], g = bg[1], b = bg[2];
+    const over = (col, a) => { r = col[0] * a + r * (1 - a); g = col[1] * a + g * (1 - a); b = col[2] * a + b * (1 - a); };
+    for (const [sx, sw, col] of strips) {
+      if (Y >= 40 && Y < 400 && X >= sx && X < sx + sw) {
+        const k = (X - sx) / sw;
+        over(hex(col), 1 - Math.abs(k * 2 - 1));          // transparente, cheio no meio, transparente
+      }
+    }
+    if (Y < 120) over([170 / 255, 200 / 255, 1], 0.9 * (1 - Y / 120));
+    o[0] = r; o[1] = g; o[2] = b; o[3] = 1;
+  });
   t.wrapS = THREE.RepeatWrapping;
   return t;
 }
 
+// brilho redondo no chão: cor interna que some para a externa transparente
 function radial(inner, outer) {
-  const c = document.createElement('canvas');
-  c.width = c.height = 256;
-  const g = c.getContext('2d');
-  const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
-  gr.addColorStop(0, inner);
-  gr.addColorStop(1, outer);
-  g.fillStyle = gr;
-  g.fillRect(0, 0, 256, 256);
-  return new THREE.CanvasTexture(c);
+  const p = c => c.match(/[\d.]+/g).map(Number);
+  const a = p(inner), b = p(outer);
+  const A = [a[0] / 255, a[1] / 255, a[2] / 255, a[3]], B = [b[0] / 255, b[1] / 255, b[2] / 255, b[3]];
+  return dataTex(256, 256, (x, y, o) => {
+    const k = clamp01(Math.hypot(x - 128, y - 128) / 128);
+    const c = lerp4(A, B, k); o[0] = c[0]; o[1] = c[1]; o[2] = c[2]; o[3] = c[3];
+  });
 }
 
 /* ---------- shaders ---------- */
@@ -188,7 +202,22 @@ function pyramid() {
   const canvas = document.querySelector('.pyr-gl');
   if (!canvas) return;
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  // plano B: sem WebGL (ou se o contexto cair), entra a imagem parada da pirâmide, no mesmo lugar
+  const poster = () => {
+    if (canvas.dataset.poster) return;
+    canvas.dataset.poster = '1';
+    const img = new Image();
+    img.className = 'pyr-poster'; img.alt = '';
+    img.src = canvas.clientWidth < 600 ? 'assets/img/pyr-poster-m.webp' : 'assets/img/pyr-poster.webp';
+    canvas.after(img);
+    canvas.style.display = 'none';
+    const lab = document.querySelector('.pyr-labels'); if (lab) lab.style.display = 'none';
+  };
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  } catch (e) { poster(); return; }
+  canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); renderer.setAnimationLoop(null); poster(); });
   const PHONE = window.matchMedia('(max-width: 900px)').matches;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, PHONE ? 1.25 : 1.75));
   renderer.autoClear = false;
@@ -395,7 +424,7 @@ function pyramid() {
       } else {
         // o rótulo nunca passa da borda: a linha encurta se faltar espaço
         el.classList.remove('is-v');
-        const txtW = el.querySelector('.call__txt').offsetWidth;
+        const txtW = el._tw || (el._tw = el.querySelector('.call__txt').offsetWidth);
         const end = Math.min(side, w - txtW - 18 - 12);
         el.style.setProperty('--len', `${Math.max(24, end - x)}px`);
       }

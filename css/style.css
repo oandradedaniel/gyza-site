@@ -203,6 +203,11 @@ body.is-loading .nav { opacity: 0; }
 }
 
 body.is-loading:not(.is-revealed) .hero__content, body.is-loading .hero__mark { visibility: hidden; }
+/* durante a abertura só aparece o logo, mesmo quando a abertura é mais baixa que a tela (celular) */
+body.is-loading main > section:not(.hero), body.is-loading .footer { visibility: hidden; }
+.intro__mark { will-change: transform; }
+.hero__halo { will-change: opacity, transform; }
+.servico__nome { will-change: transform; }
 
 /* ---------- 2. Manifesto ---------- */
 .manifesto {
@@ -447,6 +452,10 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .nav__links { display: none; }
   .nav__logo svg { width: 74px; }
   /* celular: a abertura acompanha o conteúdo e o nome fica logo abaixo do botão, encoberto pela seção clara */
+  .nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .hero__halo i { filter: blur(18px); }
+  .servico__nome { transition: color .35s var(--ease); }
+  .servico:hover .servico__nome, .servico.is-active .servico__nome { transform: none; }
   .hero { height: auto; min-height: 0; padding-bottom: calc(120vw * 200.45 / 750 * 1.02 + 30px); }
   .hero__title { font-size: min(7.4vw, 32px); letter-spacing: -.045em; }
   .hero__content { padding-top: 132px; }

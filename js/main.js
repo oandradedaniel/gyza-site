@@ -29,17 +29,20 @@
   const faixa = $('.revela__faixa');
   const heroMark = $('.hero__mark');
   const ACX = 631.55, ACY = 98.5; // centro do A no viewBox
+  const isPhone = window.matchMedia('(max-width: 900px)').matches;
 
   function endIntro() {
     gsap.set(heroMark, { autoAlpha: 1 });
     intro.classList.add('is-done');
     document.body.classList.remove('is-loading');
+    // no celular a seção clara aparece suave, sem estourar na tela
+    if (isPhone && !reduce) gsap.from('#servicos', { autoAlpha: 0, y: 30, duration: 0.8, ease: 'expo.out', clearProps: 'all' });
     ScrollTrigger.refresh();
   }
 
   function heroIn(tl, at) {
     tl.add(() => document.body.classList.add('is-revealed'), at)
-      .from('.hero__halo', { opacity: 0, scale: 1.08, duration: 2, ease: 'power2.out' }, at - 0.4)
+      .from('.hero__halo', { opacity: 0, scale: isPhone ? 1 : 1.08, duration: 2, ease: 'power2.out' }, at - 0.4)
       .from('.hero__content .line > span', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, at + 0.1)
       .from('.hero__ctas > *', { y: 24, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08 }, at + 0.4);
   }
@@ -70,7 +73,8 @@
       // o logo desce e vira o nome gigante da base da tela
       .add(() => {
         const t = heroMark.getBoundingClientRect();
-        gsap.to(svg, { x: t.left, y: t.top, width: t.width, duration: 1.25, ease: 'expo.inOut', onComplete: endIntro });
+        // só transform (sem mudar a largura): roda liso no celular
+        gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
       }, 2.3)
       .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.9);
     heroIn(tl, 2.8);

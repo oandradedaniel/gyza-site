@@ -177,7 +177,8 @@ function pyramid() {
   if (!canvas) return;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  const PHONE = window.matchMedia('(max-width: 900px)').matches;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, PHONE ? 1.25 : 1.75));
   renderer.autoClear = false;
 
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
@@ -293,7 +294,7 @@ function pyramid() {
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     renderer.getDrawingBufferSize(res);
-    rt.setSize(res.x, res.y);
+    rt.setSize(Math.ceil(res.x / 2), Math.ceil(res.y / 2));   // o fundo refratado é suave: meia resolução basta
     camera.aspect = w / h;
     // no celular a câmera chega mais perto: pirâmide maior na tela
     if (!OPT) {

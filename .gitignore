@@ -1,0 +1,6 @@
+# servidor local de teste
+.serve.py
+# sistema e ferramentas
+.DS_Store
+.vercel
+node_modules/

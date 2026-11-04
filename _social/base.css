@@ -1,0 +1,9 @@
+@font-face { font-family: "DM Sans"; src: url("/assets/fonts/DMSans-VF.ttf") format("truetype"); font-weight: 100 1000; }
+:root { --preto:#050505; --gelo:#EAEAEA; --papel:#F2F4F7; --tinta:#0A0F1A; --tinta-2:#4B5563; --apoio:#B9C0C8; --cinza:#8A929C; --azul:#1F4FD8; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1350px; overflow: hidden; }
+body { font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; background: var(--preto); color: var(--gelo); position: relative; }
+.frame { position: absolute; inset: 0; padding: 80px; }
+.top { display: flex; justify-content: space-between; align-items: center; font-size: 22px; color: var(--cinza); position: relative; z-index: 3; }
+.logo { width: 132px; fill: currentColor; color: var(--gelo); }
+.logo .topo { fill: var(--azul); }

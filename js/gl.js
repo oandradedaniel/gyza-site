@@ -337,6 +337,13 @@ function pyramid() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     const side = w * (w < 600 ? 0.7 : 0.78);   // a linha sai para a lateral direita
     const active = Math.round(step);
+    // base da pirâmide na tela (para o rótulo do celular)
+    let baseY = 0;
+    for (let k = 0; k < 4; k++) {
+      const a = k * Math.PI / 2 + y;
+      v3.set(Math.sin(a) * R, main.position.y, Math.cos(a) * R).project(camera);
+      baseY = Math.max(baseY, (-v3.y * 0.5 + 0.5) * h);
+    }
     for (let k = 0; k < 4; k++) {
       const el = callOfFace[k];
       if (!el) continue;
@@ -351,7 +358,17 @@ function pyramid() {
       grow[i] = lerp(grow[i], target, target > grow[i] ? 0.07 : 0.2);
       el.style.transform = `translate(${x}px, ${py}px)`;
       el.style.opacity = Math.min(1, grow[i] * 3).toFixed(3);
-      el.style.setProperty('--len', `${Math.max(40, side - x)}px`);
+      if (w < 600) {
+        // celular: a linha desce até abaixo da base e o rótulo fica embaixo, centralizado
+        el.classList.add('is-v');
+        el.style.setProperty('--len', `${Math.max(24, baseY + 26 - py)}px`);
+      } else {
+        // o rótulo nunca passa da borda: a linha encurta se faltar espaço
+        el.classList.remove('is-v');
+        const txtW = el.querySelector('.call__txt').offsetWidth;
+        const end = Math.min(side, w - txtW - 18 - 12);
+        el.style.setProperty('--len', `${Math.max(24, end - x)}px`);
+      }
       el.style.setProperty('--grow', grow[i].toFixed(3));
     }
   }

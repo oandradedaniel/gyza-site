@@ -366,7 +366,9 @@ body.is-loading:not(.is-revealed) .hero__content, body.is-loading .hero__mark { 
 .orcamento__copy { display: grid; gap: 24px; justify-items: start; position: sticky; top: 120px; }
 .orcamento__title { font-size: clamp(46px, 6.4vw, 108px); font-weight: 600; line-height: .95; letter-spacing: -.05em; }
 .orcamento__lead { font-size: var(--fs-lead); color: rgba(255,255,255,.78); max-width: 420px; }
-.orcamento__wa { color: #fff; }
+.orcamento__wa { --bg: #fff; --fg: var(--tinta); gap: 10px; }
+.orcamento__wa::before { background: var(--tinta); }
+.orcamento__wa svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
 .form {
   background: #fff; color: var(--tinta);
   border-radius: 32px; padding: clamp(24px, 3vw, 44px);

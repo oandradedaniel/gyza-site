@@ -35,8 +35,6 @@
     gsap.set(heroMark, { autoAlpha: 1 });
     intro.classList.add('is-done');
     document.body.classList.remove('is-loading');
-    // no celular a seção clara aparece suave, sem estourar na tela
-    if (isPhone && !reduce) gsap.from('#servicos', { autoAlpha: 0, y: 30, duration: 0.8, ease: 'expo.out', clearProps: 'all' });
     ScrollTrigger.refresh();
   }
 
@@ -217,6 +215,44 @@
       }, 0);
   }
 
+  /* ---------- método no celular: trilha vertical entre os cards ---------- */
+  function metodoMobile() {
+    const track = $('.metodo__track');
+    const etapas = $$('.etapa', track);
+    const svg = $('.trilha'), base = $('.trilha__base'), fill = $('.trilha__fill');
+    let len = 0, nodes = [];
+    const draw = () => {
+      const x = etapas[0].offsetLeft + etapas[0].offsetWidth / 2;
+      const last = etapas[etapas.length - 1];
+      const y0 = etapas[0].offsetTop + etapas[0].offsetHeight / 2;
+      const y1 = last.offsetTop + last.offsetHeight / 2;
+      const d = `M ${x} ${y0} L ${x} ${y1}`;
+      base.setAttribute('d', d); fill.setAttribute('d', d);
+      len = y1 - y0;
+      fill.style.strokeDasharray = len;
+      fill.style.strokeDashoffset = len;
+      nodes.forEach(n => n.remove());
+      nodes = etapas.slice(1).map(e => {
+        const prev = e.previousElementSibling;
+        const cy = (prev.offsetTop + prev.offsetHeight + e.offsetTop) / 2;
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', x); c.setAttribute('cy', cy); c.setAttribute('r', 6);
+        c.dataset.at = (cy - y0) / len;
+        svg.appendChild(c);
+        return c;
+      });
+    };
+    draw();
+    ScrollTrigger.addEventListener('refreshInit', draw);
+    ScrollTrigger.create({
+      trigger: track, start: 'top 60%', end: 'bottom 60%', scrub: true,
+      onUpdate: s => {
+        fill.style.strokeDashoffset = len * (1 - s.progress);
+        nodes.forEach(n => n.classList.toggle('is-on', s.progress >= +n.dataset.at));
+      },
+    });
+  }
+
   /* ---------- trabalhos: cartões empilham ---------- */
   function trabalhos() {
     const cases = $$('.case');
@@ -313,7 +349,7 @@
     if (!reduce) {
       heroScroll();
       frentes();
-      ScrollTrigger.matchMedia({ '(min-width: 901px)': metodo });
+      ScrollTrigger.matchMedia({ '(min-width: 901px)': metodo, '(max-width: 900px)': metodoMobile });
       trabalhos();
       footer();
       pointer();

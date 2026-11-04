@@ -204,7 +204,7 @@ body.is-loading .nav { opacity: 0; }
 
 body.is-loading:not(.is-revealed) .hero__content, body.is-loading .hero__mark { visibility: hidden; }
 /* durante a abertura só aparece o logo, mesmo quando a abertura é mais baixa que a tela (celular) */
-body.is-loading main > section:not(.hero), body.is-loading .footer { visibility: hidden; }
+body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not(.is-revealed) .footer { visibility: hidden; }
 .intro__mark { will-change: transform; }
 .hero__halo { will-change: opacity, transform; }
 .servico__nome { will-change: transform; }
@@ -484,7 +484,7 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .metodo__track { width: auto; flex-direction: column; align-items: stretch; margin-top: 44px; }
   .etapa { width: 100%; min-height: 0; }
   .etapa h3 { margin-top: 26px; }
-  .trilha { display: none; }
+  .metodo__track { padding: 0 var(--gutter); }
   .case { top: calc(12vh + var(--k, 0) * 12px); }
   .case__media { aspect-ratio: 16 / 10; }
   .case__info { grid-template-columns: 1fr auto; }

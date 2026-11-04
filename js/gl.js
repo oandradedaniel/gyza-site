@@ -82,6 +82,7 @@ const glassFrag = /* glsl */`
   uniform float uFloor;
   uniform float uTime;
   uniform float uGlow;
+  uniform float uWhite;
   varying vec3 vN;
   varying vec3 vNv;
   varying vec3 vP;
@@ -118,12 +119,13 @@ const glassFrag = /* glsl */`
     // faixa de luz que desliza pelas faces
     float band = smoothstep(0.55, 1.0, sin((vP.x * 0.9 + vP.y * 1.4) * 2.0 - uTime * 0.35)) * 0.16;
 
-    vec3 deep = vec3(0.015, 0.045, 0.18);
-    vec3 blue = vec3(0.13, 0.33, 0.98);
+    // uWhite: 0 na ponta (azul), sobe até 1 na base (vidro branco transparente)
+    vec3 deep = mix(vec3(0.015, 0.045, 0.18), vec3(0.06, 0.07, 0.09), uWhite);
+    vec3 blue = mix(vec3(0.13, 0.33, 0.98), vec3(0.78, 0.83, 0.92), uWhite);
     vec3 body = mix(deep, blue, 0.06 + 0.38 * (1.0 - facing));
-    body = mix(body, vec3(0.18, 0.42, 1.0), 0.6 * uGlow);
+    body = mix(body, mix(vec3(0.18, 0.42, 1.0), vec3(0.86, 0.9, 0.98), uWhite), 0.6 * uGlow);
 
-    vec3 col = body + bg * vec3(0.8, 0.9, 1.15) * 0.95
+    vec3 col = body + bg * mix(vec3(0.8, 0.9, 1.15), vec3(0.95), uWhite) * 0.95
              + envc * (0.12 + fres * 1.1)
              + spec * vec3(0.85, 0.93, 1.0)
              + fres * blue * 0.9
@@ -229,7 +231,7 @@ function pyramid() {
 
   const uniforms = (extra = {}) => ({
     uBg: { value: rt.texture }, uEnv: { value: env }, uStudio: { value: STUDIO }, uRes: { value: res },
-    uBack: { value: 0 }, uGlow: { value: 0 }, uRefl: { value: 0 }, uFloor: { value: FLOOR }, uTime: { value: 0 },
+    uBack: { value: 0 }, uGlow: { value: 0 }, uWhite: { value: 0 }, uRefl: { value: 0 }, uFloor: { value: FLOOR }, uTime: { value: 0 },
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, { value: v }])),
   });
   const mats = [];
@@ -273,14 +275,18 @@ function pyramid() {
 
   const em = edgeMat(0);
   const main = new THREE.Group();
-  slices.forEach(s => {
+  const WHITE = [0, 0.5, 0.8, 1];                 // da ponta azul para a base branca, camada a camada
+  slices.forEach((s, i) => {
     const f = flat(s.geo);
-    s.back = glass(THREE.BackSide, { uBack: 1 });
-    s.front = glass(THREE.FrontSide, {});
+    s.back = glass(THREE.BackSide, { uBack: 1, uWhite: WHITE[i] });
+    s.front = glass(THREE.FrontSide, { uWhite: WHITE[i] });
     s.group = new THREE.Group();
     const b = new THREE.Mesh(f, s.back); b.renderOrder = 1;
     const fr = new THREE.Mesh(f, s.front); fr.renderOrder = 2;
-    s.group.add(b, fr, edges(s.geo, em));
+    // aresta acompanha a camada: azul na ponta, quase branca na base
+    const e = i === 0 ? em : edgeMat(0);
+    if (i) e.uniforms.uColor.value.lerp(new THREE.Color(0xe6ecf7), WHITE[i]);
+    s.group.add(b, fr, edges(s.geo, e));
     s.glow = 0; s.lift = 0;
     main.add(s.group);
   });

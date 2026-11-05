@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="Anuncios"><defs>
+<linearGradient id="ganub" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#7FA6FF"/><stop offset=".5" stop-color="#1F4FD8"/><stop offset="1" stop-color="#0E2A86"/></linearGradient>
+<linearGradient id="ganuh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="ganur" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".5" stop-color="#BFD3FF" stop-opacity=".25"/><stop offset="1" stop-color="#7FA6FF" stop-opacity=".6"/></linearGradient>
+<linearGradient id="ganui" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9D9FF"/></linearGradient>
+<radialGradient id="ganug" cx=".5" cy="1" r=".7"><stop offset="0" stop-color="#7FA6FF" stop-opacity=".55"/><stop offset="1" stop-color="#7FA6FF" stop-opacity="0"/></radialGradient>
+<filter id="ganus" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="9" stdDeviation="7" flood-color="#0A1F66" flood-opacity=".45"/></filter>
+<filter id="ganut" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="2.2" flood-color="#0A1F66" flood-opacity=".4"/></filter>
+</defs><g transform="translate(80 80) scale(1.19) translate(-90.5 -79.5)"><g opacity="1"><g filter="url(#ganus)"><path fill="url(#ganub)" d="M56.0,72.0 Q56,64 63.0,60.1L117.0,29.9 Q124,26 124.0,34.0L124.0,106.0 Q124,114 116.3,112.0L63.7,98.0 Q56,96 56.0,88.0Z"/></g>
+<clipPath id="ganuc0"><path  d="M56.0,72.0 Q56,64 63.0,60.1L117.0,29.9 Q124,26 124.0,34.0L124.0,106.0 Q124,114 116.3,112.0L63.7,98.0 Q56,96 56.0,88.0Z"/></clipPath>
+<g clip-path="url(#ganuc0)"><rect x="56" y="26" width="68" height="45.760000000000005" fill="url(#ganuh)"/><rect x="56" y="74.4" width="68" height="39.6" fill="url(#ganug)"/></g>
+<path fill="none" stroke="url(#ganur)" stroke-width="1.6" d="M56.0,72.0 Q56,64 63.0,60.1L117.0,29.9 Q124,26 124.0,34.0L124.0,106.0 Q124,114 116.3,112.0L63.7,98.0 Q56,96 56.0,88.0Z"/></g><g opacity="1"><g filter="url(#ganut)"><rect fill="url(#ganub)" x="28" y="60" width="40" height="40" rx="12"/></g>
+<clipPath id="ganuc1"><rect  x="28" y="60" width="40" height="40" rx="12"/></clipPath>
+<g clip-path="url(#ganuc1)"><rect x="28" y="60" width="40" height="20.8" fill="url(#ganuh)"/><rect x="28" y="82" width="40" height="18" fill="url(#ganug)"/></g>
+<rect fill="none" stroke="url(#ganur)" stroke-width="1.6" x="28" y="60" width="40" height="40" rx="12"/></g><g opacity="1"><g filter="url(#ganut)"><rect fill="url(#ganub)" x="52" y="96" width="20" height="34" rx="8"/></g>
+<clipPath id="ganuc2"><rect  x="52" y="96" width="20" height="34" rx="8"/></clipPath>
+<g clip-path="url(#ganuc2)"><rect x="52" y="96" width="20" height="17.68" fill="url(#ganuh)"/><rect x="52" y="114.7" width="20" height="15.3" fill="url(#ganug)"/></g>
+<rect fill="none" stroke="url(#ganur)" stroke-width="1.6" x="52" y="96" width="20" height="34" rx="8"/></g><path fill="url(#ganui)" opacity="0" d="M135.0,48.0 Q134,48 134.9,47.6L149.1,40.4 Q150,40 150.0,41.0L150.0,47.0 Q150,48 149.0,48.0Z"/><path d="M136 52l12-6M138 70h14M136 88l12 6" stroke="url(#ganub)" stroke-width="5" stroke-linecap="round"/><ellipse cx="90" cy="44" rx="10" ry="3" fill="#fff" opacity=".8" transform="rotate(-25 90 44)"/></g></svg>

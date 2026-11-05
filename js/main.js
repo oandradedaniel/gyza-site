@@ -116,9 +116,13 @@
         ult = y;
       }, { passive: true });
     }
-    // o botão de baixo some quando o formulário de orçamento está na tela (a abertura não tem mais botão próprio)
+    // o botão de baixo some quando o formulário de análise está na tela (a abertura não tem mais botão próprio)
     // e não volta no rodapé, que já tem o botão igual: desligado do formulário até o fim da página
-    if (cta) ScrollTrigger.create({ trigger: '#orcamento', start: 'top 70%', onEnter: () => cta.classList.add('is-off'), onLeaveBack: () => cta.classList.remove('is-off') });
+    if (cta) {
+      let noForm = false;
+      const apl = () => cta.classList.toggle('is-off', noForm);
+      ScrollTrigger.create({ trigger: '#analise', start: 'top 70%', onEnter: () => { noForm = true; apl(); }, onLeaveBack: () => { noForm = false; apl(); } });
+    }
     // o botão de baixo segue o tema da seção que está embaixo dele
     if (cta) $$('[data-theme]').forEach(sec => {
       ScrollTrigger.create({
@@ -361,9 +365,21 @@
     // Só mexe em scrollLeft (sem layout), pausa em hover, toque, arrasto, foco, projeto aberto, trilho fora da tela e aba escondida.
     if (reduce || items.length < 2) return;
     const HOLD = 4200, DUR = 2000, RESUME = 5000;
-    let visible = false, hover = false, focus = false, touch = false, timer = 0, raf = 0;
+    let visible = false, hover = false, focus = false, touch = false, parado = false, timer = 0, raf = 0;
+    // botão de pausa (WCAG 2.2.2): quem pausa decide; a passagem só volta pelo mesmo botão
+    const pausa = $(`[data-${attr}-pausa]`);
+    if (pausa) {
+      const quem = attr === 'equipe' ? 'sócios' : 'cases';
+      pausa.hidden = false;
+      pausa.addEventListener('click', () => {
+        parado = !parado;
+        pausa.setAttribute('aria-pressed', String(parado));
+        pausa.setAttribute('aria-label', (parado ? 'Retomar' : 'Pausar') + ` a passagem automática dos ${quem}`);
+        if (parado) stop(); else arm(1200);
+      });
+    }
     const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const paused = () => !visible || hover || focus || touch || down || document.hidden || document.body.classList.contains('is-proj');
+    const paused = () => parado || !visible || hover || focus || touch || down || document.hidden || document.body.classList.contains('is-proj');
     const stop = () => { cancelAnimationFrame(raf); raf = 0; track.classList.remove('is-auto'); };
     const arm = (ms = HOLD) => { clearTimeout(timer); timer = setTimeout(tick, ms); };
     const tween = to => {
@@ -518,42 +534,50 @@
     });
   }
 
-  /* ---------- orçamento: envia pelo WhatsApp ---------- */
+  /* ---------- sinais e cards: entram em cascata uma vez ---------- */
+  function sinais() {
+    if (reduce) return;
+    gsap.from($$('.sinal'), { y: 18, opacity: 0, duration: .7, ease: 'expo.out', stagger: .06, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.sinais__lista', start: 'top 85%' } });
+    gsap.from($$('.card'), { y: 24, opacity: 0, duration: .9, ease: 'expo.out', stagger: .05, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.cards', start: 'top 85%' } });
+  }
+
+  /* ---------- análise: envia pelo WhatsApp ---------- */
   function form() {
     const f = $('[data-form]');
     const note = $('[data-form-note]');
-    const original = note.textContent;
+    const original = note.innerHTML;
     f.addEventListener('submit', e => {
       e.preventDefault();
       const req = $$('input[required]', f);
       let ok = true;
       req.forEach(i => {
-        const bad = !i.value.trim() || (i.type === 'email' && !/^\S+@\S+\.\S+$/.test(i.value))
-          || (i.name === 'whatsapp' && i.value.replace(/\D/g, '').length < 10);
+        const bad = !i.value.trim() || (i.name === 'whatsapp' && i.value.replace(/\D/g, '').length < 10);
         i.classList.toggle('is-error', bad);
+        i.setAttribute('aria-invalid', String(bad));
         if (bad) ok = false;
       });
       if (!ok) {
-        note.textContent = 'Preencha nome, empresa, WhatsApp e um e-mail válido.';
+        note.textContent = 'Preencha nome, empresa e WhatsApp com DDD.';
         note.classList.add('is-error');
+        $('input.is-error', f).focus();
         return;
       }
-      note.textContent = original;
+      note.innerHTML = original;
       note.classList.remove('is-error');
       const d = new FormData(f);
-      const frentes = d.getAll('frente');
+      const reconhece = d.getAll('reconhece');
       const msg = [
-        'Olá, GYZA. Quero solicitar um orçamento.',
+        'Olá, GYZA. Quero solicitar a análise gratuita da minha empresa.',
         `Nome: ${d.get('nome')}`,
         `Empresa: ${d.get('empresa')}`,
         `WhatsApp: ${d.get('whatsapp')}`,
-        `E-mail: ${d.get('email')}`,
-        frentes.length ? `Precisa de: ${frentes.join(', ')}` : '',
-        d.get('outros') ? `Outros: ${d.get('outros')}` : '',
+        d.get('perfil') ? `Instagram ou site: ${d.get('perfil')}` : '',
+        reconhece.length ? `Reconheço na minha empresa:\n${reconhece.map(t => '- ' + t).join('\n')}` : '',
       ].filter(Boolean).join('\n');
+      window.__gyzaUltimaMsg = msg;
       window.open(`https://wa.me/5547992606871?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
     });
-    $$('input[required]', f).forEach(i => i.addEventListener('input', () => i.classList.remove('is-error')));
+    $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); }));
     // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
     const tel = $('input[name="whatsapp"]', f);
     tel.maxLength = 15;
@@ -563,12 +587,6 @@
       tel.value = n.length <= 2 ? (n ? `(${n}` : '')
         : n.length <= corte ? `(${n.slice(0, 2)}) ${n.slice(2)}`
         : `(${n.slice(0, 2)}) ${n.slice(2, corte)}-${n.slice(corte)}`;
-    });
-    // "Outros" abre um campo curto para descrever
-    const outros = $('[data-outros]', f), campo = $('.field--outros', f);
-    outros.addEventListener('change', () => {
-      campo.hidden = !outros.checked;
-      if (outros.checked) $('input', campo).focus(); else $('input', campo).value = '';
     });
   }
 
@@ -612,14 +630,12 @@
     menuCelular();
     reveals();
     form();
-    servicos();
+    sinais();
     trilho($('[data-cases]'), '.case', 'cases');
     trilho($('[data-equipe]'), '.pessoa', 'equipe');
     projetos();
     if (!reduce) {
       heroScroll();
-      frentes();
-      ScrollTrigger.matchMedia({ '(min-width: 901px)': metodo, '(max-width: 900px)': metodoMobile });
       footer();
       pointer();
     }

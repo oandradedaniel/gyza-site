@@ -37,6 +37,21 @@
 
   --ease: cubic-bezier(.22, .61, .36, 1);
   --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  /* LP de análise (head-de-arte, 05/11/2026): sinais, cards e formulário */
+  --fs-dor: clamp(20px, 16.29px + .952vw, 30px);
+  --fs-card-t: clamp(20px, 18.14px + .476vw, 25px);
+  --fs-card-p: 16px;
+  --fs-num: 13px;
+  --fs-label: 14px;
+  --fs-nota: 13px;
+  --alvo-toque: 44px;
+  --raio-card: 24px;
+  --raio-chip: 999px;
+  --sombra-card: inset 0 1px 0 rgba(255,255,255,.9), 0 1px 2px rgba(10,15,26,.04), 0 12px 32px -12px rgba(10,15,26,.10);
+  --sombra-card-hover: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 4px rgba(10,15,26,.05), 0 28px 56px -20px rgba(31,79,216,.28);
+  --brilho-azul: 0 0 0 6px rgba(31,79,216,.18), 0 0 28px rgba(31,79,216,.55);
+  --dur-1: 160ms; --dur-2: 320ms; --dur-3: 600ms; --dur-4: 900ms;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -1029,3 +1044,189 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 .equipe .round--line { color: var(--tinta); border-color: rgba(0,0,0,.18); }
 @media (max-width: 900px) { .equipe__trilho .pessoa { flex-basis: 72vw; } .equipe__trilho .pessoa + .pessoa { margin-top: 0; } }
 @media (prefers-reduced-motion: reduce) { .equipe__trilho.is-auto { scroll-snap-type: x mandatory; } }
+
+
+/* =====================================================================
+   LP de análise (head-de-arte, 05/11/2026)
+   Ordem: abertura, dor, sinais (escuro), cuidamos (claro), cases, sócios, análise (azul)
+   ===================================================================== */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+/* L2 sem a jornada: só título e apoio */
+.servicos__head { margin-bottom: 0; }
+
+/* ---------- 3. Reconhece algum desses? ---------- */
+.sinais { position: relative; background: var(--preto); color: var(--gelo); padding: var(--section) 0; overflow: hidden; isolation: isolate; }
+.sinais__luz { position: absolute; z-index: -1; left: -10%; top: 25%; width: 70%; aspect-ratio: 1; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(31,79,216,.22), rgba(31,79,216,0)); }
+.sinais__grid { display: grid; grid-template-columns: minmax(0, 600px) minmax(0, 1fr); gap: clamp(40px, 6vw, 120px); align-items: start; }
+.sinais__head { position: sticky; top: 120px; }
+.sinais__lead { margin-top: 24px; max-width: 34ch; font-size: var(--fs-lead); color: var(--apoio); line-height: 1.5; }
+.pill .seta { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sinais__lista { border-top: 1px solid var(--linha); counter-reset: none; }
+.sinal { display: grid; grid-template-columns: 56px 1fr; gap: 16px; align-items: baseline; padding: 26px 0 26px; border-bottom: 1px solid var(--linha); }
+.sinal__n { font-size: var(--fs-num); color: var(--azul-claro); font-variant-numeric: tabular-nums; letter-spacing: .02em; transform: translateY(-.35em); }
+.sinal__txt { font-size: var(--fs-dor); font-weight: 500; letter-spacing: -.025em; line-height: 1.25; color: var(--gelo); text-wrap: pretty; max-width: 40ch; }
+
+/* ---------- 4. O que a GYZA cuida ---------- */
+.cuidamos { position: relative; z-index: 2; background: var(--papel); color: var(--tinta); padding: var(--section) 0; border-radius: var(--raio-secao); }
+.cuidamos__head { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: end; margin-bottom: clamp(48px, 6vw, 88px); }
+.cuidamos__lead { font-size: var(--fs-lead); color: var(--tinta-2); max-width: 470px; justify-self: end; line-height: 1.5; }
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.card { position: relative; display: flex; flex-direction: column; min-height: 288px; padding: 28px 28px 30px; background: #fff;
+  border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card);
+  transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease); }
+.card__ico { width: 104px; height: 104px; margin: -8px 0 0 -10px; filter: drop-shadow(0 14px 18px rgba(31,79,216,.22)); transition: transform var(--dur-3) var(--ease-out); }
+.card__nome { margin-top: auto; padding-top: 20px; font-size: var(--fs-card-t); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
+.card__txt { margin-top: 10px; font-size: var(--fs-card-p); line-height: 1.5; color: var(--tinta-2); max-width: 30ch; }
+.card__tag { position: absolute; top: 24px; right: 24px; white-space: nowrap; padding: 5px 12px 5px 10px; border-radius: var(--raio-chip);
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; line-height: 1.3; color: var(--tinta-2); background: rgba(10,15,26,.05);
+  transition: color var(--dur-2) var(--ease), background var(--dur-2) var(--ease); }
+.card__tag::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: rgba(10,15,26,.25); transition: background var(--dur-2) var(--ease); }
+.card__tag-de { color: var(--cinza); }
+
+@media (hover: hover) and (min-width: 901px) {
+  .card:hover { transform: translateY(-6px); box-shadow: var(--sombra-card-hover); }
+  .card:hover .card__ico { transform: translateY(-4px) rotate(-4deg) scale(1.04); }
+}
+.cuidamos__pe { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--linha-papel); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.cuidamos__pe p { font-size: 18px; }
+.cuidamos__pe p span { color: var(--tinta-2); }
+.cuidamos__pe .pill { gap: 10px; }
+
+/* ---------- trilhos: botão de pausa (WCAG 2.2.2) ---------- */
+.round--pausa .i-play { display: none; }
+.round--pausa[aria-pressed="true"] .i-pausa { display: none; }
+.round--pausa[aria-pressed="true"] .i-play { display: block; }
+.round--pausa svg path { stroke-linejoin: round; }
+.round--pausa .i-play path { fill: currentColor; stroke: none; }
+
+/* ---------- 7. Análise ---------- */
+.ancora-antiga { position: absolute; top: 0; }
+.orcamento__title:focus { outline: none; }
+.field { font-size: var(--fs-label); }
+.field em { font-style: normal; font-weight: 400; color: var(--cinza); }
+.chips--sinais { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chips--sinais legend { font-size: var(--fs-label); grid-column: 1 / -1; }
+.chips--sinais label { position: relative; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 10px 14px 10px 12px;
+  border: 1px solid var(--cor-borda-campo); border-radius: 16px; background: var(--papel); color: var(--tinta); cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease), background var(--dur-2) var(--ease); }
+.chips--sinais input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; pointer-events: auto; }
+.chips--sinais .marca { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--cor-borda-campo); background: #fff; padding: 0;
+  transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease); }
+.chips--sinais .marca svg { width: 13px; height: 13px; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset var(--dur-2) var(--ease-out) 60ms; }
+.chips--sinais span:last-child { display: block; padding: 0; border: 0; border-radius: 0; background: none; font-size: 14px; line-height: 1.35; }
+.chips--sinais label:has(input:checked) { border-color: var(--azul); background: #EEF4FF; }
+.chips--sinais label:has(input:checked) .marca { background: var(--azul); border-color: var(--azul); }
+.chips--sinais label:has(input:checked) .marca svg { stroke-dashoffset: 0; }
+.chips--sinais input:checked + .marca + span { background: none; color: var(--tinta); }
+.chips--sinais label:has(input:focus-visible) { outline: 2px solid var(--cor-foco-claro); outline-offset: 2px; }
+.form__selo { font-size: 15px; font-weight: 500; color: var(--tinta); text-align: center; }
+.form__note { font-size: var(--fs-nota); line-height: 1.45; max-width: 60ch; margin: 0 auto; }
+.form__note a { color: var(--azul); text-decoration: underline; text-underline-offset: 2px; }
+
+/* rodapé: razão social e política */
+.footer__legal { gap: 16px; flex-wrap: wrap; }
+.footer__links { display: flex; gap: 24px; }
+.footer__links a { transition: color .3s; }
+.footer__links a:hover { color: var(--gelo); }
+
+/* tipo: correções do 09 Tipografia */
+.case__info h3 { line-height: 1.2; }
+
+@media (max-width: 900px) {
+  .hero__title { font-size: clamp(34px, 9.2vw, 38px); text-wrap: balance; }
+  .sinais { padding: 88px 0 72px; }
+  .sinais__grid { grid-template-columns: 1fr; gap: 36px; }
+  .sinais__head { position: static; }
+  .sinais__lead { margin-top: 16px; }
+  .sinal { grid-template-columns: 34px 1fr; gap: 10px; padding: 20px 0; }
+  .chips--sinais { grid-template-columns: 1fr; }
+
+  .cuidamos { padding: 88px 0 96px; }
+  .cuidamos__head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px; }
+  .cuidamos__lead { justify-self: start; }
+  .cards { grid-template-columns: 1fr; gap: 0; background: #fff; border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card); overflow: hidden; }
+  .card { display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ico tag" "ico nome" "ico txt"; column-gap: 16px; align-items: start;
+    min-height: 0; padding: 18px 18px 18px 14px; border: 0; border-bottom: 1px solid var(--linha-papel); border-radius: 0; box-shadow: none; }
+  .card:last-child { border-bottom: 0; }
+  .card__ico { grid-area: ico; width: 64px; height: 64px; margin: -4px 0 0; filter: drop-shadow(0 8px 10px rgba(31,79,216,.20)); }
+  .card__nome { grid-area: nome; margin-top: 4px; padding-top: 0; }
+  .card__txt { grid-area: txt; margin-top: 4px; }
+  .card__tag { grid-area: tag; position: static; justify-self: start; margin: 2px 0 6px; }
+  .cuidamos__pe { flex-direction: column; align-items: stretch; gap: 16px; }
+  .cuidamos__pe .pill { width: 100%; }
+  .footer__legal { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .card__ico, .card__tag, .chips--sinais label, .chips--sinais .marca, .chips--sinais .marca svg { transition: none; }
+  .card:hover, .card:hover .card__ico { transform: none; }
+}
+
+/* ---------- cor: correções AA do 10 Cor (05/11/2026), só papéis, sem trocar a cor da marca ---------- */
+:root {
+  --cor-foco: var(--azul-claro);          /* tema escuro */
+  --cor-foco-claro: var(--azul);          /* tema claro e card branco */
+  --cor-borda-campo: #6E7783;             /* 4,5:1 sobre branco, 4,1:1 sobre papel */
+  --cor-placeholder: #57606C;             /* 5,8:1 sobre papel */
+}
+:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 3px; }
+[data-theme="light"] :focus-visible, .form :focus-visible, .nav.is-light :focus-visible { outline-color: var(--cor-foco-claro); }
+.orcamento .orcamento__copy :focus-visible { outline-color: #fff; }
+.field input { border-color: var(--cor-borda-campo); }
+.field input::placeholder { color: var(--cor-placeholder); opacity: 1; }
+.field input:focus, .field input:focus-visible { outline: 2px solid var(--cor-foco-claro); outline-offset: 2px; border: 2px solid var(--azul); padding: 0 19px; }
+.field input[aria-invalid="true"] { border: 2px solid #BC3326; padding: 0 19px; }
+.orcamento__lead { color: rgba(255,255,255,.9); }
+/* menos azul solto na primeira tela: o halo fica atmosfera, o botão do topo é o acento */
+.hero__halo { opacity: .82; }
+/* celular: depois da abertura, a marca e o botão do menu ganham vidro a 85% para não sumirem sobre fundo da mesma cor */
+@media (max-width: 900px) {
+  .nav__logo { display: block; padding: 9px 14px; border-radius: 999px; transition: background .4s var(--ease), box-shadow .4s var(--ease); }
+  .nav.is-scrolled .nav__logo { background: rgba(5,5,5,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.14); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .nav.is-light.is-scrolled .nav__logo { background: rgba(242,244,247,.85); box-shadow: inset 0 1px 0 #fff, 0 6px 18px rgba(10,15,26,.10); }
+  .nav.is-scrolled .nav__menu { background: rgba(5,5,5,.85); }
+  .nav.is-light.is-scrolled .nav__menu { background: rgba(242,244,247,.85); }
+  .menu-aberto .nav__logo { background: none !important; box-shadow: none !important; }
+}
+
+/* ---------- política de privacidade (privacidade.html) ---------- */
+.priv .nav { position: fixed; }
+.priv-hero { position: relative; padding: clamp(140px, 16vw, 210px) 0 clamp(48px, 6vw, 80px); overflow: hidden; }
+.priv-hero__halo { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 70% at 78% 0%, rgba(31,79,216,.26), transparent 70%); }
+.priv-hero .wrap { position: relative; }
+.priv-kicker { color: var(--azul-claro); font-size: 14px; font-weight: 500; margin-bottom: 18px; }
+.priv-hero h1 { font-size: var(--fs-h2); font-weight: 500; line-height: 1; letter-spacing: -.045em; max-width: 14ch; }
+.priv-hero__lead { margin-top: 24px; max-width: 58ch; font-size: var(--fs-lead); color: var(--apoio); }
+.priv-meta { margin-top: 16px; font-size: 14px; color: var(--cinza); }
+.priv-doc { position: relative; z-index: 2; background: var(--papel); color: var(--tinta); padding: clamp(56px, 7vw, 110px) 0 clamp(80px, 10vw, 140px); border-radius: var(--raio-secao); }
+.priv-doc__grid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); }
+.priv-toc { position: sticky; top: 100px; align-self: start; font-size: 14px; }
+.priv-toc h2 { font-size: 13px; font-weight: 500; color: var(--tinta-2); margin-bottom: 14px; }
+.priv-toc a { display: block; padding: 6px 0; color: var(--tinta-2); transition: color .3s; }
+.priv-toc a:hover { color: var(--tinta); }
+.priv-texto { max-width: 68ch; }
+.priv-texto section { padding: clamp(22px, 3vw, 36px) 0; border-top: 1px solid var(--linha-papel); scroll-margin-top: 90px; }
+.priv-texto section:first-child { border-top: 0; padding-top: 0; }
+.priv-texto h2 { font-size: clamp(24px, 2.4vw, 34px); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; margin-bottom: 16px; }
+.priv-texto p { color: var(--tinta-2); margin-bottom: 14px; }
+.priv-texto strong { color: var(--tinta); font-weight: 500; }
+.priv-texto ol, .priv-texto ul { margin: 0 0 14px; counter-reset: n; }
+.priv-texto li { position: relative; padding: 6px 0 6px 34px; color: var(--tinta-2); }
+.priv-texto ol li { counter-increment: n; }
+.priv-texto ol li::before { content: counter(n); position: absolute; left: 0; top: 7px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; color: var(--azul); background: rgba(31,79,216,.08); }
+.priv-texto ul li::before { content: ""; position: absolute; left: 8px; top: 16px; width: 6px; height: 6px; border-radius: 50%; background: var(--azul); }
+.priv-link { color: var(--azul); border-bottom: 1px solid currentColor; }
+.priv-hero .priv-link { color: var(--azul-claro); }
+.priv-caixa { margin-top: 8px; padding: 22px 24px; border-radius: var(--raio-card); background: #fff; box-shadow: var(--sombra-card); }
+.priv-caixa p { margin: 0; color: var(--tinta); }
+/* marcador [A CONFIRMAR]: visível de propósito, para ninguém publicar sem conferir */
+mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6px; border-radius: 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; font-size: .95em; }
+.priv-hero mark.conf { background: rgba(127,166,255,.16); color: var(--azul-claro); }
+.footer mark.conf { background: rgba(127,166,255,.16); color: var(--azul-claro); }
+@media (max-width: 900px) { .priv-doc__grid { grid-template-columns: 1fr; } .priv-toc { display: none; } }
+.priv .nav { background: rgba(5,5,5,.85); padding: 7px 7px 7px 22px; backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 12px 40px rgba(0,0,0,.25); }
+@media (max-width: 900px) { .priv .nav { padding: 6px 16px; } .priv .nav__logo { padding: 0; } }
+.card__tag { z-index: 1; background: var(--papel); }
+.card__tag-de, .field em { color: var(--tinta-2); }

@@ -3,15 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GYZA | Agência de marketing 360°</title>
-<meta name="description" content="A GYZA é uma agência de marketing 360° com foco em performance digital. Marca, conteúdo, site e campanha, feitos por quem já construiu isso muitas vezes.">
+<title>GYZA | Análise gratuita da presença digital da sua empresa</title>
+<meta name="description" content="A GYZA analisa sem custo como a sua empresa aparece para o cliente e cuida da marca, do conteúdo e do site.">
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793911628">
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
-</script>
+<link rel="stylesheet" href="css/style.css?v=1793912000">
 </head>
 <body class="is-loading">
 
@@ -71,14 +68,13 @@
     <svg viewBox="0 0 750 200.45"><use href="#logo"/></svg>
   </a>
   <nav class="nav__links" aria-label="Principal">
-    <a href="#servicos">O que fazemos</a>
-    <a href="#frentes">Do logo ao anúncio</a>
-    <a href="#metodo">Como trabalhamos</a>
+    <a href="#sinais">Reconhece?</a>
+    <a href="#cuidamos">O que cuidamos</a>
     <a href="#trabalhos">Cases</a>
     <a href="#equipe">Quem somos</a>
   </nav>
-  <!-- computador: o pedido de orçamento fica no topo; o botão fixo de baixo é só do celular -->
-  <a class="pill pill--small nav__cta" href="#orcamento" data-magnetic><span>Solicite um orçamento</span></a>
+  <!-- computador: o pedido de análise fica no topo; o botão fixo de baixo é só do celular -->
+  <a class="pill pill--small nav__cta" href="#analise" data-magnetic><span>Solicite sua análise</span></a>
   <!-- celular: menu de 3 riscos em vidro (no computador não aparece) -->
   <button class="nav__menu" type="button" aria-expanded="false" aria-controls="menu-celular" aria-label="Abrir menu" data-menu-botao>
     <span class="nav__pontos" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -89,14 +85,13 @@
 <div class="mmenu" id="menu-celular" role="dialog" aria-modal="true" aria-label="Menu" data-menu>
   <div class="mmenu__inner">
     <nav class="mmenu__links" aria-label="Seções">
-      <a href="#servicos" style="--i:0"><span class="mmenu__n">01.</span><span class="mmenu__t"><span>O que fazemos</span></span></a>
-      <a href="#frentes" style="--i:1"><span class="mmenu__n">02.</span><span class="mmenu__t"><span>Do logo ao anúncio</span></span></a>
-      <a href="#metodo" style="--i:2"><span class="mmenu__n">03.</span><span class="mmenu__t"><span>Como trabalhamos</span></span></a>
-      <a href="#trabalhos" style="--i:3"><span class="mmenu__n">04.</span><span class="mmenu__t"><span>Cases</span></span></a>
-      <a href="#equipe" style="--i:4"><span class="mmenu__n">05.</span><span class="mmenu__t"><span>Quem somos</span></span></a>
+      <a href="#sinais" style="--i:0"><span class="mmenu__n">01.</span><span class="mmenu__t"><span>Reconhece algum desses?</span></span></a>
+      <a href="#cuidamos" style="--i:1"><span class="mmenu__n">02.</span><span class="mmenu__t"><span>O que cuidamos</span></span></a>
+      <a href="#trabalhos" style="--i:2"><span class="mmenu__n">03.</span><span class="mmenu__t"><span>Cases</span></span></a>
+      <a href="#equipe" style="--i:3"><span class="mmenu__n">04.</span><span class="mmenu__t"><span>Quem somos</span></span></a>
     </nav>
-    <div class="mmenu__pe" style="--i:5">
-      <a class="pill mmenu__cta" href="#orcamento"><span>Solicite um orçamento</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <div class="mmenu__pe" style="--i:4">
+      <a class="pill mmenu__cta" href="#analise"><span>Solicite sua análise</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <p class="mmenu__rot">Contato</p>
       <div class="mmenu__contato">
         <a href="https://wa.me/5547992606871" target="_blank" rel="noopener">WhatsApp</a>
@@ -107,10 +102,10 @@
   </div>
 </div>
 
-<!-- teste: botão de orçamento fixo embaixo da tela -->
+<!-- celular: botão de análise fixo embaixo da tela -->
 <div class="cta-grupo">
-<a class="pill cta-baixo" data-magnetic href="#orcamento"><span class="cta-baixo__txt"><span class="cta-baixo__l1">Solicite um orçamento</span><span class="cta-baixo__l2" aria-hidden="true">Orçamento</span></span><svg class="cta-baixo__seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-<a class="cta-wa" href="https://wa.me/5547992606871?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GYZA%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener" aria-label="Chamar a GYZA no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6z"/><path d="M9 8.6c.2-.5.6-.6 1-.6l.6 1.4-.6.8c.5 1.1 1.4 2 2.5 2.5l.8-.6 1.4.6c0 .4-.1.8-.6 1-1 .5-3-.2-4.3-1.5S8.5 9.6 9 8.6z"/></svg></a>
+<a class="pill cta-baixo" data-magnetic href="#analise"><span class="cta-baixo__txt"><span class="cta-baixo__l1">Solicite sua análise</span><span class="cta-baixo__l2" aria-hidden="true">Análise gratuita</span></span><svg class="cta-baixo__seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<a class="cta-wa" href="https://wa.me/5547992606871?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GYZA%20e%20quero%20a%20an%C3%A1lise%20gratuita%20da%20minha%20empresa." target="_blank" rel="noopener" aria-label="Chamar a GYZA no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6z"/><path d="M9 8.6c.2-.5.6-.6 1-.6l.6 1.4-.6.8c.5 1.1 1.4 2 2.5 2.5l.8-.6 1.4.6c0 .4-.1.8-.6 1-1 .5-3-.2-4.3-1.5S8.5 9.6 9 8.6z"/></svg></a>
 </div>
 
 <main>
@@ -130,135 +125,100 @@
   <!-- 2. O QUE FAZEMOS -->
   <section class="servicos" id="servicos" data-theme="light">
     <div class="wrap servicos__head">
-      <h2 class="h2" data-lines>O cliente já procurou<br> você hoje.</h2>
+      <h2 class="h2" data-lines>Seu cliente decide<br> antes de te chamar.</h2>
       <p class="servicos__lead" data-lines>Ele pesquisou, comparou e escolheu em poucos minutos. A GYZA cuida da presença digital da sua empresa para o cliente sempre optar por você.</p>
     </div>
-    <div class="wrap jornada">
-      <div class="jornada__titulo">
-        <h3>Antes de falar com você, ele já passou por aqui.</h3>
-        <p class="jornada__sub">São seis passos que o cliente dá sozinho antes de pedir um orçamento. Em cada um, a GYZA deixa sua empresa pronta para ser a escolhida.</p>
+  </section>
+
+  <!-- 3. RECONHECE ALGUM DESSES? (só a lista, em tipografia; a marcação fica no formulário da análise) -->
+  <section class="sinais" id="sinais" data-theme="dark" aria-labelledby="sinais-t">
+    <div class="sinais__luz" aria-hidden="true"></div>
+    <div class="wrap sinais__grid">
+      <div class="sinais__head">
+        <h2 class="h2" id="sinais-t" data-lines>Reconhece algum<br> desses?</h2>
+        <p class="sinais__lead">Quase todo dono de empresa já passou por um desses.</p>
       </div>
-      <ol class="jornada__lista" data-jornada>
-      <li class="passo">
-        <span class="passo__n">01</span>
-        <span class="passo__ponto" aria-hidden="true"></span>
-        <div class="passo__corpo">
-          <p class="passo__quando">Na pesquisa</p>
-          <h4 class="passo__nome">Posicionamento</h4>
-          <p class="passo__txt">Se ele não entende o que você faz, ele passa direto. Deixamos isso claro.</p>
-        </div>
-      </li>
-      <li class="passo">
-        <span class="passo__n">02</span>
-        <span class="passo__ponto" aria-hidden="true"></span>
-        <div class="passo__corpo">
-          <p class="passo__quando">Na busca</p>
-          <h4 class="passo__nome">Presença</h4>
-          <p class="passo__txt">Se ele não te acha, ele acha outro. Colocamos sua empresa onde ele procura.</p>
-        </div>
-      </li>
-      <li class="passo">
-        <span class="passo__n">03</span>
-        <span class="passo__ponto" aria-hidden="true"></span>
-        <div class="passo__corpo">
-          <p class="passo__quando">Na comparação</p>
-          <h4 class="passo__nome">Identidade</h4>
-          <p class="passo__txt">Se a marca parece amadora, o preço parece caro. Ajustamos a imagem ao valor que você cobra.</p>
-        </div>
-      </li>
-      <li class="passo">
-        <span class="passo__n">04</span>
-        <span class="passo__ponto" aria-hidden="true"></span>
-        <div class="passo__corpo">
-          <p class="passo__quando">No intervalo</p>
-          <h4 class="passo__nome">Conteúdo</h4>
-          <p class="passo__txt">Se você some, ele esquece. Mantemos sua empresa presente toda semana.</p>
-        </div>
-      </li>
-      <li class="passo">
-        <span class="passo__n">05</span>
-        <span class="passo__ponto" aria-hidden="true"></span>
-        <div class="passo__corpo">
-          <p class="passo__quando">Na dúvida</p>
-          <h4 class="passo__nome">Audiovisual</h4>
-          <p class="passo__txt">Se ele não vê, ele não confia. Mostramos o seu trabalho em vídeo.</p>
-        </div>
-      </li>
-      <li class="passo">
-        <span class="passo__n">06</span>
-        <span class="passo__ponto" aria-hidden="true"></span>
-        <div class="passo__corpo">
-          <p class="passo__quando">Na decisão</p>
-          <h4 class="passo__nome">Anúncios</h4>
-          <p class="passo__txt">Se você não aparece na hora certa, outro aparece. Levamos sua empresa até ele.</p>
-        </div>
-      </li>
-      </ol>
+      <ul class="sinais__lista" role="list">
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">01</span><span class="sinal__txt">O Instagram está parado há semanas.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">02</span><span class="sinal__txt">O Google está sem fotos e sem avaliações.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">03</span><span class="sinal__txt">O site não abre direito no celular.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">04</span><span class="sinal__txt">O logo não combina com o preço que você cobra.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">05</span><span class="sinal__txt">O cliente pede orçamento e some.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">06</span><span class="sinal__txt">Você posta, mas não vende.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">07</span><span class="sinal__txt">O concorrente aparece antes de você no Google.</span></li>
+        <li class="sinal"><span class="sinal__n" aria-hidden="true">08</span><span class="sinal__txt">Você investe em anúncio e não sabe o que voltou.</span></li>
+      </ul>
     </div>
   </section>
 
-  <!-- 4. DO LOGO AO ANÚNCIO (pirâmide: base Marca, topo Anúncios) -->
-  <section class="frentes" id="frentes" data-theme="dark">
-    <div class="hero__halo frentes__halo" aria-hidden="true"><i></i><b></b></div>
-    <div class="frentes__stage wrap">
-      <div class="frentes__copy">
-        <p class="frentes__sobre">360° de estratégia</p>
-        <h2 class="h2 frentes__title">Do logo ao anúncio.</h2>
-        <p class="frentes__intro">Uma camada sustenta a outra. Sem marca forte, o conteúdo não convence. Sem conteúdo, o site não vende. Sem tudo isso, o anúncio só gasta.</p>
-        <div class="frentes__panels">
-          <article class="frente is-on">
-            <h3>Marca</h3>
-            <p>Tudo começa aqui: quem você é, o que promete e por que vale o preço.</p>
-            <ul><li>Posicionamento</li><li>Nome e logo</li><li>Manual da marca</li><li>Tom de voz</li></ul>
-          </article>
-          <article class="frente">
-            <h3>Conteúdo</h3>
-            <p>Com a marca definida, ela passa a falar todo dia onde o cliente já está.</p>
-            <ul><li>Redes sociais</li><li>Foto e vídeo</li><li>Vídeo de cinema</li><li>Roteiro e texto</li></ul>
-          </article>
-          <article class="frente">
-            <h3>Digital</h3>
-            <p>Onde o interesse vira contato: site, Google e páginas prontos para atender bem.</p>
-            <ul><li>Site</li><li>Páginas de venda</li><li>Perfil no Google</li><li>Aparecer na busca</li></ul>
-          </article>
-          <article class="frente">
-            <h3>Anúncios</h3>
-            <p>No topo, o anúncio leva sua empresa a mais gente, com a base já firme.</p>
-            <ul><li>Anúncios no Google</li><li>Anúncios no Instagram</li><li>Lançamentos</li><li>Acompanhamento dos números</li></ul>
-          </article>
-        </div>
-        <ol class="frentes__dots" aria-hidden="true"><li class="is-on"></li><li></li><li></li><li></li></ol>
+  <!-- 4. O QUE CUIDAMOS (o selo de cada card diz a qual sinal ele responde) -->
+  <section class="cuidamos" id="cuidamos" data-theme="light" aria-labelledby="cuidamos-t">
+    <div class="wrap">
+      <div class="cuidamos__head">
+        <h2 class="h2" id="cuidamos-t" data-lines>O que a GYZA cuida<br> na sua empresa.</h2>
+        <p class="cuidamos__lead">Cada frente abaixo tem a ver com um dos sinais que você viu. Depois da análise, você escolhe por onde começar.</p>
       </div>
-      <div class="pyr-wrap" aria-hidden="true">
-        <canvas class="pyr-gl"></canvas>
-        <div class="pyr-labels"><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt"><b>01</b> Marca<em>Nome, logo e posicionamento</em></p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt"><b>02</b> Conteúdo<em>Redes, foto e vídeo</em></p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt"><b>03</b> Digital<em>Site e Google</em></p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt"><b>04</b> Anúncios<em>Campanhas e lançamentos</em></p></div></div>
+      <div class="cards">
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/marca.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> logo e preço</p>
+        <h3 class="card__nome">Marca</h3>
+        <p class="card__txt">Logo e identidade que combinam com o valor que você cobra.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/conteudo.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> Instagram parado</p>
+        <h3 class="card__nome">Conteúdo</h3>
+        <p class="card__txt">Perfil sempre ativo, com assunto definido e frequência.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/conteudo-vende.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> posta e não vende</p>
+        <h3 class="card__nome">Conteúdo que vende</h3>
+        <p class="card__txt">Posts feitos para levar o cliente até a conversa com você.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/video.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <h3 class="card__nome">Vídeo</h3>
+        <p class="card__txt">Vídeos que mostram o seu trabalho para o cliente conhecer você antes da conversa.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/site.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> site no celular</p>
+        <h3 class="card__nome">Site</h3>
+        <p class="card__txt">Site rápido, que abre bem no celular e explica o que você faz.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/local.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> Google vazio</p>
+        <h3 class="card__nome">Google</h3>
+        <p class="card__txt">Perfil completo, com fotos e um jeito fácil de pedir avaliações.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/anuncios.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> anúncio sem retorno</p>
+        <h3 class="card__nome">Anúncios</h3>
+        <p class="card__txt">Campanhas no Google e no Instagram, com acompanhamento dos números.</p>
+      </article>
+      <article class="card">
+        <img class="card__ico" src="assets/img/icones-lp/paginas.svg" width="160" height="160" alt="" loading="lazy" decoding="async">
+        <p class="card__tag"><span class="card__tag-de">Para:</span> cliente que some</p>
+        <h3 class="card__nome">Páginas de venda</h3>
+        <p class="card__txt">Página que leva o interessado direto para a conversa com você.</p>
+      </article>
+      </div>
+      <div class="cuidamos__pe">
+        <p>Não sabe por onde começar? <span>É para isso que serve a análise.</span></p>
+        <a class="pill pill--ink" href="#analise" data-magnetic><span>Solicite sua análise</span><svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
   </section>
 
-  <!-- 5. MÉTODO -->
-  <section class="metodo" id="metodo" data-theme="light">
-    <div class="metodo__pin">
-      <div class="wrap metodo__head">
-        <h2 class="h2">Primeiro o diagnóstico,<br> depois o impacto.</h2>
-        <p class="metodo__lead">Todo projeto segue um método em cinco etapas, do diagnóstico ao acompanhamento.</p>
-      </div>
-      <div class="metodo__track">
-        <svg class="trilha" aria-hidden="true"><path class="trilha__base"/><path class="trilha__fill"/></svg>
-        <article class="etapa"><span class="etapa__n">01</span><h3>Diagnóstico</h3><p>Olhamos a sua marca como o cliente olha: Google, site, redes e atendimento. Sem achismo.</p></article>
-        <article class="etapa"><span class="etapa__n">02</span><h3>Plano</h3><p>Dizemos o que falta, em que ordem fazer e quanto custa. Nada de pacote fechado.</p></article>
-        <article class="etapa"><span class="etapa__n">03</span><h3>Criação</h3><p>Time sênior na execução. A sua empresa aprova cada etapa antes de seguir.</p></article>
-        <article class="etapa"><span class="etapa__n">04</span><h3>Lançamento</h3><p>Tudo vai ao ar junto, testado e no prazo definido no plano.</p></article>
-        <article class="etapa"><span class="etapa__n">05</span><h3>Acompanhamento</h3><p>Acompanhamos os números e ajustamos a rota junto com a sua equipe.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. TRABALHOS -->
+  <!-- 5. CASES -->
   <section class="trabalhos" id="trabalhos" data-theme="dark">
     <div class="wrap trabalhos__head">
-      <h2 class="h2" data-lines>Confira alguns<br> cases.</h2>
-      <p class="trabalhos__lead" data-lines>Marca, conteúdo e performance. Cada projeto com estratégia própria e direção de criação do começo ao fim.</p>
+      <h2 class="h2" data-lines>Veja como já cuidamos<br> de outras marcas.</h2>
+      <p class="trabalhos__lead" data-lines>Cada projeto começa por uma análise e tem estratégia própria, com direção de criação do início ao fim.</p>
     </div>
     <!-- os cases correm para os lados: quem quiser segue rolando o site para baixo -->
     <div class="cases" data-cases role="region" aria-label="Cases">
@@ -284,6 +244,7 @@
     <div class="wrap cases__ctrl">
       <p class="cases__count" aria-live="polite"><b data-cases-n>01</b> / 03</p>
       <div class="cases__btns">
+        <button class="round round--line round--pausa" type="button" data-cases-pausa aria-pressed="false" aria-label="Pausar a passagem automática dos cases" hidden><svg class="i-pausa" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></button>
         <button class="round round--line" type="button" data-cases-prev aria-label="Case anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <button class="round round--line" type="button" data-cases-next aria-label="Próximo case"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
@@ -291,42 +252,43 @@
   </section>
 
   <!-- 7. QUEM SOMOS -->
-  <!-- fotos: trocar assets/img/equipe/vitor.webp e dani.webp (retrato 4:5, 800 x 1000) pela foto real e atualizar o alt; hoje os arquivos são um mockup de silhueta -->
+  <!-- fotos: trocar assets/img/equipe/vitor.webp, dani.webp, pedro.webp e iago.webp (retrato 4:5, 800 x 1000) pela foto real e atualizar o alt; hoje os arquivos são um mockup de silhueta -->
   <section class="equipe" id="equipe" data-theme="light">
     <div class="wrap equipe__grid">
       <div class="equipe__head">
         <h2 class="h2" data-lines>Quem está por trás<br> da GYZA.</h2>
-        <p class="equipe__lead">Os sócios da GYZA: estratégia, criação, tecnologia e produto digital.</p>
+        <p class="equipe__lead">Somos quatro sócios, cada um com uma frente. Você fala com quem decide e com quem faz.</p>
       </div>
       <div class="equipe__trilho" data-equipe role="region" aria-label="Sócios da GYZA">
       <article class="pessoa">
         <figure class="pessoa__foto"><img src="assets/img/equipe/vitor.webp" width="800" height="1000" alt="Espaço para a foto de Vitor Silveira" loading="lazy" decoding="async"></figure>
         <p class="pessoa__papel">CEO e Head Comercial</p>
         <h3 class="pessoa__nome">Vitor Silveira</h3>
-        <p class="pessoa__txt">Cuida da estratégia e do comercial da GYZA. Transforma o diagnóstico em plano e acompanha os números com o cliente.</p>
+        <p class="pessoa__txt">Cuida da estratégia e do comercial. Conversa com você sobre a análise e acompanha os números.</p>
       </article>
       <article class="pessoa">
         <figure class="pessoa__foto"><img src="assets/img/equipe/dani.webp" width="800" height="1000" alt="Espaço para a foto de Daniel Andrade" loading="lazy" decoding="async"></figure>
         <p class="pessoa__papel">Head de Criação</p>
         <h3 class="pessoa__nome">Daniel Andrade</h3>
-        <p class="pessoa__txt">Responde pela criação: marca, identidade e direção visual de cada projeto. Também está à frente da Dandrade Design [a confirmar].</p>
+        <p class="pessoa__txt">Responde pela criação: marca, identidade e direção visual de cada projeto.</p>
       </article>
       <article class="pessoa">
         <figure class="pessoa__foto"><img src="assets/img/equipe/pedro.webp" width="800" height="1000" alt="Espaço para a foto de Pedro" loading="lazy" decoding="async"></figure>
         <p class="pessoa__papel">Head de Tecnologia</p>
         <h3 class="pessoa__nome">Pedro</h3>
-        <p class="pessoa__txt">Cuida da tecnologia da GYZA: site, sistemas e automações que sustentam o trabalho de cada projeto. [texto a confirmar]</p>
+        <p class="pessoa__txt">Cuida da tecnologia: site, sistemas e automações que deixam o atendimento organizado.</p>
       </article>
       <article class="pessoa">
         <figure class="pessoa__foto"><img src="assets/img/equipe/iago.webp" width="800" height="1000" alt="Espaço para a foto de Iago" loading="lazy" decoding="async"></figure>
         <p class="pessoa__papel">Head de Produto Digital</p>
         <h3 class="pessoa__nome">Iago</h3>
-        <p class="pessoa__txt">Cuida do produto digital: como cada página, fluxo e entrega funciona para quem usa. [texto a confirmar]</p>
+        <p class="pessoa__txt">Cuida do produto digital: páginas e caminhos que levam o cliente do interesse até o contato.</p>
       </article>
       </div>
       <div class="cases__ctrl equipe__ctrl">
         <p class="cases__count" aria-live="polite"><b data-equipe-n>01</b> / 04</p>
         <div class="cases__btns">
+          <button class="round round--line round--pausa" type="button" data-equipe-pausa aria-pressed="false" aria-label="Pausar a passagem automática dos sócios" hidden><svg class="i-pausa" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></button>
           <button class="round round--line" type="button" data-equipe-prev aria-label="Sócio anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
           <button class="round round--line" type="button" data-equipe-next aria-label="Próximo sócio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </div>
@@ -334,13 +296,14 @@
     </div>
   </section>
 
-  <!-- 8. ORÇAMENTO -->
-  <section class="orcamento" id="orcamento" data-theme="dark">
+  <!-- 8. ANÁLISE (o id antigo #orcamento fica como âncora de compatibilidade) -->
+  <section class="orcamento" id="analise" data-theme="dark" aria-labelledby="analise-t">
+    <span id="orcamento" class="ancora-antiga" aria-hidden="true"></span>
     <div class="wrap orcamento__inner">
       <div class="orcamento__copy">
-        <h2 class="orcamento__title" data-lines>Solicite um<br> orçamento.</h2>
-        <p class="orcamento__lead">Conte o que a sua empresa precisa. A GYZA desenha o caminho e retorna com uma proposta.</p>
-        <a class="pill orcamento__wa" data-magnetic href="https://wa.me/5547992606871" target="_blank" rel="noopener" aria-label="Chamar a GYZA no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6z"/><path d="M9 8.6c.2-.5.6-.6 1-.6l.6 1.4-.6.8c.5 1.1 1.4 2 2.5 2.5l.8-.6 1.4.6c0 .4-.1.8-.6 1-1 .5-3-.2-4.3-1.5S8.5 9.6 9 8.6z"/></svg><span>Chamar no WhatsApp</span></a>
+        <h2 class="orcamento__title" id="analise-t" tabindex="-1" data-lines>Solicite sua<br> análise gratuita.</h2>
+        <p class="orcamento__lead">Conte um pouco sobre a sua empresa. A gente olha o seu Google, o site, o Instagram e a marca como o cliente olha, e mostra o que encontrou e por onde começar.</p>
+        <a class="pill orcamento__wa" data-magnetic href="https://wa.me/5547992606871?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GYZA%20e%20quero%20a%20an%C3%A1lise%20gratuita%20da%20minha%20empresa." target="_blank" rel="noopener" aria-label="Falar com a GYZA no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6z"/><path d="M9 8.6c.2-.5.6-.6 1-.6l.6 1.4-.6.8c.5 1.1 1.4 2 2.5 2.5l.8-.6 1.4.6c0 .4-.1.8-.6 1-1 .5-3-.2-4.3-1.5S8.5 9.6 9 8.6z"/></svg><span>Falar no WhatsApp</span></a>
       </div>
       <form class="form" data-form novalidate>
         <div class="form__row">
@@ -349,21 +312,22 @@
         </div>
         <div class="form__row">
           <label class="field"><span>WhatsApp</span><input name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required></label>
-          <label class="field"><span>E-mail</span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="field"><span>Instagram ou site <em>(opcional)</em></span><input name="perfil" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="@suaempresa ou o link do site"></label>
         </div>
-        <fieldset class="chips">
-          <legend>O que a sua empresa precisa?</legend>
-          <label><input type="checkbox" name="frente" value="Branding"><span>Branding</span></label>
-          <label><input type="checkbox" name="frente" value="Identidade visual"><span>Identidade visual</span></label>
-          <label><input type="checkbox" name="frente" value="Site"><span>Site</span></label>
-          <label><input type="checkbox" name="frente" value="Conteúdo"><span>Conteúdo</span></label>
-          <label><input type="checkbox" name="frente" value="Audiovisual"><span>Audiovisual</span></label>
-          <label><input type="checkbox" name="frente" value="Performance"><span>Performance</span></label>
-          <label><input type="checkbox" name="frente" value="Outros" data-outros><span>Outros</span></label>
+        <fieldset class="chips chips--sinais">
+          <legend>Marque o que você reconhece na sua empresa.</legend>
+          <label><input type="checkbox" name="reconhece" value="O Instagram está parado há semanas"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>O Instagram está parado há semanas.</span></label>
+          <label><input type="checkbox" name="reconhece" value="O Google está sem fotos e sem avaliações"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>O Google está sem fotos e sem avaliações.</span></label>
+          <label><input type="checkbox" name="reconhece" value="O site não abre direito no celular"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>O site não abre direito no celular.</span></label>
+          <label><input type="checkbox" name="reconhece" value="O logo não combina com o preço que você cobra"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>O logo não combina com o preço que você cobra.</span></label>
+          <label><input type="checkbox" name="reconhece" value="O cliente pede orçamento e some"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>O cliente pede orçamento e some.</span></label>
+          <label><input type="checkbox" name="reconhece" value="Você posta, mas não vende"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Você posta, mas não vende.</span></label>
+          <label><input type="checkbox" name="reconhece" value="O concorrente aparece antes de você no Google"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>O concorrente aparece antes de você no Google.</span></label>
+          <label><input type="checkbox" name="reconhece" value="Você investe em anúncio e não sabe o que voltou"><span class="marca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Você investe em anúncio e não sabe o que voltou.</span></label>
         </fieldset>
-        <label class="field field--outros" hidden><span>Conte o que a sua empresa precisa</span><input name="outros" maxlength="160"></label>
-        <button class="pill pill--blue form__send" type="submit"><span>Enviar pedido</span></button>
-        <p class="form__note" data-form-note>Ao enviar, a sua mensagem abre no WhatsApp da GYZA. Usamos os dados só para responder ao pedido.</p>
+        <button class="pill pill--blue form__send" type="submit"><span>Enviar para análise</span></button>
+        <p class="form__selo">Análise gratuita, sem custo e sem compromisso.</p>
+        <p class="form__note" data-form-note>Ao enviar, a mensagem abre no seu WhatsApp para você mandar à GYZA. Usamos seus dados só para fazer a análise e responder você. Se não virar contrato, apagamos em até 90 dias. <a href="privacidade.html">Política de privacidade</a>.</p>
       </form>
     </div>
   </section>
@@ -372,17 +336,17 @@
 <footer class="footer" data-theme="dark">
   <div class="wrap footer__top">
     <p class="footer__sig">Marketing 360° com foco em performance digital.</p>
-    <a class="pill" data-magnetic href="#orcamento"><span>Solicite um orçamento</span></a>
+    <a class="pill" data-magnetic href="#analise"><span>Solicite sua análise</span></a>
   </div>
   <div class="wrap footer__cols">
     <div>
       <h4>Navegue</h4>
-      <a href="#servicos">O que fazemos</a><a href="#frentes">Do logo ao anúncio</a><a href="#metodo">Como trabalhamos</a><a href="#trabalhos">Cases</a><a href="#equipe">Quem somos</a>
+      <a href="#sinais">Reconhece algum desses?</a><a href="#cuidamos">O que cuidamos</a><a href="#trabalhos">Cases</a><a href="#equipe">Quem somos</a><a href="privacidade.html">Política de privacidade</a>
     </div>
     <div>
       <h4>Contato</h4>
       <a class="fi" href="https://wa.me/5547992606871" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6z"/><path d="M9 8.6c.2-.5.6-.6 1-.6l.6 1.4-.6.8c.5 1.1 1.4 2 2.5 2.5l.8-.6 1.4.6c0 .4-.1.8-.6 1-1 .5-3-.2-4.3-1.5S8.5 9.6 9 8.6z"/></svg></i><span><b>WhatsApp</b>Fale com a equipe</span></a>
-      <a class="fi" href="#orcamento"><i><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></svg></i><span><b>Orçamento</b>Resposta com proposta</span></a>
+      <a class="fi" href="#analise"><i><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></svg></i><span><b>Análise</b>Gratuita, sem compromisso</span></a>
     </div>
     <div>
       <h4>Onde estamos</h4>
@@ -391,7 +355,7 @@
     </div>
   </div>
   <svg class="footer__mark" viewBox="0 0 750 200.45" aria-hidden="true"><use href="#logo"/></svg>
-  <div class="wrap footer__legal"><span>© 2026 GYZA</span><a href="#topo">Voltar ao topo</a></div>
+  <div class="wrap footer__legal"><span>© 2026 Glory Digital LTDA. GYZA é o nome fantasia da Glory Digital LTDA, CNPJ 43.637.282/0001-45.</span><span class="footer__links"><a href="privacidade.html">Política de privacidade</a><a href="#topo">Voltar ao topo</a></span></div>
 </footer>
 
 <!-- Projeto aberto: o card do case cresce até virar uma página -->
@@ -436,7 +400,7 @@
       <footer class="proj__end">
         <p>Quer uma marca com essa presença?</p>
         <div class="proj__ctas">
-          <a class="pill" data-magnetic href="#orcamento" data-proj-close><span>Solicite um orçamento</span></a>
+          <a class="pill" data-magnetic href="#analise" data-proj-close><span>Solicite sua análise</span></a>
           <a class="link-line" href="https://www.behance.net/gallery/168784171/Dandrade-Design" target="_blank" rel="noopener">Ver no Behance</a>
         </div>
       </footer>
@@ -486,7 +450,7 @@
       <footer class="proj__end">
         <p>Quer uma marca com essa presença?</p>
         <div class="proj__ctas">
-          <a class="pill" data-magnetic href="#orcamento" data-proj-close><span>Solicite um orçamento</span></a>
+          <a class="pill" data-magnetic href="#analise" data-proj-close><span>Solicite sua análise</span></a>
         </div>
       </footer>
     </div>
@@ -497,7 +461,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js?v=1793911628"></script>
-<script type="module" src="js/gl.js?v=1793911628"></script>
+<script src="js/main.js?v=1793912000"></script>
 </body>
 </html>

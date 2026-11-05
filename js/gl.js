@@ -208,12 +208,17 @@ function pyramid() {
     canvas.dataset.poster = '1';
     const img = new Image();
     img.className = 'pyr-poster'; img.alt = '';
-    img.src = canvas.clientWidth < 600 ? 'assets/img/pyr-poster-m.webp' : 'assets/img/pyr-poster.webp';
+    img.src = canvas.clientWidth < 600 ? 'assets/img/pyr-poster-m.webp?v=5' : 'assets/img/pyr-poster.webp?v=5';
     canvas.after(img);
     canvas.style.display = 'none';
     const lab = document.querySelector('.pyr-labels'); if (lab) lab.style.display = 'none';
   };
   let renderer;
+  // sem WebGL (bloqueado, desligado ou sem placa): vai direto para a imagem parada, sem erro no console
+  let gl = null;
+  try { const t = document.createElement('canvas'); gl = t.getContext('webgl2') || t.getContext('webgl'); } catch (e) { gl = null; }
+  if (!gl) { poster(); return; }
+  gl.getExtension('WEBGL_lose_context')?.loseContext();
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   } catch (e) { poster(); return; }

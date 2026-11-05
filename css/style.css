@@ -626,3 +626,7 @@ body.is-loading .cta-baixo { opacity: 0; translate: -50% 20px; }
 body.is-loading .cta-baixo { translate: 0 20px !important; }
 .cta-baixo.is-off { translate: 0 140% !important; }
 @media (max-width: 600px) { .cta-baixo { width: calc(100% - 32px); } }
+
+/* título novo de O que fazemos: 2 linhas no computador (com 1fr 1fr "procurou" caía sozinho na 2ª linha) */
+.servicos__head { grid-template-columns: 1.35fr 1fr; }
+@media (max-width: 900px) { .servicos__head { grid-template-columns: 1fr; } }

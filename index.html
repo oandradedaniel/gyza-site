@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793906869">
+<link rel="stylesheet" href="css/style.css?v=1793908347">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
 </script>
@@ -189,16 +189,27 @@
       <h2 class="h2" data-lines>Confira alguns<br> cases.</h2>
       <p class="trabalhos__lead" data-lines>Marca, conteúdo e performance. Cada projeto com estratégia própria e direção de criação do começo ao fim.</p>
     </div>
-    <div class="cases wrap">
-      <article class="case" style="--c1:#1F4FD8;--c2:#0C1C46">
-        <div class="case__media"><img class="case__img" src="assets/img/cases/case-02.webp" width="2880" height="1610" alt="Case 01" loading="lazy" decoding="async"></div>
+    <!-- os cases correm para os lados: quem quiser segue rolando o site para baixo -->
+    <div class="cases" data-cases>
+      <article class="case">
+        <div class="case__media"><img class="case__img" src="assets/img/cases/case-02.webp" width="2880" height="1610" alt="Case 01" loading="lazy" decoding="async" draggable="false"></div>
       </article>
-      <article class="case" style="--c1:#D8DEE9;--c2:#9BA5B5">
-        <div class="case__media"><img class="case__img" src="assets/img/cases/case-03.webp" width="2880" height="1610" alt="Case 02" loading="lazy" decoding="async"></div>
+      <article class="case">
+        <div class="case__media"><img class="case__img" src="assets/img/cases/case-03.webp" width="2880" height="1610" alt="Case 02" loading="lazy" decoding="async" draggable="false"></div>
       </article>
-      <article class="case" style="--c1:#3FA9F5;--c2:#11328D">
-        <div class="case__media"><img class="case__img" src="assets/img/cases/case-01.webp" width="2880" height="1610" alt="Case 03" loading="lazy" decoding="async"></div>
+      <article class="case case--open" data-proj-open="dandrade">
+        <div class="case__media">
+          <img class="case__img" src="assets/img/cases/case-01.webp" width="2880" height="1610" alt="Dandrade Design" loading="lazy" decoding="async" draggable="false">
+          <button class="case__ver" type="button"><span>Ver projeto</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button>
+        </div>
       </article>
+    </div>
+    <div class="wrap cases__ctrl">
+      <p class="cases__count"><b data-cases-n>01</b> / 03</p>
+      <div class="cases__btns">
+        <button class="round round--line" type="button" data-cases-prev aria-label="Case anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+        <button class="round round--line" type="button" data-cases-next aria-label="Próximo case"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
     </div>
   </section>
 
@@ -262,11 +273,61 @@
   <div class="wrap footer__legal"><span>© 2026 GYZA</span><a href="#topo">Voltar ao topo</a></div>
 </footer>
 
+<!-- Projeto aberto: o card do case cresce até virar uma página -->
+<div class="proj" id="proj-dandrade" role="dialog" aria-modal="true" aria-labelledby="proj-dandrade-t" hidden>
+  <div class="proj__scroll" data-proj-scroll>
+    <figure class="proj__cover"><img src="assets/img/cases/case-01.webp" width="2880" height="1610" alt=""></figure>
+    <div class="proj__body wrap">
+      <header class="proj__head">
+        <p class="proj__kicker">Identidade visual</p>
+        <h2 class="proj__title" id="proj-dandrade-t">Dandrade Design</h2>
+        <p class="proj__lead">Uma marca feita para não parecer comum. O símbolo une o D à bandeira quadriculada de chegada, e o azul elétrico assume o protagonismo em cada aplicação.</p>
+        <dl class="proj__meta">
+          <div><dt>Cliente</dt><dd>Dandrade Design</dd></div>
+          <div><dt>Escopo</dt><dd>Logo, paleta, tipografia e aplicações</dd></div>
+          <div><dt>Ano</dt><dd>2023</dd></div>
+        </dl>
+      </header>
+
+      <div class="proj__gal">
+        <img class="is-wide" src="assets/img/cases/dandrade/01.webp" width="1920" height="1080" alt="Logo Dandrade Design em duas versões" loading="lazy" decoding="async">
+        <div class="proj__txt">
+          <h3>Conceito</h3>
+          <p>Foguete, bandeira e tabuleiro. Ousadia para sair do convencional, a chegada como destino e estratégia em cada jogada. O quadriculado vira o elemento que costura toda a identidade.</p>
+        </div>
+        <img class="is-wide" src="assets/img/cases/dandrade/02.webp" width="1920" height="1080" alt="Conceito do símbolo: foguete, bandeira e tabuleiro" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/dandrade/03.webp" width="1920" height="1080" alt="Símbolo e versões do logo" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/dandrade/04.webp" width="1920" height="1080" alt="Paleta de cores" loading="lazy" decoding="async">
+        <div class="proj__txt">
+          <h3>Aplicações</h3>
+          <p>Do cartão ao vestuário, a marca mantém o mesmo contraste: preto profundo, azul intenso e o quadriculado em movimento.</p>
+        </div>
+        <img class="is-wide" src="assets/img/cases/dandrade/05.webp" width="1920" height="1080" alt="Peça Movement" loading="lazy" decoding="async">
+        <img src="assets/img/cases/dandrade/06.webp" width="1920" height="1080" alt="Cartões de visita" loading="lazy" decoding="async">
+        <img src="assets/img/cases/dandrade/07.webp" width="1920" height="1080" alt="Ecobag azul" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/dandrade/08.webp" width="1920" height="1080" alt="Vitrine com o símbolo" loading="lazy" decoding="async">
+        <img src="assets/img/cases/dandrade/09.webp" width="1920" height="1080" alt="Camisetas" loading="lazy" decoding="async">
+        <img src="assets/img/cases/dandrade/10.webp" width="1920" height="1080" alt="Cubos com o símbolo" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/dandrade/11.webp" width="1920" height="1080" alt="Site no notebook" loading="lazy" decoding="async">
+      </div>
+
+      <footer class="proj__end">
+        <p>Quer uma marca com essa presença?</p>
+        <div class="proj__ctas">
+          <a class="pill" data-magnetic href="#orcamento" data-proj-close><span>Solicite um orçamento</span></a>
+          <a class="link-line" href="https://www.behance.net/gallery/168784171/Dandrade-Design" target="_blank" rel="noopener">Ver no Behance</a>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <button class="proj__close" type="button" data-proj-close aria-label="Fechar projeto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+
 <div class="cursor" aria-hidden="true"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js?v=1793906869"></script>
-<script type="module" src="js/gl.js?v=1793906869"></script>
+<script src="js/main.js?v=1793908347"></script>
+<script type="module" src="js/gl.js?v=1793908347"></script>
 </body>
 </html>

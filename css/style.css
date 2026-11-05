@@ -997,3 +997,7 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 .nav.is-light .nav__cta { --bg: var(--azul); --fg: #fff; }
 @media (min-width: 901px) { .cta-grupo { display: none; } }
 @media (max-width: 900px) { .nav__cta { display: none; } }
+
+/* lâmina 3: título da jornada com texto de apoio */
+.jornada__titulo h3 { font: inherit; letter-spacing: inherit; margin: 0; max-width: 22ch; }
+.jornada__sub { margin-top: 14px; font-size: var(--fs-lead); font-weight: 400; letter-spacing: 0; line-height: 1.5; color: var(--tinta-2); max-width: 52ch; }

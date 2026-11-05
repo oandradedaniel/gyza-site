@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793910021">
+<link rel="stylesheet" href="css/style.css?v=1793910071">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
 </script>
@@ -134,7 +134,15 @@
       <p class="servicos__lead" data-lines>Ele pesquisou, comparou e escolheu em poucos minutos. A GYZA cuida da presença digital da sua empresa para o cliente sempre optar por você.</p>
     </div>
     <div class="wrap jornada">
-      <h3 class="jornada__titulo">Cada passo da escolha do cliente</h3>
+      <div class="jornada__titulo" data-l3>
+        <h3>Antes de falar com você, ele já passou por aqui.</h3>
+        <p class="jornada__sub">São seis passos que o cliente dá sozinho antes de pedir um orçamento. Em cada um, a GYZA deixa sua empresa pronta para ser a escolhida.</p>
+      </div>
+      <script>/* teste de copy da lâmina 3: ?l3=5 mostra a ideia 5 */
+        if (new URLSearchParams(location.search).get('l3') === '5') { const t = document.querySelector('[data-l3]');
+          t.querySelector('h3').textContent = 'O caminho do cliente até o sim.';
+          t.querySelector('p').textContent = 'Ele não decide de uma vez. Vai passo a passo, e em cada passo a GYZA trabalha para que ele siga até você.'; }
+      </script>
       <ol class="jornada__lista" data-jornada>
       <li class="passo">
         <span class="passo__n">01</span>
@@ -473,7 +481,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js?v=1793910021"></script>
-<script type="module" src="js/gl.js?v=1793910021"></script>
+<script src="js/main.js?v=1793910071"></script>
+<script type="module" src="js/gl.js?v=1793910071"></script>
 </body>
 </html>

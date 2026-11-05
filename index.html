@@ -76,7 +76,32 @@
     <a href="#metodo">Como trabalhamos</a>
     <a href="#trabalhos">Cases</a>
   </nav>
+  <!-- celular: menu de 3 pontinhos (no computador não aparece) -->
+  <button class="nav__menu" type="button" aria-expanded="false" aria-controls="menu-celular" aria-label="Abrir menu" data-menu-botao>
+    <span class="nav__pontos" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="nav__x" aria-hidden="true"><i></i><i></i></span>
+  </button>
 </header>
+
+<div class="mmenu" id="menu-celular" role="dialog" aria-modal="true" aria-label="Menu" data-menu>
+  <div class="mmenu__inner">
+    <nav class="mmenu__links" aria-label="Seções">
+      <a href="#servicos" style="--i:0"><span class="mmenu__n">01.</span><span class="mmenu__t"><span>O que fazemos</span></span></a>
+      <a href="#frentes" style="--i:1"><span class="mmenu__n">02.</span><span class="mmenu__t"><span>360°</span></span></a>
+      <a href="#metodo" style="--i:2"><span class="mmenu__n">03.</span><span class="mmenu__t"><span>Como trabalhamos</span></span></a>
+      <a href="#trabalhos" style="--i:3"><span class="mmenu__n">04.</span><span class="mmenu__t"><span>Cases</span></span></a>
+    </nav>
+    <div class="mmenu__pe" style="--i:4">
+      <a class="pill mmenu__cta" href="#orcamento"><span>Solicite um orçamento</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p class="mmenu__rot">Contato</p>
+      <div class="mmenu__contato">
+        <a href="https://wa.me/5547992606871" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/gyza.ag/" target="_blank" rel="noopener">@gyza.ag</a>
+      </div>
+      <p class="mmenu__onde">Balneário Camboriú, Santa Catarina</p>
+    </div>
+  </div>
+</div>
 
 <!-- teste: botão de orçamento fixo embaixo da tela -->
 <a class="pill cta-baixo" data-magnetic href="#orcamento"><span>Solicite um orçamento</span><svg class="cta-baixo__seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>

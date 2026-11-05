@@ -383,7 +383,43 @@
   }
 
   /* ---------- início ---------- */
+  /* ---------- celular: menu de 3 pontinhos ---------- */
+  function menuCelular() {
+    const botao = $('[data-menu-botao]'), menu = $('[data-menu]');
+    if (!botao || !menu) return;
+    const raiz = document.documentElement;
+    const focaveis = () => [botao, ...$$('a', menu)];
+    const aberto = () => menu.classList.contains('is-open');
+    const abrir = () => {
+      menu.classList.add('is-open'); raiz.classList.add('menu-aberto');
+      botao.setAttribute('aria-expanded', 'true'); botao.setAttribute('aria-label', 'Fechar menu');
+      setTimeout(() => { if (aberto()) $('a', menu).focus({ preventScroll: true }); }, reduce ? 0 : 320);
+    };
+    const fechar = (devolverFoco = true) => {
+      menu.classList.remove('is-open'); raiz.classList.remove('menu-aberto');
+      botao.setAttribute('aria-expanded', 'false'); botao.setAttribute('aria-label', 'Abrir menu');
+      if (devolverFoco) botao.focus({ preventScroll: true });
+    };
+    botao.addEventListener('click', () => (aberto() ? fechar() : abrir()));
+    // link: fecha e deixa o navegador rolar até a seção
+    $$('a', menu).forEach(a => a.addEventListener('click', () => fechar(false)));
+    // fundo: toque fora de link fecha
+    menu.addEventListener('click', e => { if (!e.target.closest('a')) fechar(); });
+    document.addEventListener('keydown', e => {
+      if (!aberto()) return;
+      if (e.key === 'Escape') { e.preventDefault(); fechar(); return; }
+      if (e.key !== 'Tab') return;
+      // foco preso entre o X e os links do menu
+      const f = focaveis(), i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && (i === f.length - 1 || i === -1)) { e.preventDefault(); f[0].focus(); }
+    });
+    // passou para o computador com o menu aberto: fecha
+    matchMedia('(min-width: 901px)').addEventListener('change', m => { if (m.matches && aberto()) fechar(false); });
+  }
+
   function start() {
+    menuCelular();
     reveals();
     form();
     servicos();

@@ -640,3 +640,70 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
 .case { padding-bottom: calc(6vh + 72px); }
 .case__media { max-height: 68vh; }
 @media (max-width: 900px) { .case { padding-bottom: calc(6vh + 48px); } }
+
+/* ---------- celular: menu de 3 pontinhos (estudo do bddb.ag em 390: painel de tela cheia que abre em clip-path, 760 ms, curva .2 .7 0 1; lista numerada grande com linha fina) ---------- */
+.nav__menu, .mmenu { display: none; }
+@media (max-width: 900px) {
+  .nav { width: calc(100% - 24px); justify-content: center; }
+  .nav__menu {
+    display: grid; place-items: center;
+    position: absolute; right: 0; top: 50%; translate: 0 -50%;
+    width: 48px; height: 48px; padding: 0; margin: 0;
+    border: 0; border-radius: 50%; background: none; color: inherit; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav__menu:focus-visible { outline: 2px solid var(--azul-claro); outline-offset: 0; }
+  /* 3 pontinhos com a altura das letras do logo */
+  .nav__pontos, .nav__x { grid-area: 1 / 1; display: flex; align-items: center; justify-content: center; gap: 4px; width: 24px; height: 24px; }
+  .nav__pontos i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; transition: transform .45s var(--ease-out), opacity .3s; }
+  .nav__x { position: relative; }
+  .nav__x i { position: absolute; left: 1px; right: 1px; top: 50%; height: 2px; margin-top: -1px; border-radius: 2px; background: currentColor; transform: rotate(0) scaleX(0); transition: transform .45s var(--ease-out); }
+  .menu-aberto .nav__pontos i { opacity: 0; transform: scale(.2); }
+  .menu-aberto .nav__pontos i:first-child { transform: translateX(9px) scale(.2); }
+  .menu-aberto .nav__pontos i:last-child { transform: translateX(-9px) scale(.2); }
+  .menu-aberto .nav__x i:first-child { transform: rotate(45deg) scaleX(1); transition-delay: .08s; }
+  .menu-aberto .nav__x i:last-child { transform: rotate(-45deg) scaleX(1); transition-delay: .14s; }
+
+  /* com o menu aberto o topo fica claro sobre o preto e não some */
+  .menu-aberto .nav, .menu-aberto .nav.is-light { color: var(--gelo); }
+  .menu-aberto .nav.is-hidden { transform: none !important; opacity: 1; }
+  .menu-aberto .cta-baixo { opacity: 0; pointer-events: none; translate: 0 140% !important; }
+  html.menu-aberto { overflow: hidden; }
+
+  .mmenu {
+    display: block; position: fixed; inset: 0; z-index: 49;
+    background:
+      radial-gradient(90% 55% at 100% 0%, rgba(31,79,216,.42), rgba(31,79,216,0) 70%),
+      var(--preto);
+    color: var(--gelo);
+    overflow-y: auto; overscroll-behavior: contain;
+    clip-path: circle(0 at calc(100% - 36px) 40px);
+    visibility: hidden;
+    transition: clip-path .5s cubic-bezier(.6, 0, .4, 1), visibility 0s linear .5s;
+  }
+  .mmenu.is-open { clip-path: circle(150% at calc(100% - 36px) 40px); visibility: visible; transition: clip-path .76s cubic-bezier(.2, .7, 0, 1), visibility 0s; }
+  .mmenu__inner { min-height: 100%; display: flex; flex-direction: column; padding: 104px var(--gutter) 40px; }
+  .mmenu__links { display: grid; border-top: 1px solid var(--linha); }
+  .mmenu__links a { display: flex; align-items: baseline; gap: 16px; padding: 16px 0 14px; border-bottom: 1px solid var(--linha); }
+  .mmenu__n { flex: none; width: 34px; font-size: 13px; font-weight: 500; color: var(--azul-claro); font-variant-numeric: tabular-nums; }
+  .mmenu__t { display: block; overflow: hidden; padding-bottom: .08em; }
+  .mmenu__t > span { display: block; font-size: clamp(30px, 8.6vw, 40px); font-weight: 500; line-height: 1.05; letter-spacing: -.04em; }
+  .mmenu__pe { margin-top: auto; padding-top: 40px; display: grid; gap: 14px; justify-items: start; }
+  .mmenu__cta { --bg: var(--azul); --fg: #fff; width: 100%; gap: 10px; }
+  .mmenu__cta::before { background: var(--azul-vivo); }
+  .mmenu__cta svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mmenu__rot { margin-top: 18px; font-size: 13px; font-weight: 500; color: var(--cinza); }
+  .mmenu__contato { display: flex; gap: 24px; font-size: 17px; }
+  .mmenu__onde { font-size: 14px; color: var(--apoio); }
+
+  /* entrada: as palavras sobem por trás da linha, uma depois da outra; o pé aparece por último */
+  .mmenu__t > span { transform: translateY(105%); transition: transform .5s var(--ease-out); }
+  .mmenu__n, .mmenu__pe { opacity: 0; transition: opacity .3s; }
+  .mmenu.is-open .mmenu__t > span { transform: none; transition: transform .9s var(--ease-out) calc(.18s + var(--i) * .06s); }
+  .mmenu.is-open .mmenu__n, .mmenu.is-open .mmenu__pe { opacity: 1; transition: opacity .6s var(--ease) calc(.3s + var(--i) * .06s); }
+}
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+  .mmenu, .mmenu.is-open { clip-path: none; }
+  .mmenu__t > span { transform: none; }
+  .mmenu__n, .mmenu__pe { opacity: 1; }
+}

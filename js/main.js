@@ -41,8 +41,7 @@
   function heroIn(tl, at) {
     tl.add(() => document.body.classList.add('is-revealed'), at)
       .from('.hero__halo', { opacity: 0, scale: isPhone ? 1 : 1.08, duration: 2, ease: 'power2.out' }, at - 0.4)
-      .from('.hero__content .line > span', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, at + 0.1)
-      .from('.hero__ctas > *', { y: 24, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08 }, at + 0.4);
+      .from('.hero__content .line > span', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, at + 0.1);
   }
 
   function runIntro() {
@@ -108,7 +107,8 @@
       requestAnimationFrame(passo);
     }
     // o botão de baixo some quando o formulário de orçamento está na tela (a abertura não tem mais botão próprio)
-    if (cta) ScrollTrigger.create({ trigger: '#orcamento', start: 'top 70%', end: 'bottom 30%', onToggle: s => cta.classList.toggle('is-off', s.isActive) });
+    // e não volta no rodapé, que já tem o botão igual: desligado do formulário até o fim da página
+    if (cta) ScrollTrigger.create({ trigger: '#orcamento', start: 'top 70%', onEnter: () => cta.classList.add('is-off'), onLeaveBack: () => cta.classList.remove('is-off') });
     // o botão de baixo segue o tema da seção que está embaixo dele
     if (cta) $$('[data-theme]').forEach(sec => {
       ScrollTrigger.create({
@@ -128,6 +128,8 @@
       onUpdate: s => {
         const y = s.scroll();
         nav.classList.toggle('is-hidden', y > last + 2 && y > window.innerHeight * 0.8);
+        // os links do topo só na abertura; depois fica só a marca
+        nav.classList.toggle('is-scrolled', y > window.innerHeight * 0.6);
         if (y < last - 2) nav.classList.remove('is-hidden');
         last = y;
       },

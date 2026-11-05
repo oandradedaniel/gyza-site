@@ -100,11 +100,21 @@
       const passo = () => {
         if (rolou) { alvoX = 50 + Math.sin(scrollY / 180) * 45; rolou = 0; }
         x += (alvoX - x) * 0.12; y += (alvoY - y) * 0.12;
-        cta.style.setProperty('--gx', x.toFixed(1) + '%');
-        cta.style.setProperty('--gy', y.toFixed(1) + '%');
+        cta.parentElement.style.setProperty('--gx', x.toFixed(1) + '%');
+        cta.parentElement.style.setProperty('--gy', y.toFixed(1) + '%');
         requestAnimationFrame(passo);
       };
       requestAnimationFrame(passo);
+    }
+    // botão de baixo: compacta ao descer, expande ao subir ou ao parar no topo
+    if (cta) {
+      let ult = 0;
+      addEventListener('scroll', () => {
+        const y = scrollY;
+        if (y > innerHeight * 0.5) cta.classList.toggle('is-compacto', y > ult + 2 ? true : y < ult - 2 ? false : cta.classList.contains('is-compacto'));
+        else cta.classList.remove('is-compacto');
+        ult = y;
+      }, { passive: true });
     }
     // o botão de baixo some quando o formulário de orçamento está na tela (a abertura não tem mais botão próprio)
     // e não volta no rodapé, que já tem o botão igual: desligado do formulário até o fim da página

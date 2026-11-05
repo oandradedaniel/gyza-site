@@ -1077,13 +1077,14 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 .card { position: relative; display: flex; flex-direction: column; min-height: 288px; padding: 28px 28px 30px; background: #fff;
   border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card);
   transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease); }
-.card__ico { width: 104px; height: 104px; margin: -8px 0 0 -10px; filter: drop-shadow(0 14px 18px rgba(31,79,216,.22)); transition: transform var(--dur-3) var(--ease-out); }
+.card__ico { display: block; width: 104px; height: 104px; margin: -4px 0 0 -4px; transition: transform var(--dur-3) var(--ease-out); }
+.card__ico img { display: block; width: 100%; height: 100%; }
 .card__nome { margin-top: auto; padding-top: 20px; font-size: var(--fs-card-t); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
 .card__txt { margin-top: 10px; font-size: var(--fs-card-p); line-height: 1.5; color: var(--tinta-2); max-width: 30ch; }
 
 @media (hover: hover) and (min-width: 901px) {
   .card:hover { transform: translateY(-6px); box-shadow: var(--sombra-card-hover); }
-  .card:hover .card__ico { transform: translateY(-4px) rotate(-4deg) scale(1.04); }
+  .card:hover .card__ico { transform: translateY(-4px); }
 }
 .cuidamos__pe { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--linha-papel); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .cuidamos__pe p { font-size: 18px; }
@@ -1146,7 +1147,7 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
   .card { display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ico nome" "ico txt"; column-gap: 16px; align-items: start;
     min-height: 0; padding: 18px 18px 18px 14px; border: 0; border-bottom: 1px solid var(--linha-papel); border-radius: 0; box-shadow: none; }
   .card:last-child { border-bottom: 0; }
-  .card__ico { grid-area: ico; width: 64px; height: 64px; margin: -4px 0 0; filter: drop-shadow(0 8px 10px rgba(31,79,216,.20)); }
+  .card__ico { grid-area: ico; width: 64px; height: 64px; margin: -4px 0 0; }
   .card__nome { grid-area: nome; margin-top: 4px; padding-top: 0; }
   .card__txt { grid-area: txt; margin-top: 4px; }
   .cuidamos__pe { flex-direction: column; align-items: stretch; gap: 16px; }

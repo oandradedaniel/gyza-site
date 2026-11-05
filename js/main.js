@@ -257,25 +257,75 @@
   function cases() {
     const track = $('[data-cases]');
     const items = $$('.case', track);
+    const N = items.length;
+    // uma cópia da lista no fim: o trilho gira sem emenda
+    items.forEach(c => {
+      const k = c.cloneNode(true);
+      k.setAttribute('aria-hidden', 'true');
+      $$('button, a', k).forEach(b => { b.tabIndex = -1; });
+      track.appendChild(k);
+    });
+    const all = $$('.case', track);
+    const left = i => all[i].offsetLeft - all[0].offsetLeft;
     const n = $('[data-cases-n]');
     const prev = $('[data-cases-prev]'), next = $('[data-cases-next]');
     const at = () => {
       const x = track.scrollLeft;
       let best = 0;
-      items.forEach((c, i) => { if (Math.abs(c.offsetLeft - items[0].offsetLeft - x) < Math.abs(items[best].offsetLeft - items[0].offsetLeft - x)) best = i; });
+      all.forEach((c, i) => { if (Math.abs(left(i) - x) < Math.abs(left(best) - x)) best = i; });
       return best;
     };
-    const go = i => track.scrollTo({ left: items[Math.max(0, Math.min(items.length - 1, i))].offsetLeft - items[0].offsetLeft, behavior: 'smooth' });
-    const sync = () => {
-      const i = at();
-      n.textContent = String(i + 1).padStart(2, '0');
-      prev.disabled = track.scrollLeft < 4;
-      next.disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
+    let expect = -1, lastScroll = 0, paused = 0, hover = false, vis = false;
+    const hold = (ms = 4000) => { paused = performance.now() + ms; };
+    // passou da cópia: volta uma volta inteira, sem mudar o que aparece na tela
+    const wrap = () => {
+      const w = left(N);
+      if (track.scrollLeft >= w) { track.scrollLeft -= w; expect = track.scrollLeft; }
     };
+    const go = i => {
+      hold();
+      lastScroll = performance.now();   // não dar a volta no meio da rolagem suave
+      if (i < 0) { track.scrollLeft += left(N); expect = track.scrollLeft; i += N; }
+      track.scrollTo({ left: left(Math.min(all.length - 1, i)), behavior: 'smooth' });
+    };
+    const sync = () => { n.textContent = String(at() % N + 1).padStart(2, '0'); };
     prev.addEventListener('click', () => go(at() - 1));
     next.addEventListener('click', () => go(at() + 1));
-    track.addEventListener('scroll', sync, { passive: true });
+    track.addEventListener('scroll', () => {
+      sync();
+      if (Math.abs(track.scrollLeft - expect) > 1) lastScroll = performance.now();
+    }, { passive: true });
     sync();
+
+    // desliza sozinho, bem devagar; para quando a pessoa encosta, e volta depois
+    if (!reduce) {
+      const step = 1 / (window.devicePixelRatio || 1);
+      const speed = innerWidth < 600 ? 14 : 22;   // px por segundo
+      let acc = 0, t0 = performance.now();
+      new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(track);
+      track.addEventListener('mouseenter', () => { hover = true; });
+      track.addEventListener('mouseleave', () => { hover = false; hold(1200); });
+      track.addEventListener('touchstart', () => { track.classList.remove('is-auto'); hold(); }, { passive: true });
+      const tick = now => {
+        const dt = Math.min(64, now - t0); t0 = now;
+        const b = document.body.classList;
+        const live = vis && !hover && !down && now > paused && now - lastScroll > 1200
+          && !b.contains('is-proj') && !b.contains('is-loading');
+        if (live) {
+          track.classList.add('is-auto');
+          acc += speed * dt / 1000;
+          if (acc >= step) {
+            const px = Math.floor(acc / step) * step;
+            acc -= px;
+            track.scrollLeft += px;
+            expect = track.scrollLeft;
+            wrap();
+          }
+        } else if (now - lastScroll > 200) wrap();
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
 
     // mouse: arrastar para o lado, com um empurrão no fim; um arrasto não conta como clique
     let down = false, moved = 0, x0 = 0, s0 = 0, i0 = 0;

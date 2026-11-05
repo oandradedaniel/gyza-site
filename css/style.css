@@ -348,6 +348,7 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
   cursor: grab;
 }
 .cases::-webkit-scrollbar { display: none; }
+.cases.is-auto { scroll-snap-type: none; }
 .cases.is-drag { scroll-snap-type: none; cursor: grabbing; }
 .cases.is-drag .case { pointer-events: none; }
 .case { flex: 0 0 min(76vw, 1080px); scroll-snap-align: start; }

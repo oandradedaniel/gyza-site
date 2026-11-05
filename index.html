@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793908783">
+<link rel="stylesheet" href="css/style.css?v=1793912027">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
 </script>
@@ -191,8 +191,11 @@
     </div>
     <!-- os cases correm para os lados: quem quiser segue rolando o site para baixo -->
     <div class="cases" data-cases>
-      <article class="case">
-        <div class="case__media"><img class="case__img" src="assets/img/cases/case-02.webp" width="2880" height="1610" alt="Case 01" loading="lazy" decoding="async" draggable="false"></div>
+      <article class="case case--open" data-proj-open="gremski">
+        <div class="case__media">
+          <img class="case__img" src="assets/img/cases/case-02.webp" width="2880" height="1610" alt="Gremski Arquitetura e Interiores" loading="lazy" decoding="async" draggable="false">
+          <button class="case__ver" type="button"><span>Ver projeto</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button>
+        </div>
       </article>
       <article class="case case--open" data-proj-open="laroche">
         <div class="case__media">
@@ -326,6 +329,60 @@
   <button class="proj__close" type="button" data-proj-close aria-label="Fechar projeto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </div>
 
+<div class="proj" id="proj-gremski" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="proj-gremski-t" hidden>
+  <div class="proj__scroll" data-proj-scroll>
+    <figure class="proj__cover"><img src="assets/img/cases/case-02.webp" width="2880" height="1610" alt=""></figure>
+    <div class="proj__body wrap">
+      <header class="proj__head">
+        <p class="proj__kicker">Identidade visual</p>
+        <h2 class="proj__title" id="proj-gremski-t">Gremski</h2>
+        <p class="proj__lead">Uma marca para um escritório de arquitetura e interiores que trabalha com detalhe. Moderna, sofisticada e séria, do canteiro de obras à apresentação do projeto.</p>
+        <dl class="proj__meta">
+          <div><dt>Cliente</dt><dd>Gremski Arquitetura &amp; Interiores</dd></div>
+          <div><dt>Escopo</dt><dd>Logo, conceito, papelaria e aplicações</dd></div>
+          <div><dt>Ano</dt><dd>2024</dd></div>
+        </dl>
+      </header>
+
+      <div class="proj__gal">
+        <img class="is-wide" src="assets/img/cases/gremski/01.webp" width="1920" height="1080" alt="Logo Gremski sobre fachada" loading="lazy" decoding="async">
+        <div class="proj__txt">
+          <h3>Conceito</h3>
+          <p>O símbolo reúne a letra G, a casa, a porta aberta e a geometria da construção. Quatro atributos guiam a marca: modernidade, sofisticação, autoridade e seriedade.</p>
+        </div>
+        <img class="is-wide" src="assets/img/cases/gremski/02.webp" width="1920" height="1080" alt="Construção do símbolo" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/03.webp" width="1920" height="1080" alt="Conceito do símbolo" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/04.webp" width="1920" height="1080" alt="Atributos da marca" loading="lazy" decoding="async">
+        <div class="proj__txt">
+          <h3>Aplicações</h3>
+          <p>Fachada, estande, papelaria, obra e redes sociais. Preto, branco e muito respiro, para a arquitetura sempre ficar em primeiro plano.</p>
+        </div>
+        <img class="is-wide" src="assets/img/cases/gremski/05.webp" width="1920" height="1080" alt="Outdoor" loading="lazy" decoding="async">
+        <img src="assets/img/cases/gremski/06.webp" width="1920" height="1080" alt="Placa de fachada" loading="lazy" decoding="async">
+        <img src="assets/img/cases/gremski/07.webp" width="1920" height="1080" alt="Ecobag" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/08.webp" width="1920" height="1080" alt="Estande" loading="lazy" decoding="async">
+        <img src="assets/img/cases/gremski/09.webp" width="1920" height="1080" alt="Cartaz na parede" loading="lazy" decoding="async">
+        <img src="assets/img/cases/gremski/10.webp" width="1920" height="1080" alt="Material impresso" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/11.webp" width="1920" height="1080" alt="Papelaria" loading="lazy" decoding="async">
+        <img src="assets/img/cases/gremski/12.webp" width="1920" height="1080" alt="Capacetes de obra" loading="lazy" decoding="async">
+        <img src="assets/img/cases/gremski/13.webp" width="1920" height="1080" alt="Apresentação no tablet" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/14.webp" width="1920" height="1080" alt="Totem e interiores" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/15.webp" width="1920" height="1080" alt="Posts para redes sociais" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/gremski/16.webp" width="1920" height="1080" alt="Folder" loading="lazy" decoding="async">
+      </div>
+
+      <footer class="proj__end">
+        <p>Quer uma marca com essa presença?</p>
+        <div class="proj__ctas">
+          <a class="pill" data-magnetic href="#orcamento" data-proj-close><span>Solicite um orçamento</span></a>
+          <a class="link-line" href="https://www.behance.net/gallery/191089117/Gremski-Arquitetura-Interiores" target="_blank" rel="noopener">Ver no Behance</a>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <button class="proj__close" type="button" data-proj-close aria-label="Fechar projeto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+
 <div class="proj" id="proj-laroche" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="proj-laroche-t" hidden>
   <div class="proj__scroll" data-proj-scroll>
     <figure class="proj__cover"><img src="assets/img/cases/case-03.webp" width="2880" height="1610" alt=""></figure>
@@ -379,7 +436,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js?v=1793908783"></script>
-<script type="module" src="js/gl.js?v=1793908783"></script>
+<script src="js/main.js?v=1793912027"></script>
+<script type="module" src="js/gl.js?v=1793912027"></script>
 </body>
 </html>

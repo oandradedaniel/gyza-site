@@ -275,7 +275,7 @@
       all.forEach((c, i) => { if (Math.abs(left(i) - x) < Math.abs(left(best) - x)) best = i; });
       return best;
     };
-    let expect = -1, lastScroll = 0, paused = 0, hover = false, vis = false;
+    let expect = -1, lastScroll = 0, paused = 0, vis = false;
     const hold = (ms = 4000) => { paused = performance.now() + ms; };
     // passou da cópia: volta uma volta inteira, sem mudar o que aparece na tela
     const wrap = () => {
@@ -303,13 +303,11 @@
       const speed = innerWidth < 600 ? 30 : 45;   // px por segundo
       let acc = 0, t0 = performance.now();
       new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(track);
-      track.addEventListener('mouseenter', () => { hover = true; });
-      track.addEventListener('mouseleave', () => { hover = false; hold(1200); });
       track.addEventListener('touchstart', () => { track.classList.remove('is-auto'); hold(); }, { passive: true });
       const tick = now => {
         const dt = Math.min(64, now - t0); t0 = now;
         const b = document.body.classList;
-        const live = vis && !hover && !down && now > paused && now - lastScroll > 1200
+        const live = vis && !down && now > paused && now - lastScroll > 1200
           && !b.contains('is-proj') && !b.contains('is-loading');
         if (live) {
           track.classList.add('is-auto');

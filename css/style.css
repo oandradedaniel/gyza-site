@@ -630,3 +630,13 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
 /* título novo de O que fazemos: 2 linhas no computador (com 1fr 1fr "procurou" caía sozinho na 2ª linha) */
 .servicos__head { grid-template-columns: 1.35fr 1fr; }
 @media (max-width: 900px) { .servicos__head { grid-template-columns: 1fr; } }
+
+/* cases: legenda discreta embaixo de cada imagem (nome do cliente e o que foi feito); serve para quantos cases entrarem */
+.case__info { grid-template-columns: 1fr auto; padding: 16px 4px 0; }
+.case__info h3 { font-size: clamp(18px, 1.5vw, 22px); font-weight: 500; letter-spacing: -.02em; color: var(--gelo); }
+.case__info p { font-size: 15px; color: var(--apoio); }
+@media (max-width: 900px) { .case__info { gap: 4px; padding-top: 12px; } }
+/* mais respiro embaixo de cada case: a legenda continua à vista quando o case seguinte começa a subir por cima */
+.case { padding-bottom: calc(6vh + 72px); }
+.case__media { max-height: 68vh; }
+@media (max-width: 900px) { .case { padding-bottom: calc(6vh + 48px); } }

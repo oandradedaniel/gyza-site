@@ -7,10 +7,20 @@
   gsap.registerPlugin(ScrollTrigger);
   window.__pyr = 0;
 
-  // a abertura sempre começa do topo: sem restaurar rolagem nem pular para âncora
+  // a abertura sempre começa do topo; se veio com âncora (ex.: index.html#analise), guarda e rola até ela no fim da abertura
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  const ALIAS = { '#orcamento': '#analise' };
+  const hashInicial = ALIAS[location.hash] || location.hash;
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   window.scrollTo(0, 0);
+  function irParaHash() {
+    if (!hashInicial) return;
+    let alvo = null;
+    try { alvo = document.querySelector(hashInicial); } catch (e) { alvo = null; }
+    history.replaceState(null, '', location.pathname + location.search + hashInicial);
+    if (!alvo) return;
+    requestAnimationFrame(() => alvo.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }));
+  }
 
   /* ---------- quebra de texto ---------- */
   $$('[data-lines]').forEach(el => {
@@ -36,6 +46,7 @@
     intro.classList.add('is-done');
     document.body.classList.remove('is-loading');
     ScrollTrigger.refresh();
+    irParaHash();
   }
 
   function heroIn(tl, at) {
@@ -600,8 +611,12 @@
     const f = $('[data-form]');
     const note = $('[data-form-note]');
     const original = note.innerHTML;
+    // um envio por vez: o botão trava 3 s para não abrir o WhatsApp a cada clique
+    const btn = $('[type="submit"]', f), btnTxt = $('span', btn) || btn, btnOriginal = btnTxt.textContent;
+    let enviando = false;
     f.addEventListener('submit', e => {
       e.preventDefault();
+      if (enviando) return;
       const req = $$('input[required]', f);
       let ok = true;
       req.forEach(i => {
@@ -629,7 +644,16 @@
         reconhece.length ? `Reconheço na minha empresa:\n${reconhece.map(t => '- ' + t).join('\n')}` : '',
       ].filter(Boolean).join('\n');
       window.__gyzaUltimaMsg = msg;
+      if (enviando) return;
+      enviando = true;
+      btn.disabled = true; btn.setAttribute('aria-busy', 'true');
+      btnTxt.textContent = 'Abrindo o WhatsApp...';
       window.open(`https://wa.me/5547992606871?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+      setTimeout(() => {
+        enviando = false;
+        btn.disabled = false; btn.removeAttribute('aria-busy');
+        btnTxt.textContent = btnOriginal;
+      }, 3000);
     });
     $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); }));
     // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871

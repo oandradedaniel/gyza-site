@@ -544,8 +544,6 @@ body.is-loading .cta-baixo { opacity: 0; translate: -50% 20px; }
 }
 .cta-baixo.is-light:hover { color: #fff; }
 
-/* abertura: triângulo do GYZA gigante em vidro azul escuro, com reflexo branco como as letras */
-.hero__mark { --topo: url(#topoVidro); --topo-borda: rgba(255,255,255,.55); filter: drop-shadow(0 0 24px rgba(40,80,220,.25)); }
 
 /* botão de baixo: vidro líquido mais transparente, com reflexo que segue o mouse e a rolagem */
 .cta-baixo {

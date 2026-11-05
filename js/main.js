@@ -315,33 +315,112 @@
     });
   }
 
-  /* ---------- trilhos laterais: cases e equipe (arrastar, setas, deslizar e passagem lenta sozinha) ---------- */
-  // componente único dos dois trilhos (cases e equipe): troque só o seletor dos itens e os atributos de contador e setas
+  /* ---------- trilhos laterais: cases e equipe (arrastar, setas, e passagem contínua sem emenda) ---------- */
+  // componente único dos dois trilhos: troque só o seletor dos itens e o prefixo dos atributos (contador, setas, pausa)
   function trilho(track, itemSel, attr) {
     if (!track) return;
     const items = $$(itemSel, track);
+    const N = items.length;
     const n = $(`[data-${attr}-n]`);
     const prev = $(`[data-${attr}-prev]`), next = $(`[data-${attr}-next]`);
+    const loop = !reduce && N > 1;
+    // cópias da lista no fim (aria-hidden, fora da ordem de foco): o trilho gira sem emenda
+    if (loop) {
+      const last = items[N - 1];
+      const w0 = last.offsetLeft + last.offsetWidth - items[0].offsetLeft;
+      const copias = Math.max(1, Math.ceil(Math.max(innerWidth, screen.width || 0) / Math.max(1, w0)));
+      for (let c = 0; c < copias; c++) items.forEach(it => {
+        const k = it.cloneNode(true);
+        k.setAttribute('aria-hidden', 'true');
+        k.removeAttribute('id');
+        $$('button, a, input, [tabindex]', k).forEach(b => { b.tabIndex = -1; });
+        track.appendChild(k);
+      });
+    }
+    const all = $$(itemSel, track);
+    const left = i => all[i].offsetLeft - all[0].offsetLeft;
     const at = () => {
       const x = track.scrollLeft;
       let best = 0;
-      items.forEach((c, i) => { if (Math.abs(c.offsetLeft - items[0].offsetLeft - x) < Math.abs(items[best].offsetLeft - items[0].offsetLeft - x)) best = i; });
+      all.forEach((c, i) => { if (Math.abs(left(i) - x) < Math.abs(left(best) - x)) best = i; });
       return best;
     };
-    const go = i => track.scrollTo({ left: items[Math.max(0, Math.min(items.length - 1, i))].offsetLeft - items[0].offsetLeft, behavior: 'smooth' });
+    let expect = -1, lastScroll = 0, hold = 0, hover = false, vis = false, focus = false, parado = false, down = false;
+    const segura = (ms = 4000) => { hold = performance.now() + ms; };
+    // passou da primeira cópia: volta uma volta inteira, sem mudar o que aparece na tela
+    const wrap = () => {
+      if (!loop) return;
+      const w = left(N);
+      if (track.scrollLeft >= w) { track.scrollLeft -= w; expect = track.scrollLeft; }
+    };
+    const go = i => {
+      segura();
+      lastScroll = performance.now();   // não dar a volta no meio da rolagem suave
+      if (loop && i < 0) { track.scrollLeft += left(N); expect = track.scrollLeft; i += N; }
+      track.scrollTo({ left: left(Math.max(0, Math.min(all.length - 1, i))), behavior: 'smooth' });
+    };
     const sync = () => {
-      const i = at();
-      n.textContent = String(i + 1).padStart(2, '0');
-      prev.disabled = track.scrollLeft < 4;
-      next.disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
+      n.textContent = String(at() % N + 1).padStart(2, '0');
+      if (!loop) {
+        prev.disabled = track.scrollLeft < 4;
+        next.disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
+      }
     };
     prev.addEventListener('click', () => go(at() - 1));
     next.addEventListener('click', () => go(at() + 1));
-    track.addEventListener('scroll', sync, { passive: true });
+    track.addEventListener('scroll', () => {
+      sync();
+      if (Math.abs(track.scrollLeft - expect) > 1) lastScroll = performance.now();
+    }, { passive: true });
     sync();
 
+    // desliza sozinho, bem devagar (px por segundo); para quando a pessoa encosta e volta depois
+    if (loop) {
+      const step = 1 / (window.devicePixelRatio || 1);
+      const speed = innerWidth < 600 ? 20 : 32;
+      let acc = 0, t0 = performance.now();
+      new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(track);
+      track.addEventListener('mouseenter', () => { hover = true; });
+      track.addEventListener('mouseleave', () => { hover = false; segura(1200); });
+      // só o foco de teclado pausa; o foco devolvido ao card depois de fechar um projeto não trava a passagem
+      track.addEventListener('focusin', e => { focus = e.target.matches(':focus-visible'); });
+      track.addEventListener('focusout', () => { focus = false; segura(1200); });
+      track.addEventListener('touchstart', () => { track.classList.remove('is-auto'); segura(); }, { passive: true });
+      // botão de pausa (WCAG 2.2.2): quem pausa decide; a passagem só volta pelo mesmo botão
+      const pausa = $(`[data-${attr}-pausa]`);
+      if (pausa) {
+        const quem = attr === 'equipe' ? 'sócios' : 'cases';
+        pausa.hidden = false;
+        pausa.addEventListener('click', () => {
+          parado = !parado;
+          pausa.setAttribute('aria-pressed', String(parado));
+          pausa.setAttribute('aria-label', (parado ? 'Retomar' : 'Pausar') + ` a passagem automática dos ${quem}`);
+          if (!parado) segura(600);
+        });
+      }
+      const tick = now => {
+        const dt = Math.min(64, now - t0); t0 = now;
+        const b = document.body.classList;
+        const live = vis && !hover && !focus && !parado && !down && !document.hidden && now > hold && now - lastScroll > 1200
+          && !b.contains('is-proj') && !b.contains('is-loading');
+        if (live) {
+          track.classList.add('is-auto');
+          acc += speed * dt / 1000;
+          if (acc >= step) {
+            const px = Math.floor(acc / step) * step;
+            acc -= px;
+            track.scrollLeft += px;
+            expect = track.scrollLeft;
+            wrap();
+          }
+        } else if (now - lastScroll > 200) wrap();
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
     // mouse: arrastar para o lado, com um empurrão no fim; um arrasto não conta como clique
-    let down = false, moved = 0, x0 = 0, s0 = 0, i0 = 0;
+    let moved = 0, x0 = 0, s0 = 0, i0 = 0;
     track.addEventListener('pointerdown', e => {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
       down = true; moved = 0; x0 = e.clientX; s0 = track.scrollLeft; i0 = at();
@@ -360,70 +439,6 @@
       go(Math.abs(dx) > 60 ? i0 + (dx < 0 ? 1 : -1) : i0);
     });
     track.addEventListener('click', e => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
-
-    // passagem lenta sozinha: de card em card (2s, ease in-out), parada de 4,2s em cada um, e volta ao primeiro com a mesma suavidade.
-    // Só mexe em scrollLeft (sem layout), pausa em hover, toque, arrasto, foco, projeto aberto, trilho fora da tela e aba escondida.
-    if (reduce || items.length < 2) return;
-    const HOLD = 4200, DUR = 2000, RESUME = 5000;
-    let visible = false, hover = false, focus = false, touch = false, parado = false, timer = 0, raf = 0;
-    // botão de pausa (WCAG 2.2.2): quem pausa decide; a passagem só volta pelo mesmo botão
-    const pausa = $(`[data-${attr}-pausa]`);
-    if (pausa) {
-      const quem = attr === 'equipe' ? 'sócios' : 'cases';
-      pausa.hidden = false;
-      pausa.addEventListener('click', () => {
-        parado = !parado;
-        pausa.setAttribute('aria-pressed', String(parado));
-        pausa.setAttribute('aria-label', (parado ? 'Retomar' : 'Pausar') + ` a passagem automática dos ${quem}`);
-        if (parado) stop(); else arm(1200);
-      });
-    }
-    const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const paused = () => parado || !visible || hover || focus || touch || down || document.hidden || document.body.classList.contains('is-proj');
-    const stop = () => { cancelAnimationFrame(raf); raf = 0; track.classList.remove('is-auto'); };
-    const arm = (ms = HOLD) => { clearTimeout(timer); timer = setTimeout(tick, ms); };
-    const tween = to => {
-      const from = track.scrollLeft, d = to - from, t0 = performance.now();
-      const dur = Math.max(DUR, Math.abs(d) / track.clientWidth * 1100);
-      track.classList.add('is-auto');
-      const step = now => {
-        const t = Math.min(1, (now - t0) / dur);
-        track.scrollLeft = from + d * ease(t);
-        if (paused()) return stop();
-        if (t < 1) raf = requestAnimationFrame(step); else { stop(); arm(); }
-      };
-      raf = requestAnimationFrame(step);
-    };
-    function tick() {
-      if (paused()) return arm(800);
-      const max = track.scrollWidth - track.clientWidth;
-      const i = at();
-      const atEnd = track.scrollLeft >= max - 4 || i >= items.length - 1;
-      const to = atEnd ? 0 : Math.min(max, items[i + 1].offsetLeft - items[0].offsetLeft);
-      tween(to);
-    }
-    // qualquer gesto do usuário vence a animação; retoma depois de um tempo parado
-    const user = (ms = RESUME) => { stop(); arm(ms); };
-    track.addEventListener('mouseenter', () => { hover = true; stop(); });
-    track.addEventListener('mouseleave', () => { hover = false; arm(); });
-    track.addEventListener('focusin', e => { if (!e.target.matches(':focus-visible')) return; focus = true; stop(); });
-    track.addEventListener('focusout', () => { focus = false; arm(); });
-    track.addEventListener('touchstart', () => { touch = true; stop(); }, { passive: true });
-    track.addEventListener('touchend', () => { touch = false; arm(RESUME); }, { passive: true });
-    track.addEventListener('touchcancel', () => { touch = false; arm(RESUME); }, { passive: true });
-    track.addEventListener('pointerdown', () => user(), { passive: true });
-    track.addEventListener('wheel', () => user(), { passive: true });
-    prev.addEventListener('click', () => user());
-    next.addEventListener('click', () => user());
-    window.addEventListener('pointerup', () => { if (down === false) arm(RESUME); });
-    document.addEventListener('visibilitychange', () => { stop(); arm(); });
-    let projOn = document.body.classList.contains('is-proj');
-    new MutationObserver(() => {
-      const on = document.body.classList.contains('is-proj');
-      if (on === projOn) return;
-      projOn = on; stop(); arm(RESUME);
-    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
-    new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) arm(); else stop(); }, { threshold: .4 }).observe(track);
   }
 
   /* ---------- projeto: o card cresce até virar uma página ---------- */

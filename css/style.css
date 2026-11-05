@@ -350,6 +350,7 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
   cursor: grab;
 }
 .cases::-webkit-scrollbar { display: none; }
+.cases.is-auto { scroll-snap-type: none; }
 .cases.is-drag { scroll-snap-type: none; cursor: grabbing; }
 .cases.is-drag .case { pointer-events: none; }
 .case { flex: 0 0 min(76vw, 1080px); scroll-snap-align: start; }
@@ -1072,18 +1073,13 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 .cuidamos { position: relative; z-index: 2; background: var(--papel); color: var(--tinta); padding: var(--section) 0; border-radius: var(--raio-secao); }
 .cuidamos__head { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: end; margin-bottom: clamp(48px, 6vw, 88px); }
 .cuidamos__lead { font-size: var(--fs-lead); color: var(--tinta-2); max-width: 470px; justify-self: end; line-height: 1.5; }
-.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .card { position: relative; display: flex; flex-direction: column; min-height: 288px; padding: 28px 28px 30px; background: #fff;
   border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card);
   transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease); }
 .card__ico { width: 104px; height: 104px; margin: -8px 0 0 -10px; filter: drop-shadow(0 14px 18px rgba(31,79,216,.22)); transition: transform var(--dur-3) var(--ease-out); }
 .card__nome { margin-top: auto; padding-top: 20px; font-size: var(--fs-card-t); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
 .card__txt { margin-top: 10px; font-size: var(--fs-card-p); line-height: 1.5; color: var(--tinta-2); max-width: 30ch; }
-.card__tag { position: absolute; top: 24px; right: 24px; white-space: nowrap; padding: 5px 12px 5px 10px; border-radius: var(--raio-chip);
-  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; line-height: 1.3; color: var(--tinta-2); background: rgba(10,15,26,.05);
-  transition: color var(--dur-2) var(--ease), background var(--dur-2) var(--ease); }
-.card__tag::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: rgba(10,15,26,.25); transition: background var(--dur-2) var(--ease); }
-.card__tag-de { color: var(--cinza); }
 
 @media (hover: hover) and (min-width: 901px) {
   .card:hover { transform: translateY(-6px); box-shadow: var(--sombra-card-hover); }
@@ -1147,20 +1143,19 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
   .cuidamos__head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px; }
   .cuidamos__lead { justify-self: start; }
   .cards { grid-template-columns: 1fr; gap: 0; background: #fff; border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card); overflow: hidden; }
-  .card { display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ico tag" "ico nome" "ico txt"; column-gap: 16px; align-items: start;
+  .card { display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ico nome" "ico txt"; column-gap: 16px; align-items: start;
     min-height: 0; padding: 18px 18px 18px 14px; border: 0; border-bottom: 1px solid var(--linha-papel); border-radius: 0; box-shadow: none; }
   .card:last-child { border-bottom: 0; }
   .card__ico { grid-area: ico; width: 64px; height: 64px; margin: -4px 0 0; filter: drop-shadow(0 8px 10px rgba(31,79,216,.20)); }
   .card__nome { grid-area: nome; margin-top: 4px; padding-top: 0; }
   .card__txt { grid-area: txt; margin-top: 4px; }
-  .card__tag { grid-area: tag; position: static; justify-self: start; margin: 2px 0 6px; }
   .cuidamos__pe { flex-direction: column; align-items: stretch; gap: 16px; }
   .cuidamos__pe .pill { width: 100%; }
   .footer__legal { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card, .card__ico, .card__tag, .chips--sinais label, .chips--sinais .marca, .chips--sinais .marca svg { transition: none; }
+  .card, .card__ico, .chips--sinais label, .chips--sinais .marca, .chips--sinais .marca svg { transition: none; }
   .card:hover, .card:hover .card__ico { transform: none; }
 }
 
@@ -1225,5 +1220,15 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
 @media (max-width: 900px) { .priv-doc__grid { grid-template-columns: 1fr; } .priv-toc { display: none; } }
 .priv .nav { background: rgba(5,5,5,.85); padding: 7px 7px 7px 22px; backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 12px 40px rgba(0,0,0,.25); }
 @media (max-width: 900px) { .priv .nav { padding: 6px 16px; } .priv .nav__logo { padding: 0; } }
-.card__tag { z-index: 1; background: var(--papel); }
-.card__tag-de, .field em { color: var(--tinta-2); }
+.field em { color: var(--tinta-2); }
+
+/* Reconhece algum desses?: tracinho no lugar do número e fecho depois da lista */
+.sinal { grid-template-columns: 40px 1fr; align-items: start; }
+.sinal__n { display: block; width: 18px; height: 2px; border-radius: 2px; background: var(--azul-claro); transform: none; margin-top: calc(var(--fs-dor) * .625 - 1px); font-size: 0; }
+.sinais__fecho { grid-column: 2; margin-top: clamp(32px, 4vw, 56px); }
+.sinais__fecho-t { font-size: var(--fs-dor); font-weight: 500; letter-spacing: -.025em; line-height: 1.25; color: var(--gelo); max-width: 26ch; text-wrap: balance; }
+.sinais__fecho-p { margin-top: 14px; max-width: 44ch; font-size: var(--fs-lead); color: var(--apoio); line-height: 1.5; }
+@media (max-width: 900px) {
+  .sinal { grid-template-columns: 28px 1fr; }
+  .sinais__fecho { grid-column: auto; margin-top: 32px; }
+}

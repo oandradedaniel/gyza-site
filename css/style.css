@@ -725,7 +725,6 @@ body.is-loading .cta-baixo { opacity: 0; translate: -50% 20px; }
 .nav.is-hidden { transform: translateY(-160%) !important; opacity: 0; }
 /* depois da abertura, só a marca */
 .nav__links { transition: opacity .3s var(--ease); }
-.nav.is-scrolled .nav__links { opacity: 0; pointer-events: none; }
 /* campo "Outros": escondido de verdade até ser marcado */
 .field[hidden] { display: none; }
 
@@ -859,8 +858,6 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
 @media (min-width: 901px) {
   .nav__links { max-width: 640px; overflow: hidden; white-space: nowrap; transition: opacity .3s var(--ease), max-width .6s var(--ease-out); }
   .nav { transition: transform .6s var(--ease-out), opacity .4s, color .4s var(--ease), gap .6s var(--ease-out); }
-  .nav.is-scrolled { gap: 0; }
-  .nav.is-scrolled .nav__links { max-width: 0; }
 }
 
 /* celular: botão do menu com 3 riscos empilhados, dentro de um círculo de vidro líquido */

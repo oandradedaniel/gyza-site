@@ -158,10 +158,8 @@
       start: 0, end: 'max',
       onUpdate: s => {
         const y = s.scroll();
-        nav.classList.toggle('is-hidden', y > last + 2 && y > window.innerHeight * 0.8);
-        // os links do topo só na abertura; depois fica só a marca
+        // topo fixo e completo o tempo todo, como no site oficial (pedido do Vitor)
         nav.classList.toggle('is-scrolled', y > window.innerHeight * 0.6);
-        if (y < last - 2) nav.classList.remove('is-hidden');
         last = y;
       },
     });

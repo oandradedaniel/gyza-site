@@ -1256,19 +1256,19 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
 }
 
 /* ---------- divisão entre seções (Vitor, 05/11/2026): borda reta de ponta a ponta, sem raio, e degradê para a cor da próxima ---------- */
-/* sem backdrop-filter: só um linear-gradient por seção. Exceções do Vitor: corte seco da abertura para a L2 e dos cases para Quem está por trás; L2 para o Reconhece e Reconhece para os serviços em degradê curto */
+/* sem backdrop-filter: só um linear-gradient por seção. Exceções do Vitor: corte seco da abertura para a L2 e dos cases para Quem está por trás; Reconhece para os serviços em degradê curto; a L2 (clara) fica por cima do Reconhece em corte seco */
 :root { --fade-secao: 140px; --fade-curto: 56px; }
 @media (max-width: 900px) { :root { --fade-secao: 100px; --fade-curto: 40px; } }
 .manifesto, .servicos, .metodo, .cuidamos, .equipe, .orcamento, .footer, .priv-doc { border-radius: 0; }
 .footer { margin-top: 0; }
-.servicos, .sinais, .cuidamos, .equipe, .orcamento { position: relative; isolation: isolate; }
-.servicos::after, .sinais::after, .cuidamos::after, .equipe::after, .orcamento::after {
+.sinais, .cuidamos, .equipe, .orcamento { position: relative; isolation: isolate; }
+.sinais::after, .cuidamos::after, .equipe::after, .orcamento::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: calc(var(--fade-secao) + 1px);
   z-index: -1; pointer-events: none;
   background: linear-gradient(to bottom, transparent, var(--fade-para));
 }
-/* L2 para o Reconhece e Reconhece para os serviços: curto e com curva suave (smoothstep), sem faixa cinza larga */
-.servicos::after, .sinais::after {
+/* Reconhece para os serviços: curto e com curva suave (smoothstep), sem faixa cinza larga */
+.sinais::after {
   height: calc(var(--fade-curto) + 1px);
   background: linear-gradient(to bottom,
     transparent 0%,
@@ -1277,7 +1277,6 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
     color-mix(in srgb, var(--fade-para) 84%, transparent) 75%,
     var(--fade-para) 100%);
 }
-.servicos { --fade-para: var(--preto); }
 .sinais { --fade-para: var(--papel); }
 .cuidamos { --fade-para: var(--preto); }
 .equipe { --fade-para: var(--azul); }
@@ -1304,3 +1303,6 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
   .sinais__fecho { grid-template-columns: 1fr; gap: 10px; margin-top: 28px; }
   .sinais__fecho-p { justify-self: start; }
 }
+
+/* L2 clara por cima do Reconhece escuro: borda reta e nítida, com uma sombra bem discreta sobre o preto */
+.servicos { position: relative; z-index: 4; box-shadow: 0 18px 36px -18px rgba(0,0,0,.55); }

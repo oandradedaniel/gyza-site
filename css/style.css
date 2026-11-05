@@ -756,11 +756,3 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
   .nav.is-scrolled { gap: 0; }
   .nav.is-scrolled .nav__links { max-width: 0; }
 }
-
-/* abertura: ícone 360° no lugar do ponto final do título */
-.hero__360 { display: inline-block; width: .62em; height: .62em; margin-left: .12em; vertical-align: -.02em;
-  fill: none; stroke: var(--azul-claro, #4f7cff); stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round;
-  filter: drop-shadow(0 0 14px rgba(31,79,216,.55)); animation: giro-360 1.4s cubic-bezier(.65,0,.35,1) 1.6s 1 both; }
-.hero__360 circle { fill: var(--azul-claro, #4f7cff); stroke: none; }
-@keyframes giro-360 { from { transform: rotate(-360deg); } to { transform: rotate(0); } }
-@media (prefers-reduced-motion: reduce) { .hero__360 { animation: none; } }

@@ -30,6 +30,11 @@
   $$('[data-words]').forEach(el => {
     el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
   });
+  // abertura: o texto de apoio entra palavra por palavra, com as palavras-chave acesas
+  $$('[data-hl]').forEach(el => {
+    const parte = (t, hl) => t.split(/(\s+)/).map(w => (!w || /^\s+$/.test(w)) ? w : `<span class="hw${hl ? ' is-hl' : ''}">${w}</span>`).join('');
+    el.innerHTML = [...el.childNodes].map(n => parte(n.textContent, n.nodeType !== 3)).join('');
+  });
 
   /* ---------- abertura ---------- */
   const intro = $('.intro');
@@ -52,7 +57,8 @@
   function heroIn(tl, at) {
     tl.add(() => document.body.classList.add('is-revealed'), at)
       .from('.hero__halo', { opacity: 0, scale: isPhone ? 1 : 1.08, duration: 2, ease: 'power2.out' }, at - 0.4)
-      .from('.hero__content .line > span', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, at + 0.1);
+      .from('.hero__content .line > span', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, at + 0.1)
+      .from('.hero__lead .hw', { opacity: 0, y: 10, filter: 'blur(6px)', duration: 0.7, ease: 'power3.out', stagger: 0.04 }, at + 0.55);
   }
 
   function runIntro() {

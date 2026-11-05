@@ -1354,3 +1354,7 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
   .sinal__n { margin-left: 4px; width: 7px; height: 7px; }
 }
 @media (prefers-reduced-motion: reduce) { .sinal, .sinal::before { transition: none; } .sinal:hover { transform: none; } }
+
+/* abertura: texto de apoio em cinza com as palavras-chave acesas em branco */
+.hero__lead .hw { display: inline-block; }
+.hero__lead .hw.is-hl { color: #fff; font-weight: 500; }

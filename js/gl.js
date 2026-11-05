@@ -250,16 +250,17 @@ function pyramid() {
   pool.position.y = FLOOR + 0.001;
   bgScene.add(halo, pool);
 
-  // geometria: faces a 59 graus, cortada em 4 fatias, uma por frente (do topo para a base)
+  // geometria: faces a 59 graus, cortada em 5 fatias, uma por serviço (do topo para a base)
   const half = 1.15;
   const H = half * Math.tan(59 * Math.PI / 180);
   const R = half * Math.SQRT2;
   const flat = g => { const n = g.toNonIndexed(); n.computeVertexNormals(); return n; };
-  const CUTS = [1, 0.7, 0.45, 0.22, 0];          // alturas relativas, do topo para a base: Anúncios, Digital, Conteúdo, Marca
+  const CUTS = [1, 0.74, 0.54, 0.36, 0.18, 0];   // alturas relativas, do topo para a base: Performance, Conteúdo, Site, Identidade visual, Branding
+  const NS = CUTS.length - 1;
   const GAP = 0.028;
-  const slices = CUTS.slice(0, 4).map((top, i) => {
+  const slices = CUTS.slice(0, NS).map((top, i) => {
     const bot = CUTS[i + 1];
-    const y0 = H * bot + (i < 3 ? H * GAP : 0), y1 = H * top - H * GAP;
+    const y0 = H * bot + (i < NS - 1 ? H * GAP : 0), y1 = H * top - H * GAP;
     const r = y => R * (1 - y / H);
     const geo = i === 0
       ? new THREE.ConeGeometry(r(y0), y1 + H * GAP - y0, 4, 1)
@@ -316,9 +317,9 @@ function pyramid() {
 
   const em = edgeMat(0);
   const main = new THREE.Group();
-  const WHITE = [0, 0.5, 0.8, 1];                 // da ponta azul (Anúncios) para a base branca (Marca), camada a camada
-  // passo da rolagem (0 Marca ... 3 Anúncios) para a fatia (0 é a ponta, 3 é a base)
-  const sliceOf = step => 3 - step;
+  const WHITE = [0, 0.42, 0.68, 0.86, 1];         // da ponta azul (Performance) para a base branca (Branding), camada a camada
+  // passo da rolagem (0 Branding ... 4 Performance) para a fatia (0 é a ponta, 4 é a base)
+  const sliceOf = step => NS - 1 - step;
   slices.forEach((s, i) => {
     const f = flat(s.geo);
     s.back = glass(THREE.BackSide, { uBack: 1, uWhite: WHITE[i] });
@@ -382,14 +383,13 @@ function pyramid() {
   const calls = [...document.querySelectorAll('.pyr-labels .call')];
   const faceAng = k => Math.PI / 4 + k * Math.PI / 2;
   const stepRot = s => Math.PI / 4 - s * Math.PI / 2;
-  const callOfFace = [];
-  [0, 1, 2, 3].forEach(s => {
+  const faceOfStep = calls.map((_, s) => {
     let best = 0, bestZ = -2;
     for (let k = 0; k < 4; k++) {
       const z = Math.cos(faceAng(k) + stepRot(s));
       if (z > bestZ) { bestZ = z; best = k; }
     }
-    callOfFace[best] = calls[s];
+    return best;
   });
   const v3 = new THREE.Vector3();
   const grow = calls.map(() => 0);
@@ -403,10 +403,9 @@ function pyramid() {
       v3.set(Math.sin(a) * R, main.position.y, Math.cos(a) * R).project(camera);
       baseY = Math.max(baseY, (-v3.y * 0.5 + 0.5) * h);
     }
-    for (let k = 0; k < 4; k++) {
-      const el = callOfFace[k];
-      if (!el) continue;
-      const i = calls.indexOf(el);
+    for (let i = 0; i < calls.length; i++) {
+      const el = calls[i];
+      const k = faceOfStep[i];
       const a = faceAng(k) + y;
       const s = slices[sliceOf(i)];
       const faceD = (half * (1 - s.mid / H)) * (s.grow || 1) + 0.02;
@@ -464,9 +463,9 @@ function pyramid() {
     const t = reduce ? 0 : now;
     const p = window.__pyr || 0;
     if (!dragging) { vel *= Math.pow(0.92, dt * 60); drag += vel; drag = lerp(drag, 0, 1 - Math.pow(1 - 0.035, dt * 60)); }
-    // uma face por frente: gira 90 graus a cada quarto da rolagem
+    // uma face por camada: gira 90 graus a cada quinto da rolagem
     // cada frente gira no começo do seu trecho de rolagem e depois fica parada
-    const q = Math.min(3.999, p * 4), k = Math.floor(q), f = q - k;
+    const q = Math.min(NS - 0.001, p * NS), k = Math.floor(q), f = q - k;
     const ease = x => x * x * (3 - 2 * x);
     step = k === 0 ? 0 : k - 1 + ease(Math.min(1, f / 0.4));
     // mola da rotação: acelera, chega e assenta com um respiro mínimo
@@ -481,14 +480,14 @@ function pyramid() {
     const dist = camera.position.length();
     edgeMats.forEach(m => { m.uniforms.uNear.value = dist - 0.9; m.uniforms.uFar.value = dist + 1.2; });
     // fatia ativa = a que está de frente de fato (segue a rotação com mola, não o alvo)
-    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(3, Math.round((ROT0 - rot.x) / (Math.PI / 2)))));
+    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(NS - 1, Math.round((ROT0 - rot.x) / (Math.PI / 2)))));
     if (act !== prevAct) { if (prevAct >= 0 && !reduce) sweepAt = now; prevAct = act; }
     const sw = sweepAt >= 0 ? (now - sweepAt) / 0.95 : 2;
     if (sw >= 1) sweepAt = -1;
     slices.forEach((s, i) => {
       const S = s.sp;
-      // entrada: de baixo para cima, como uma construção (a Marca primeiro, o Anúncio por último)
-      spring(S.app, reduce || now - introAt > 0.12 + (3 - i) * 0.17 ? 1 : 0, dt, 38, 0.62);
+      // entrada: de baixo para cima, como uma construção (o Branding primeiro, a Performance por último)
+      spring(S.app, reduce || now - introAt > 0.12 + (NS - 1 - i) * 0.15 ? 1 : 0, dt, 38, 0.62);
       spring(S.glow, i === act ? 1 : 0, dt, 90, 0.9);
       spring(S.dim, act >= 0 && i !== act ? 1 : 0, dt, 70, 0.95);
       spring(S.grow, i === act ? 1.07 : 1, dt, 110, 0.72);

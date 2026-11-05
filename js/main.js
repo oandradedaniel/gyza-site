@@ -9,7 +9,7 @@
 
   // a abertura sempre começa do topo; se veio com âncora (ex.: index.html#analise), guarda e rola até ela no fim da abertura
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  const ALIAS = { '#orcamento': '#analise' };
+  const ALIAS = { '#orcamento': '#analise', '#cuidamos': '#frentes', '#servicos': '#frentes', '#sinais': '#frentes' };
   const hashInicial = ALIAS[location.hash] || location.hash;
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   window.scrollTo(0, 0);
@@ -216,21 +216,12 @@
     });
   }
 
-  /* ---------- serviços: a linha acende no meio da tela (igual ao site oficial) ---------- */
-  function svcLista() {
-    const itens = $$('.svc-lista .servico');
-    if (!itens.length) return;
-    if (reduce) { itens.forEach(li => li.classList.add('is-active')); return; }
-    itens.forEach(li => ScrollTrigger.create({
-      trigger: li, start: 'top 58%', end: 'bottom 42%',
-      toggleClass: { targets: li, className: 'is-active' },
-    }));
-  }
-
   /* ---------- 360: a pirâmide gira com a rolagem ---------- */
   function frentes() {
     const panels = $$('.frente');
     const dots = $$('.frentes__dots li');
+    const N = panels.length;
+    if (!N) return;
     let cur = 0;
     const show = i => {
       if (i === cur) return;
@@ -244,14 +235,14 @@
       gsap.killTweensOf(panels[i]);
       panels[i].classList.add('is-on');
       gsap.fromTo(panels[i], { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.55, delay: 0.15, ease: 'expo.out' });
-      gsap.fromTo($$('li', panels[i]), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.25, stagger: 0.04, ease: 'expo.out' });
+      gsap.fromTo($$('.frente__nome, .frente__txt', panels[i]), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.2, stagger: 0.06, ease: 'expo.out' });
       dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
     };
     ScrollTrigger.create({
-      trigger: '.frentes', start: 'top top', end: '+=300%', pin: true, scrub: true,
+      trigger: '.frentes', start: 'top top', end: '+=400%', pin: true, scrub: true,
       onUpdate: s => {
         window.__pyr = s.progress;
-        show(Math.min(3, Math.floor(s.progress * 4)));
+        show(Math.min(N - 1, Math.floor(s.progress * N)));
       },
     });
   }
@@ -609,12 +600,6 @@
     window.addEventListener('scroll', () => liga(false), { passive: true });
   }
 
-  /* ---------- sinais e cards: entram em cascata uma vez ---------- */
-  function sinais() {
-    if (reduce) return;
-    gsap.from($$('.sinal'), { y: 18, opacity: 0, duration: .7, ease: 'expo.out', stagger: .06, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.sinais__lista', start: 'top 85%' } });
-  }
-
   /* ---------- análise: envia pelo WhatsApp ---------- */
   function form() {
     const f = $('[data-form]');
@@ -643,14 +628,12 @@
       note.innerHTML = original;
       note.classList.remove('is-error');
       const d = new FormData(f);
-      const reconhece = d.getAll('reconhece');
       const msg = [
         'Olá, GYZA. Quero solicitar a análise gratuita da minha empresa.',
         `Nome: ${d.get('nome')}`,
         `Empresa: ${d.get('empresa')}`,
         `WhatsApp: ${d.get('whatsapp')}`,
         d.get('perfil') ? `Instagram ou site: ${d.get('perfil')}` : '',
-        reconhece.length ? `Reconheço na minha empresa:\n${reconhece.map(t => '- ' + t).join('\n')}` : '',
       ].filter(Boolean).join('\n');
       window.__gyzaUltimaMsg = msg;
       if (enviando) return;
@@ -717,14 +700,13 @@
     menuCelular();
     reveals();
     form();
-    sinais();
-    svcLista();
     trilho($('[data-cases]'), '.case', 'cases');
     trilho($('[data-equipe]'), '.pessoa', 'equipe', -1);
     projetos();
     caseCursor();
     if (!reduce) {
       heroScroll();
+      frentes();
       footer();
       pointer();
     }

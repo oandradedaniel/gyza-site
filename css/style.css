@@ -1358,3 +1358,50 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
 /* abertura: texto de apoio em cinza com as palavras-chave acesas em branco */
 .hero__lead .hw { display: inline-block; }
 .hero__lead .hw.is-hl { color: #fff; font-weight: inherit; }
+
+/* =====================================================================
+   Esqueleto final (START do Vitor, 05/11/2026): a pirâmide volta como "O que fazemos", com 5 camadas
+   Ordem: abertura, dor (clara), pirâmide (escura), cases (escura), análise (azul)
+   ===================================================================== */
+/* cada camada: o nome grande com ponto final (o estilo das palavras grandes da lista antiga) e a frase embaixo */
+.frentes .h2 { font-size: clamp(40px, 4.4vw, 72px); }
+.frentes__copy { gap: 24px; }
+.frentes__intro { max-width: 440px; line-height: 1.5; }
+.frentes__panels { margin-top: clamp(8px, 2vh, 28px); }
+.frente__n { font-size: 14px; font-weight: 500; letter-spacing: .02em; color: var(--azul-claro); font-variant-numeric: tabular-nums; margin-bottom: 10px; }
+.frente .frente__nome {
+  font-size: clamp(52px, 6vw, 104px); font-weight: 500; line-height: .95; letter-spacing: -.055em;
+  color: var(--gelo); margin-bottom: 18px; max-width: 9ch; text-wrap: balance;
+}
+.frente .frente__txt { font-size: var(--fs-lead); line-height: 1.45; color: var(--apoio); max-width: 400px; margin-bottom: 0; text-wrap: pretty; }
+.frentes__dots { margin-top: 4px; }
+.call__txt b { color: var(--azul-claro); font-weight: 500; margin-right: 4px; }
+
+/* divisões: dor (clara) por cima da pirâmide em corte seco; pirâmide para cases e cases para análise em degradê leve */
+.frentes, .trabalhos { isolation: isolate; }
+.frentes::after, .trabalhos::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; z-index: 0; pointer-events: none;
+}
+.frentes::after { height: calc(var(--fade-curto) + 1px); background: linear-gradient(to bottom, transparent, var(--preto)); }
+.trabalhos::after { z-index: -1; height: calc(var(--fade-secao) + 1px); background: linear-gradient(to bottom, transparent, var(--azul)); }
+
+@media (max-width: 900px) {
+  .frentes__stage { padding-top: 88px; }
+  .frentes__copy { gap: 12px; }
+  .frentes__copy .h2 { font-size: clamp(34px, 9.4vw, 42px); }
+  .frentes__intro { display: block; font-size: 15px; max-width: 34ch; }
+  .frentes__panels { margin-top: 6px; }
+  .frente__n { font-size: 13px; margin-bottom: 4px; }
+  .frente .frente__nome { font-size: clamp(36px, 10.6vw, 46px); margin-bottom: 8px; max-width: none; }
+  .frente .frente__txt { font-size: 15px; max-width: 34ch; }
+}
+/* sem movimento: as 5 camadas em lista, da base ao topo */
+@media (prefers-reduced-motion: reduce) {
+  .frentes__panels { gap: 40px; }
+  .frente .frente__nome { font-size: clamp(40px, 4.4vw, 72px); }
+  .frentes__stage { align-items: start; }
+  .pyr-wrap { position: sticky; top: 80px; height: 80svh; min-height: 520px; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 900px) {
+  .pyr-wrap { position: relative; top: auto; height: auto; min-height: 120vw; }
+}

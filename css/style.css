@@ -269,6 +269,7 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
 .pyr-gl {
   position: absolute; inset: 0; width: 100%; height: 100%;
 }
+.pyr-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 .pyr-labels { position: absolute; inset: 0; pointer-events: none; }
 .call { position: absolute; left: 0; top: 0; width: 0; will-change: transform, opacity; }
 .call__dot {

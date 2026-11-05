@@ -162,11 +162,29 @@
   }
 
   /* ---------- o que fazemos: a linha acende no meio da tela ---------- */
+  /* jornada: cada passo acende ao chegar no meio da tela e o trecho azul da trilha avança com a rolagem */
   function servicos() {
-    $$('.servico').forEach(li => ScrollTrigger.create({
-      trigger: li, start: 'top 58%', end: 'bottom 42%',
-      toggleClass: { targets: li, className: 'is-active' },
-    }));
+    const passos = $$('[data-jornada] .passo');
+    if (!passos.length) return;
+    if (reduce) {
+      passos.forEach(p => { p.classList.add('is-on'); p.style.setProperty('--p', 1); });
+      return;
+    }
+    const topoPonto = p => parseFloat(getComputedStyle(p.closest('.jornada')).getPropertyValue('--topo-ponto')) || 0;
+    passos.forEach((p, i) => {
+      // acende quando o ponto do passo cruza o meio da tela; o último apaga o "momento" quando sai
+      ScrollTrigger.create({
+        trigger: p, start: () => `top+=${topoPonto(p)} 50%`, end: () => `bottom+=${topoPonto(p)} 50%`, invalidateOnRefresh: true,
+        onToggle: s => p.classList.toggle('is-active', s.isActive),
+        onEnter: () => p.classList.add('is-on'),
+        onLeaveBack: () => p.classList.remove('is-on'),
+      });
+      // o trecho da trilha até o próximo ponto enche junto com a rolagem
+      if (i < passos.length - 1) ScrollTrigger.create({
+        trigger: p, start: () => `top+=${topoPonto(p)} 50%`, end: () => `bottom+=${topoPonto(p)} 50%`, scrub: true, invalidateOnRefresh: true,
+        onUpdate: s => p.style.setProperty('--p', s.progress.toFixed(3)),
+      });
+    });
   }
 
   /* ---------- 360: a pirâmide gira com a rolagem ---------- */

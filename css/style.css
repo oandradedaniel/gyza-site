@@ -210,7 +210,6 @@ body.is-loading:not(.is-revealed) .hero__content, body.is-loading .hero__mark { 
 body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not(.is-revealed) .footer { visibility: hidden; }
 .intro__mark { will-change: transform; }
 .hero__halo { will-change: opacity, transform; }
-.servico__nome { will-change: transform; }
 
 /* ---------- 2. Manifesto ---------- */
 .manifesto {
@@ -236,22 +235,6 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
 .servicos { position: relative; z-index: 2; padding: var(--section) 0; background: var(--papel); color: var(--tinta); border-radius: var(--raio-secao) var(--raio-secao) 0 0; }
 .servicos__head { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; margin-bottom: clamp(56px, 8vw, 110px); }
 .servicos__lead { font-size: var(--fs-lead); color: var(--tinta-2); max-width: 470px; justify-self: end; line-height: 1.5; }
-.servicos__list { border-top: 1px solid var(--linha-papel); }
-.servico {
-  display: grid; grid-template-columns: minmax(200px, .3fr) 1fr; align-items: center; gap: 24px;
-  padding: clamp(10px, 1.6vw, 22px) 0;
-  border-bottom: 1px solid var(--linha-papel);
-}
-.servico__tag { display: grid; gap: 2px; }
-.servico__tag b { font-weight: 500; font-size: 15px; color: var(--azul); }
-.servico__tag em { font-style: normal; color: var(--tinta-2); font-size: 14px; }
-.servico__nome {
-  font-size: clamp(50px, 9.4vw, 158px); font-weight: 500; line-height: .95; letter-spacing: -.055em;
-  color: #CDD2DA;
-  transition: color .5s var(--ease), transform .7s var(--ease-out);
-}
-.servico:hover .servico__nome, .servico.is-active .servico__nome { color: var(--tinta); transform: translateX(18px); }
-
 /* ---------- 4. 360 ---------- */
 .frentes { position: relative; background: var(--preto); overflow: hidden; }
 /* o mesmo halo da abertura, invertido: o arco nasce embaixo e o azul cheio fica no alto */
@@ -460,8 +443,6 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   /* celular: a abertura acompanha o conteúdo e o nome fica logo abaixo do botão, encoberto pela seção clara */
   .nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
   .hero__halo i { filter: blur(18px); }
-  .servico__nome { transition: color .35s var(--ease); }
-  .servico:hover .servico__nome, .servico.is-active .servico__nome { transform: none; }
   .hero { height: auto; min-height: 0; padding-bottom: calc(120vw * 200.45 / 750 * 1.02 + 30px); }
   .hero__title { font-size: min(7.4vw, 32px); letter-spacing: -.045em; }
   .hero__content { padding-top: 132px; }
@@ -472,8 +453,6 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .form__row { grid-template-columns: 1fr; }
   .servicos__head, .metodo__head, .trabalhos__head { grid-template-columns: 1fr; gap: 20px; }
   .servicos__lead, .metodo__lead, .trabalhos__lead { justify-self: start; }
-  .servico { grid-template-columns: 1fr; gap: 6px; }
-  .servico__nome { color: var(--tinta); }
   .frentes__stage { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 100svh; padding-top: 96px; gap: 0; align-items: start; }
   .frentes__copy { gap: 16px; }
   .frentes__intro { display: none; }
@@ -774,4 +753,72 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
   .menu-aberto .nav__pontos i, .menu-aberto .nav__pontos i:first-child, .menu-aberto .nav__pontos i:last-child { opacity: 0; transform: scaleX(.2); }
   .menu-aberto .nav__pontos i:first-child { transform: translateY(6px) scaleX(.2); }
   .menu-aberto .nav__pontos i:last-child { transform: translateY(-6px) scaleX(.2); }
+}
+
+/* ---------- 2b. Jornada: os 6 passos da escolha do cliente ----------
+   Uma trilha vertical: o trecho azul avança com a rolagem e cada passo acende quando chega no meio da tela.
+   Passo aceso (is-on) fica aceso; o passo do momento (is-active) ganha o número em azul e o anel no ponto. */
+.jornada { --rail: 40px; --dot: 14px; --topo-ponto: clamp(30px, 3.4vw, 54px); --gap: clamp(48px, 6vw, 96px); }
+.jornada__titulo { font-size: clamp(22px, 2vw, 30px); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; padding-bottom: clamp(28px, 3vw, 44px); border-bottom: 1px solid var(--linha-papel); margin-bottom: clamp(28px, 4vw, 64px); }
+.passo {
+  position: relative;
+  display: grid; grid-template-columns: clamp(96px, 11vw, 170px) var(--rail) 1fr; column-gap: clamp(16px, 2.4vw, 40px);
+  padding-bottom: var(--gap);
+}
+.passo:last-child { padding-bottom: 0; }
+/* número grande à esquerda */
+.passo__n {
+  font-size: clamp(44px, 5.2vw, 84px); font-weight: 500; letter-spacing: -.05em; line-height: .9;
+  color: #CDD2DA; font-variant-numeric: tabular-nums;
+  padding-top: calc(var(--topo-ponto) - .45em);
+  transition: color .6s var(--ease);
+}
+/* a trilha: base tracejada e o trecho azul, do ponto deste passo até o ponto do próximo */
+.passo__ponto { position: relative; justify-self: center; width: var(--dot); height: 100%; }
+.passo__ponto::before {
+  content: ""; position: absolute; left: 0; top: calc(var(--topo-ponto) - var(--dot) / 2);
+  width: var(--dot); height: var(--dot); border-radius: 50%; z-index: 1;
+  background: var(--papel); border: 1.5px solid rgba(10,15,26,.22);
+  transition: background .4s var(--ease), border-color .4s var(--ease), box-shadow .5s var(--ease);
+}
+.passo:not(:last-child) .passo__ponto::after {
+  content: ""; position: absolute; left: 50%; width: 2px; margin-left: -1px;
+  top: var(--topo-ponto); bottom: calc(-1 * (var(--topo-ponto) + var(--gap)));
+  background:
+    linear-gradient(var(--azul), var(--azul)) top / 100% calc(var(--p, 0) * 100%) no-repeat,
+    repeating-linear-gradient(to bottom, rgba(10,15,26,.18) 0 4px, transparent 4px 10px);
+}
+.passo__corpo { display: grid; gap: 10px; max-width: 760px; }
+.passo__quando { font-size: 15px; font-weight: 500; color: var(--cinza); transition: color .5s var(--ease); }
+.passo__nome {
+  font-size: clamp(44px, 7.4vw, 124px); font-weight: 500; letter-spacing: -.055em; line-height: .95;
+  color: #CDD2DA; transition: color .6s var(--ease), transform .8s var(--ease-out);
+}
+.passo__txt { font-size: var(--fs-lead); line-height: 1.5; color: var(--tinta-2); max-width: 46ch; opacity: .4; transition: opacity .6s var(--ease); }
+
+.passo.is-on .passo__ponto::before { background: var(--azul); border-color: var(--azul); }
+.passo.is-on .passo__nome { color: var(--tinta); }
+.passo.is-on .passo__quando { color: var(--azul); }
+.passo.is-on .passo__txt { opacity: 1; }
+.passo.is-on .passo__n { color: var(--tinta); }
+.passo.is-active .passo__n { color: var(--azul); }
+.passo.is-active .passo__ponto::before { box-shadow: 0 0 0 6px rgba(31,79,216,.16), 0 0 18px rgba(31,79,216,.45); }
+.passo.is-active .passo__nome { transform: translateX(12px); }
+
+@media (max-width: 900px) {
+  /* celular: trilha à esquerda; "01  Quando ele pesquisa" na mesma linha, o nome e o texto embaixo */
+  .jornada { --rail: 14px; --dot: 12px; --topo-ponto: 11px; --gap: 44px; }
+  .passo { grid-template-columns: var(--rail) auto 1fr; column-gap: 0; }
+  .passo__corpo { display: contents; }
+  .passo__ponto { grid-column: 1; grid-row: 1 / span 3; margin-right: 0; }
+  .passo__n { grid-column: 2; grid-row: 1; padding: 0 10px 0 18px; font-size: 15px; letter-spacing: 0; line-height: 22px; color: var(--cinza); }
+  .passo__quando { grid-column: 3; grid-row: 1; line-height: 22px; }
+  .passo__nome { grid-column: 2 / -1; grid-row: 2; padding-left: 18px; margin-top: 8px; font-size: clamp(40px, 11.4vw, 52px); }
+  .passo__txt { grid-column: 2 / -1; grid-row: 3; padding-left: 18px; margin-top: 10px; font-size: 16px; }
+  .passo.is-on .passo__n { color: var(--tinta); }
+  .passo.is-active .passo__nome { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .passo__nome, .passo__txt, .passo__n, .passo__quando { transition: none; }
+  .passo.is-active .passo__nome { transform: none; }
 }

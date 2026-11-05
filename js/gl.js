@@ -255,7 +255,7 @@ function pyramid() {
   const H = half * Math.tan(59 * Math.PI / 180);
   const R = half * Math.SQRT2;
   const flat = g => { const n = g.toNonIndexed(); n.computeVertexNormals(); return n; };
-  const CUTS = [1, 0.7, 0.45, 0.22, 0];          // alturas relativas: Marca, Conteúdo, Digital, Performance
+  const CUTS = [1, 0.7, 0.45, 0.22, 0];          // alturas relativas, do topo para a base: Anúncios, Digital, Conteúdo, Marca
   const GAP = 0.028;
   const slices = CUTS.slice(0, 4).map((top, i) => {
     const bot = CUTS[i + 1];
@@ -316,7 +316,9 @@ function pyramid() {
 
   const em = edgeMat(0);
   const main = new THREE.Group();
-  const WHITE = [0, 0.5, 0.8, 1];                 // da ponta azul para a base branca, camada a camada
+  const WHITE = [0, 0.5, 0.8, 1];                 // da ponta azul (Anúncios) para a base branca (Marca), camada a camada
+  // passo da rolagem (0 Marca ... 3 Anúncios) para a fatia (0 é a ponta, 3 é a base)
+  const sliceOf = step => 3 - step;
   slices.forEach((s, i) => {
     const f = flat(s.geo);
     s.back = glass(THREE.BackSide, { uBack: 1, uWhite: WHITE[i] });
@@ -406,26 +408,34 @@ function pyramid() {
       if (!el) continue;
       const i = calls.indexOf(el);
       const a = faceAng(k) + y;
-      const s = slices[i];
+      const s = slices[sliceOf(i)];
       const faceD = (half * (1 - s.mid / H)) * (s.grow || 1) + 0.02;
       v3.set(Math.sin(a) * faceD, main.position.y + s.mid + s.off, Math.cos(a) * faceD).project(camera);
       const x = (v3.x * 0.5 + 0.5) * w, py = (-v3.y * 0.5 + 0.5) * h;
       // só a frente ativa aparece, e só quando a face já está de frente
-      const target = i === active ? Math.max(0, Math.min(1, (Math.cos(a) - 0.9) / 0.08)) : 0;
+      const target = sliceOf(i) === active ? Math.max(0, Math.min(1, (Math.cos(a) - 0.9) / 0.08)) : 0;
       // suavização independente da taxa de quadros: a linha se desenha junto com o giro e recolhe rápido
       grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * (target > grow[i] ? 7 : 16)));
       const drawn = 1 - Math.pow(1 - grow[i], 3);
       el.style.transform = `translate(${x}px, ${py}px)`;
       el.style.opacity = Math.min(1, grow[i] * 3).toFixed(3);
-      if (w < 600) {
-        // celular: a linha desce até abaixo da base e o rótulo fica embaixo, centralizado
+      // borda direita da fatia na tela: o rótulo não pode ficar por cima do vidro
+      let edgeX = 0;
+      const rr = half * (1 - s.mid / H) * Math.SQRT2 * (s.grow || 1);
+      for (let q = 0; q < 4; q++) {
+        const aa = q * Math.PI / 2 + y;
+        v3.set(Math.sin(aa) * rr, main.position.y + s.mid + s.off, Math.cos(aa) * rr).project(camera);
+        edgeX = Math.max(edgeX, (v3.x * 0.5 + 0.5) * w);
+      }
+      const txtW = el._tw || (el._tw = el.querySelector('.call__txt').offsetWidth);
+      const end = Math.max(Math.min(side, w - txtW - 18 - 12), edgeX + 28);
+      if (w < 600 || end + 18 + txtW > w - 8) {
+        // celular, ou fatia larga demais (a base): a linha desce até abaixo da base e o rótulo fica embaixo, centralizado
         el.classList.add('is-v');
         el.style.setProperty('--len', `${Math.max(24, baseY + 26 - py)}px`);
       } else {
-        // o rótulo nunca passa da borda: a linha encurta se faltar espaço
+        // a linha sai para a direita e passa da borda do vidro
         el.classList.remove('is-v');
-        const txtW = el._tw || (el._tw = el.querySelector('.call__txt').offsetWidth);
-        const end = Math.min(side, w - txtW - 18 - 12);
         el.style.setProperty('--len', `${Math.max(24, end - x)}px`);
       }
       el.style.setProperty('--grow', drawn.toFixed(3));
@@ -471,20 +481,20 @@ function pyramid() {
     const dist = camera.position.length();
     edgeMats.forEach(m => { m.uniforms.uNear.value = dist - 0.9; m.uniforms.uFar.value = dist + 1.2; });
     // fatia ativa = a que está de frente de fato (segue a rotação com mola, não o alvo)
-    const act = OPT ? -1 : Math.max(0, Math.min(3, Math.round((ROT0 - rot.x) / (Math.PI / 2))));
+    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(3, Math.round((ROT0 - rot.x) / (Math.PI / 2)))));
     if (act !== prevAct) { if (prevAct >= 0 && !reduce) sweepAt = now; prevAct = act; }
     const sw = sweepAt >= 0 ? (now - sweepAt) / 0.95 : 2;
     if (sw >= 1) sweepAt = -1;
     slices.forEach((s, i) => {
       const S = s.sp;
-      // entrada: de cima para baixo, uma fatia depois da outra
-      spring(S.app, reduce || now - introAt > 0.12 + i * 0.17 ? 1 : 0, dt, 38, 0.62);
+      // entrada: de baixo para cima, como uma construção (a Marca primeiro, o Anúncio por último)
+      spring(S.app, reduce || now - introAt > 0.12 + (3 - i) * 0.17 ? 1 : 0, dt, 38, 0.62);
       spring(S.glow, i === act ? 1 : 0, dt, 90, 0.9);
       spring(S.dim, act >= 0 && i !== act ? 1 : 0, dt, 70, 0.95);
       spring(S.grow, i === act ? 1.07 : 1, dt, 110, 0.72);
       // a ativa sobe um pouco; as de cima afastam para cima e as de baixo para baixo, abrindo a fenda
       spring(S.lift, act < 0 ? 0 : i === act ? 0.025 : i < act ? 0.065 : -0.035, dt, 80, 0.8);
-      s.off = S.lift.x + (1 - S.app.x) * 0.9;
+      s.off = S.lift.x - (1 - S.app.x) * 0.9;
       s.grow = S.grow.x * (1 - 0.012 * S.dim.x);
       s.glow = OPT ? OPT.glow[i] : S.glow.x;
       s.group.position.y = s.off;

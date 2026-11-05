@@ -248,7 +248,6 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
   display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 40px;
 }
 .frentes .h2 { font-size: clamp(40px, 5vw, 84px); }
-.frentes__360 { color: var(--azul); }
 .frentes__copy { display: grid; gap: 28px; align-content: center; }
 .frentes__intro { color: var(--apoio); font-size: var(--fs-lead); max-width: 420px; }
 .frentes__panels { display: grid; margin-top: 12px; }
@@ -462,9 +461,6 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .frente li { font-size: 13px; padding: 6px 12px; }
   .call__txt { font-size: 14px; }
   .call__txt em { font-size: 12px; }
-  .call.is-v .call__line { left: 0; top: 6px; width: 1px; height: var(--len, 0px); transform-origin: top; transform: scaleY(var(--grow, 0));
-    background: linear-gradient(rgba(127,166,255,.9), rgba(127,166,255,.3)); }
-  .call.is-v .call__txt { left: 0; top: calc(var(--len, 0px) + 14px); transform: translateX(-50%); text-align: center; }
   .pyr-wrap { align-self: stretch; }
   .metodo__pin { height: auto; min-height: 0; padding-bottom: var(--section); }
   .metodo__track { width: auto; flex-direction: column; align-items: stretch; margin-top: 44px; }
@@ -822,4 +818,27 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
 @media (prefers-reduced-motion: reduce) {
   .passo__nome, .passo__txt, .passo__n, .passo__quando { transition: none; }
   .passo.is-active .passo__nome { transform: none; }
+}
+
+/* Do logo ao anúncio: sobretítulo pequeno no azul claro da marca */
+.frentes__sobre { font-size: 15px; font-weight: 500; color: var(--azul-claro); margin-bottom: -14px; }
+@media (max-width: 900px) { .frentes__sobre { font-size: 14px; margin-bottom: -6px; } }
+
+/* rótulo vertical da pirâmide (celular e fatia larga no computador): a linha desce e o texto fica embaixo */
+.call.is-v .call__line { left: 0; top: 6px; width: 1px; height: var(--len, 0px); transform-origin: top; transform: scaleY(var(--grow, 0));
+    background: linear-gradient(rgba(127,166,255,.9), rgba(127,166,255,.3)); }
+.call.is-v .call__txt { left: 0; top: calc(var(--len, 0px) + 14px); transform: translateX(-50%); text-align: center; }
+
+/* sem movimento: a seção não fica presa na rolagem, então as 4 camadas aparecem em lista, da base ao topo */
+@media (prefers-reduced-motion: reduce) {
+  .frentes__stage { height: auto; min-height: 0; padding-top: var(--section); padding-bottom: var(--section); }
+  .frentes__panels { gap: 32px; }
+  .frente { grid-area: auto; opacity: 1 !important; pointer-events: auto; }
+  .frentes__dots { display: none; }
+  .pyr-wrap { min-height: 560px; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 900px) {
+  .frentes__stage { padding-top: 96px; }
+  .frentes__intro { display: block; }
+  .pyr-wrap { min-height: 120vw; }
 }

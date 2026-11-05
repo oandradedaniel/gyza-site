@@ -707,3 +707,44 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
   .mmenu__t > span { transform: none; }
   .mmenu__n, .mmenu__pe { opacity: 1; }
 }
+
+/* ---------- 7. Quem somos: título à esquerda, dois retratos 4:5 em degrau (estúdio), seção clara entre os cases e o orçamento ---------- */
+.equipe { position: relative; z-index: 2; background: var(--papel); color: var(--tinta); padding: var(--section) 0; border-radius: var(--raio-secao); }
+.equipe__grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: clamp(20px, 2.4vw, 36px); align-items: start; }
+.equipe__head { display: grid; gap: 28px; position: sticky; top: 120px; padding-right: clamp(0px, 2vw, 32px); }
+.equipe__lead { font-size: var(--fs-lead); color: var(--tinta-2); max-width: 34ch; }
+.pessoa:last-child { margin-top: clamp(64px, 9vw, 140px); }
+/* espaço reservado por baixo da foto: se o arquivo faltar, aparecem o degradê e as iniciais */
+.pessoa__foto {
+  position: relative; margin: 0 0 22px; aspect-ratio: 4 / 5; overflow: hidden;
+  border-radius: 24px;
+  background:
+    radial-gradient(130% 80% at 100% 100%, var(--azul), rgba(31,79,216,.45) 40%, rgba(31,79,216,0) 72%),
+    linear-gradient(180deg, var(--preto-2), var(--preto));
+}
+.pessoa:last-child .pessoa__foto { background:
+    radial-gradient(130% 80% at 0% 100%, var(--azul), rgba(31,79,216,.45) 40%, rgba(31,79,216,0) 72%),
+    linear-gradient(180deg, var(--preto-2), var(--preto)); }
+.pessoa__foto::before {
+  content: attr(data-ini); position: absolute; left: 8%; bottom: 4%;
+  font-size: clamp(96px, 13vw, 190px); font-weight: 500; letter-spacing: -.06em; line-height: .8; color: var(--gelo);
+}
+.pessoa__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s var(--ease-out); }
+.pessoa:hover .pessoa__foto img { transform: scale(1.03); }
+.pessoa__papel { font-size: 15px; font-weight: 500; color: var(--azul); margin-bottom: 6px; }
+.pessoa__nome { font-size: clamp(28px, 2.6vw, 40px); font-weight: 500; letter-spacing: -.04em; line-height: 1.05; margin-bottom: 12px; }
+.pessoa__txt { color: var(--tinta-2); max-width: 38ch; }
+@media (max-width: 900px) {
+  .equipe__grid { grid-template-columns: 1fr; gap: 0; }
+  .equipe__head { position: static; padding: 0; margin-bottom: 44px; gap: 20px; }
+  .pessoa + .pessoa, .pessoa:last-child { margin-top: 56px; }
+  .pessoa__foto { border-radius: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .pessoa:hover .pessoa__foto img { transform: none; } }
+/* Quem somos no computador: cabeçalho na largura toda (como as outras seções) e os dois retratos nas colunas da direita, em degrau */
+@media (min-width: 901px) {
+  .equipe__head { grid-column: 1 / -1; position: static; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: end; padding: 0; margin-bottom: clamp(56px, 7vw, 100px); }
+  .equipe__lead { justify-self: end; max-width: 420px; }
+  .pessoa:nth-of-type(1) { grid-column: 2; }
+  .pessoa:nth-of-type(2) { grid-column: 3; }
+}

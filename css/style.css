@@ -571,3 +571,5 @@ body.is-loading .cta-baixo { opacity: 0; translate: -50% 20px; }
   text-shadow: none;
 }
 @media (prefers-reduced-motion: reduce) { .cta-baixo, .cta-baixo:hover { scale: 1; } }
+/* botão de baixo escondido no formulário */
+.cta-baixo.is-off { opacity: 0; translate: -50% 140%; pointer-events: none; }

@@ -107,6 +107,8 @@
       };
       requestAnimationFrame(passo);
     }
+    // o botão de baixo some quando o formulário de orçamento está na tela (a abertura não tem mais botão próprio)
+    if (cta) ScrollTrigger.create({ trigger: '#orcamento', start: 'top 70%', end: 'bottom 30%', onToggle: s => cta.classList.toggle('is-off', s.isActive) });
     // o botão de baixo segue o tema da seção que está embaixo dele
     if (cta) $$('[data-theme]').forEach(sec => {
       ScrollTrigger.create({

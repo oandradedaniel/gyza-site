@@ -300,7 +300,7 @@
     // desliza sozinho, bem devagar; para quando a pessoa encosta, e volta depois
     if (!reduce) {
       const step = 1 / (window.devicePixelRatio || 1);
-      const speed = innerWidth < 600 ? 14 : 22;   // px por segundo
+      const speed = innerWidth < 600 ? 30 : 45;   // px por segundo
       let acc = 0, t0 = performance.now();
       new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(track);
       track.addEventListener('mouseenter', () => { hover = true; });

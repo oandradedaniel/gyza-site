@@ -315,12 +315,12 @@
       $('[data-proj-scroll]', proj).scrollTop = 0;
       document.body.classList.add('is-proj');
       if (push) history.pushState({ proj: c.dataset.projOpen }, '');
-      if (reduce) return $('.proj__close', proj).focus();
+      if (reduce) return proj.focus();
       gsap.timeline()
         .fromTo(proj, { clipPath: clipOf(media) }, { clipPath: 'inset(0px 0px 0px 0px round 0px)', duration: 1.05, ease: 'expo.inOut', clearProps: 'clipPath' })
         .fromTo($('.proj__cover img', proj), { scale: 1.12 }, { scale: 1, duration: 1.4, ease: 'expo.out' }, 0.1)
         .fromTo([$('.proj__close', proj), ...$$('.proj__head > *', proj)], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', stagger: 0.06 }, 0.75)
-        .add(() => $('.proj__close', proj).focus({ preventScroll: true }));
+        .add(() => proj.focus({ preventScroll: true }));
     };
     const fechar = (pop = false) => {
       if (!open) return;
@@ -330,7 +330,6 @@
         proj.hidden = true;
         gsap.set(proj, { clearProps: 'all' });
         document.body.classList.remove('is-proj');
-        $('.case__ver', card)?.focus({ preventScroll: true });
       };
       if (!pop && history.state?.proj) history.back();
       if (reduce) return done();

@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793908347">
+<link rel="stylesheet" href="css/style.css?v=1793908783">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
 </script>
@@ -194,8 +194,11 @@
       <article class="case">
         <div class="case__media"><img class="case__img" src="assets/img/cases/case-02.webp" width="2880" height="1610" alt="Case 01" loading="lazy" decoding="async" draggable="false"></div>
       </article>
-      <article class="case">
-        <div class="case__media"><img class="case__img" src="assets/img/cases/case-03.webp" width="2880" height="1610" alt="Case 02" loading="lazy" decoding="async" draggable="false"></div>
+      <article class="case case--open" data-proj-open="laroche">
+        <div class="case__media">
+          <img class="case__img" src="assets/img/cases/case-03.webp" width="2880" height="1610" alt="La Roche Café" loading="lazy" decoding="async" draggable="false">
+          <button class="case__ver" type="button"><span>Ver projeto</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button>
+        </div>
       </article>
       <article class="case case--open" data-proj-open="dandrade">
         <div class="case__media">
@@ -274,7 +277,7 @@
 </footer>
 
 <!-- Projeto aberto: o card do case cresce até virar uma página -->
-<div class="proj" id="proj-dandrade" role="dialog" aria-modal="true" aria-labelledby="proj-dandrade-t" hidden>
+<div class="proj" id="proj-dandrade" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="proj-dandrade-t" hidden>
   <div class="proj__scroll" data-proj-scroll>
     <figure class="proj__cover"><img src="assets/img/cases/case-01.webp" width="2880" height="1610" alt=""></figure>
     <div class="proj__body wrap">
@@ -323,11 +326,60 @@
   <button class="proj__close" type="button" data-proj-close aria-label="Fechar projeto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </div>
 
+<div class="proj" id="proj-laroche" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="proj-laroche-t" hidden>
+  <div class="proj__scroll" data-proj-scroll>
+    <figure class="proj__cover"><img src="assets/img/cases/case-03.webp" width="2880" height="1610" alt=""></figure>
+    <div class="proj__body wrap">
+      <header class="proj__head">
+        <p class="proj__kicker">Identidade visual</p>
+        <h2 class="proj__title" id="proj-laroche-t">La Roche Café</h2>
+        <p class="proj__lead">Um café com a firmeza da pedra e o calor do dourado. Uma marca sóbria, premium e acolhedora, pensada para cada ponto de contato com o cliente.</p>
+        <dl class="proj__meta">
+          <div><dt>Cliente</dt><dd>La Roche Café</dd></div>
+          <div><dt>Escopo</dt><dd>Logo, paleta e aplicações</dd></div>
+          <div><dt>Ano</dt><dd>2026</dd></div>
+        </dl>
+      </header>
+
+      <div class="proj__gal is-crop">
+        <img class="is-wide" src="assets/img/cases/laroche/m11.webp" width="2000" height="1333" alt="Logo La Roche Café" loading="lazy" decoding="async">
+        <div class="proj__txt">
+          <h3>Conceito</h3>
+          <p>La Roche quer dizer a rocha. O monograma une o L e o R em traços firmes, com cortes que lembram pedra lapidada. Preto, dourado e madeira formam uma paleta quente e sofisticada.</p>
+        </div>
+        <img class="is-wide" src="assets/img/cases/laroche/m05.webp" width="2000" height="2000" alt="Logo na vitrine do café" loading="lazy" decoding="async">
+        <img src="assets/img/cases/laroche/m01.webp" width="1050" height="1498" alt="Copo na pedra" loading="lazy" decoding="async">
+        <img src="assets/img/cases/laroche/m03.webp" width="1050" height="1498" alt="Copos na mesa de granilite" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/laroche/m08.webp" width="2000" height="1333" alt="Cartão sobre bandeja de madeira" loading="lazy" decoding="async">
+        <img src="assets/img/cases/laroche/m04.webp" width="1066" height="1476" alt="Suporte para dois copos" loading="lazy" decoding="async">
+        <img src="assets/img/cases/laroche/m09.webp" width="1444" height="2000" alt="Embalagem de café em grãos" loading="lazy" decoding="async">
+        <div class="proj__txt">
+          <h3>Aplicações</h3>
+          <p>Copos, embalagens, uniforme, fachada e sinalização. A marca acompanha o café do balcão à vitrine, sempre com o mesmo acabamento.</p>
+        </div>
+        <img class="is-wide" src="assets/img/cases/laroche/m02.webp" width="2000" height="1091" alt="Avental com o logo" loading="lazy" decoding="async">
+        <img src="assets/img/cases/laroche/m12.webp" width="1333" height="2000" alt="Fachada do café" loading="lazy" decoding="async">
+        <img src="assets/img/cases/laroche/m07.webp" width="2000" height="1500" alt="Xícara com o monograma" loading="lazy" decoding="async">
+        <img class="is-wide" style="object-position: 50% 30%" src="assets/img/cases/laroche/m06.webp" width="2000" height="1883" alt="Painel iluminado na recepção" loading="lazy" decoding="async">
+        <img class="is-wide" src="assets/img/cases/laroche/m10.webp" width="1575" height="998" alt="Caixa para viagem" loading="lazy" decoding="async">
+      </div>
+
+      <footer class="proj__end">
+        <p>Quer uma marca com essa presença?</p>
+        <div class="proj__ctas">
+          <a class="pill" data-magnetic href="#orcamento" data-proj-close><span>Solicite um orçamento</span></a>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <button class="proj__close" type="button" data-proj-close aria-label="Fechar projeto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+
 <div class="cursor" aria-hidden="true"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js?v=1793908347"></script>
-<script type="module" src="js/gl.js?v=1793908347"></script>
+<script src="js/main.js?v=1793908783"></script>
+<script type="module" src="js/gl.js?v=1793908783"></script>
 </body>
 </html>

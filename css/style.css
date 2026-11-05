@@ -61,7 +61,7 @@ ul, ol { list-style: none; }
 .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
 .line > span { display: block; will-change: transform; }
 
-#logo .topo, #simbolo .topo { fill: var(--topo, var(--azul)); }
+#logo .topo, #simbolo .topo { fill: var(--topo, var(--azul)); stroke: var(--topo-borda, none); stroke-width: 1.6; stroke-linejoin: round; }
 
 /* ---------- Botões ---------- */
 .pill {
@@ -543,3 +543,33 @@ body.is-loading .cta-baixo { opacity: 0; translate: -50% 20px; }
   box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 12px 40px rgba(10,15,26,.16);
 }
 .cta-baixo.is-light:hover { color: #fff; }
+
+/* abertura: triângulo do GYZA gigante em vidro azul escuro, com reflexo branco como as letras */
+.hero__mark { --topo: url(#topoVidro); --topo-borda: rgba(255,255,255,.55); filter: drop-shadow(0 0 24px rgba(40,80,220,.25)); }
+
+/* botão de baixo: vidro líquido mais transparente, com reflexo que segue o mouse e a rolagem */
+.cta-baixo {
+  --gx: 50%; --gy: 0%; --brilho: .32;
+  background:
+    radial-gradient(120px 60px at var(--gx) var(--gy), rgba(255,255,255,var(--brilho)), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.02) 50%, rgba(255,255,255,.06)),
+    rgba(18, 24, 40, .3);
+  backdrop-filter: blur(14px) saturate(210%) contrast(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(210%) contrast(1.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.45),
+    inset 0 -1px 0 rgba(255,255,255,.10),
+    inset 0 0 22px rgba(150,180,255,.14),
+    0 10px 34px rgba(0,0,0,.28);
+  text-shadow: 0 1px 10px rgba(0,0,0,.45);
+  transition: color .4s var(--ease), opacity .4s var(--ease), translate .5s var(--ease-out), scale .35s var(--ease-out), box-shadow .4s var(--ease);
+}
+.cta-baixo:hover { scale: 1.04; box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 0 26px rgba(150,180,255,.22), 0 14px 44px rgba(30,70,220,.35); }
+.cta-baixo.is-light {
+  background:
+    radial-gradient(120px 60px at var(--gx) var(--gy), rgba(255,255,255,.7), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.25)),
+    rgba(242, 244, 247, .18);
+  text-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) { .cta-baixo, .cta-baixo:hover { scale: 1; } }

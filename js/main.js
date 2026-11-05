@@ -89,6 +89,24 @@
   function navTheme() {
     const nav = $('[data-nav]');
     const cta = $('.cta-baixo');
+    // vidro do botão de baixo: o reflexo vai para o lado do mouse e desliza com a rolagem
+    if (cta && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let alvoX = 50, alvoY = 0, x = 50, y = 0, rolou = 0;
+      addEventListener('pointermove', e => {
+        const r = cta.getBoundingClientRect();
+        alvoX = Math.max(-10, Math.min(110, ((e.clientX - r.left) / r.width) * 100));
+        alvoY = Math.max(-40, Math.min(140, ((e.clientY - r.top) / r.height) * 100));
+      }, { passive: true });
+      addEventListener('scroll', () => { rolou = 1; }, { passive: true });
+      const passo = () => {
+        if (rolou) { alvoX = 50 + Math.sin(scrollY / 180) * 45; rolou = 0; }
+        x += (alvoX - x) * 0.12; y += (alvoY - y) * 0.12;
+        cta.style.setProperty('--gx', x.toFixed(1) + '%');
+        cta.style.setProperty('--gy', y.toFixed(1) + '%');
+        requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    }
     // o botão de baixo segue o tema da seção que está embaixo dele
     if (cta) $$('[data-theme]').forEach(sec => {
       ScrollTrigger.create({

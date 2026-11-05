@@ -360,19 +360,24 @@
       track.scrollTo({ left: left(Math.max(0, Math.min(all.length - 1, i))), behavior: 'smooth' });
     };
     const sync = () => {
-      n.textContent = String(at() % N + 1).padStart(2, '0');
-      if (!loop) {
+      if (n) n.textContent = String(at() % N + 1).padStart(2, '0');
+      if (!loop && prev && next) {
         prev.disabled = track.scrollLeft < 4;
         next.disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
       }
     };
-    prev.addEventListener('click', () => go(at() - 1));
-    next.addEventListener('click', () => go(at() + 1));
+    if (prev) prev.addEventListener('click', () => go(at() - 1));
+    if (next) next.addEventListener('click', () => go(at() + 1));
     track.addEventListener('scroll', () => {
       sync();
       if (Math.abs(track.scrollLeft - expect) > 1) lastScroll = performance.now();
     }, { passive: true });
     sync();
+    // teclado: setas esquerda e direita passam de card em card quando o trilho está em foco
+    track.addEventListener('keydown', e => {
+      if (e.target !== track || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+      e.preventDefault(); go(at() + (e.key === 'ArrowRight' ? 1 : -1));
+    });
 
     // desliza sozinho, bem devagar (px por segundo); para quando a pessoa encosta e volta depois
     if (loop) {

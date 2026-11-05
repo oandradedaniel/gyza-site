@@ -390,7 +390,7 @@
     const user = (ms = RESUME) => { stop(); arm(ms); };
     track.addEventListener('mouseenter', () => { hover = true; stop(); });
     track.addEventListener('mouseleave', () => { hover = false; arm(); });
-    track.addEventListener('focusin', () => { focus = true; stop(); });
+    track.addEventListener('focusin', e => { if (!e.target.matches(':focus-visible')) return; focus = true; stop(); });
     track.addEventListener('focusout', () => { focus = false; arm(); });
     track.addEventListener('touchstart', () => { touch = true; stop(); }, { passive: true });
     track.addEventListener('touchend', () => { touch = false; arm(RESUME); }, { passive: true });

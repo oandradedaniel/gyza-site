@@ -1312,3 +1312,45 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
   .nav { justify-content: flex-start; }
   .nav__logo { margin-left: 4px; }
 }
+
+/* ---------- Reconhece: só título e os 8 sinais, cada um numa cápsula de vidro escuro (Vitor, 05/11/2026) ---------- */
+/* sem backdrop-filter: vidro feito só com degradê translúcido, borda fina e luz de 1 px no topo */
+.sinais { --fs-dor: clamp(17px, calc(.9vw + 9px), 22px); }
+.sinais__head { display: block; margin-bottom: clamp(36px, 4.4vh, 56px); }
+.sinais__lista { border-top: 0; gap: 12px clamp(14px, 1.4vw, 20px); }
+.sinal {
+  position: relative; grid-template-columns: 22px 1fr; gap: 14px; align-items: center;
+  padding: 20px 24px; border: 0; border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.10), 0 18px 40px -24px rgba(0,0,0,.8);
+  transition: box-shadow var(--dur-3) var(--ease-out), background var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out);
+}
+/* borda luminosa: um fio azul claro que acende só no canto de cima à esquerda, de onde vem a luz */
+.sinal::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(135deg, rgba(127,166,255,.38), rgba(127,166,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.06));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: .7; transition: opacity var(--dur-3) var(--ease-out);
+}
+/* marcador: ponto azul com brilho no lugar do tracinho */
+.sinal__n {
+  width: 8px; height: 8px; margin: 0 0 0 6px; border-radius: 50%;
+  background: var(--azul-claro);
+  box-shadow: 0 0 0 4px rgba(127,166,255,.12), 0 0 14px 2px rgba(127,166,255,.55);
+}
+.sinal__txt { color: var(--gelo); line-height: 1.3; }
+@media (hover: hover) and (pointer: fine) {
+  .sinal:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, rgba(127,166,255,.09), rgba(255,255,255,.025));
+    box-shadow: inset 0 0 0 1px rgba(127,166,255,.22), inset 0 1px 0 rgba(255,255,255,.14), 0 24px 48px -24px rgba(31,79,216,.55);
+  }
+  .sinal:hover::before { opacity: 1; }
+}
+@media (max-width: 900px) {
+  .sinais__head { margin-bottom: 28px; }
+  .sinais__lista { gap: 8px; }
+  .sinal { grid-template-columns: 18px 1fr; gap: 12px; padding: 15px 16px; border-radius: 16px; }
+  .sinal__n { margin-left: 4px; width: 7px; height: 7px; }
+}
+@media (prefers-reduced-motion: reduce) { .sinal, .sinal::before { transition: none; } .sinal:hover { transform: none; } }

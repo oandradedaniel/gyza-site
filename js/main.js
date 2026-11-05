@@ -339,7 +339,8 @@
 
   /* ---------- trilhos laterais: cases e equipe (arrastar, setas, e passagem contínua sem emenda) ---------- */
   // componente único dos dois trilhos: troque só o seletor dos itens e o prefixo dos atributos (contador, setas, pausa)
-  function trilho(track, itemSel, attr) {
+  // dir: 1 = o conteúdo anda para a esquerda (cases); -1 = anda para a direita (equipe)
+  function trilho(track, itemSel, attr, dir = 1) {
     if (!track) return;
     const items = $$(itemSel, track);
     const N = items.length;
@@ -374,6 +375,8 @@
       if (!loop) return;
       const w = left(N);
       if (track.scrollLeft >= w) { track.scrollLeft -= w; expect = track.scrollLeft; }
+      // andando para a direita: chegou ao começo, pula uma volta para a frente (mesma imagem na tela)
+      else if (dir < 0 && track.scrollLeft <= 1) { track.scrollLeft += w; expect = track.scrollLeft; }
     };
     const go = i => {
       segura();
@@ -406,6 +409,8 @@
       const step = 1 / (window.devicePixelRatio || 1);
       const speed = innerWidth < 600 ? 20 : 32;
       let acc = 0, t0 = performance.now();
+      // no sentido inverso começa no fim da primeira cópia, para ter para onde andar
+      if (dir < 0) { track.scrollLeft = left(N); expect = track.scrollLeft; }
       new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(track);
       track.addEventListener('mouseenter', () => { hover = true; });
       track.addEventListener('mouseleave', () => { hover = false; segura(1200); });
@@ -436,7 +441,7 @@
           if (acc >= step) {
             const px = Math.floor(acc / step) * step;
             acc -= px;
-            track.scrollLeft += px;
+            track.scrollLeft += dir * px;
             expect = track.scrollLeft;
             wrap();
           }
@@ -711,7 +716,7 @@
     sinais();
     svcLista();
     trilho($('[data-cases]'), '.case', 'cases');
-    trilho($('[data-equipe]'), '.pessoa', 'equipe');
+    trilho($('[data-equipe]'), '.pessoa', 'equipe', -1);
     projetos();
     caseCursor();
     if (!reduce) {

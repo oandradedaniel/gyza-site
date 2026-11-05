@@ -748,3 +748,11 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
   .pessoa:nth-of-type(1) { grid-column: 2; }
   .pessoa:nth-of-type(2) { grid-column: 3; }
 }
+
+/* topo no computador: ao esconder os links eles também fecham o espaço, para a marca ficar no centro */
+@media (min-width: 901px) {
+  .nav__links { max-width: 640px; overflow: hidden; white-space: nowrap; transition: opacity .3s var(--ease), max-width .6s var(--ease-out); }
+  .nav { transition: transform .6s var(--ease-out), opacity .4s, color .4s var(--ease), gap .6s var(--ease-out); }
+  .nav.is-scrolled { gap: 0; }
+  .nav.is-scrolled .nav__links { max-width: 0; }
+}

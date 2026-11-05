@@ -364,22 +364,39 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
 .case--open { cursor: pointer; }
 .case--open:hover .case__img { transform: scale(1.035); }
 .case__ver {
-  position: absolute; left: 20px; bottom: 20px;
-  display: inline-flex; align-items: center; gap: 10px;
-  height: 46px; padding: 0 8px 0 20px; border: 0; border-radius: 999px;
-  font: 500 15px/1 var(--f); letter-spacing: -.01em; color: var(--gelo);
-  background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05)), rgba(10,14,24,.4);
+  /* só o círculo de vidro com a seta; o card inteiro abre o projeto */
+  position: absolute; right: 18px; bottom: 18px;
+  display: grid; place-items: center;
+  width: 54px; height: 54px; padding: 0; border: 0; border-radius: 50%;
+  color: var(--gelo);
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.06)), rgba(10,14,24,.36);
   backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 10px 30px rgba(0,0,0,.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.35);
   cursor: pointer;
+  transition: transform .5s var(--ease-out), background .4s var(--ease);
 }
 .case__ver svg {
-  width: 32px; height: 32px; padding: 8px; border-radius: 50%;
-  background: var(--gelo); color: var(--preto);
+  width: 22px; height: 22px;
   fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-  transition: background .4s var(--ease), color .4s var(--ease), transform .5s var(--ease-out);
+  transition: transform .5s var(--ease-out);
 }
-.case--open:hover .case__ver svg { background: var(--azul); color: #fff; transform: rotate(45deg); }
+.case--open:hover .case__ver, .case__ver:focus-visible { transform: scale(1.1); }
+.case--open:hover .case__ver svg, .case__ver:focus-visible svg { transform: rotate(45deg); }
+.case__ver:focus-visible { outline: 3px solid var(--azul-claro); outline-offset: 3px; border-radius: 50%; }
+
+/* cursor dos cases: círculo azul com a seta, só no computador com mouse */
+.case-cursor {
+  position: fixed; left: 0; top: 0; z-index: 70; pointer-events: none;
+  width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff; background: var(--azul);
+  box-shadow: 0 14px 40px -10px rgba(31,79,216,.6);
+  opacity: 0; scale: .4; transition: opacity .25s var(--ease), scale .35s var(--ease-out);
+}
+.case-cursor svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.case-cursor.is-on { opacity: 1; scale: 1; }
+.tem-case-cursor .cases .case__media, .tem-case-cursor .cases .case__media * { cursor: none; }
+body.no-case .cursor { opacity: 0 !important; }
+.cases.is-drag ~ .case-cursor, .cases.is-drag .case-cursor { opacity: 0; }
 
 .cases__ctrl { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; }
 .cases__count { font-size: 14px; color: var(--cinza); font-variant-numeric: tabular-nums; }
@@ -571,7 +588,7 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .metodo__track { padding: 0 var(--gutter); }
   .case { flex-basis: 84vw; }
   .case__media { aspect-ratio: 4 / 3; border-radius: 22px; }
-  .case__ver { left: 14px; bottom: 14px; height: 42px; font-size: 14px; }
+  .case__ver { right: 14px; bottom: 14px; width: 52px; height: 52px; }
   .cases__ctrl { margin-top: 20px; }
   .proj__cover { height: 62svh; }
   .proj__body { margin-top: -6vh; }
@@ -1073,19 +1090,24 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 .cuidamos { position: relative; z-index: 2; background: var(--papel); color: var(--tinta); padding: var(--section) 0; border-radius: var(--raio-secao); }
 .cuidamos__head { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: end; margin-bottom: clamp(48px, 6vw, 88px); }
 .cuidamos__lead { font-size: var(--fs-lead); color: var(--tinta-2); max-width: 470px; justify-self: end; line-height: 1.5; }
-.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.card { position: relative; display: flex; flex-direction: column; min-height: 288px; padding: 28px 28px 30px; background: #fff;
-  border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card);
-  transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease); }
-.card__ico { display: block; width: 104px; height: 104px; margin: -4px 0 0 -4px; transition: transform var(--dur-3) var(--ease-out); }
-.card__ico img { display: block; width: 100%; height: 100%; }
-.card__nome { margin-top: auto; padding-top: 20px; font-size: var(--fs-card-t); font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
-.card__txt { margin-top: 10px; font-size: var(--fs-card-p); line-height: 1.5; color: var(--tinta-2); max-width: 30ch; }
-
-@media (hover: hover) and (min-width: 901px) {
-  .card:hover { transform: translateY(-6px); box-shadow: var(--sombra-card-hover); }
-  .card:hover .card__ico { transform: translateY(-4px); }
+.cuidamos .cuidamos__head { margin-bottom: clamp(56px, 8vw, 110px); }
+/* lista de serviços: a do site oficial (origin/main .servico), sem rótulo: palavra grande na margem do título e a descrição pequena logo abaixo */
+.servicos__list { border-top: 1px solid var(--linha-papel); }
+.servico {
+  display: grid; justify-items: start; gap: clamp(8px, .8vw, 12px);
+  padding: clamp(16px, 2vw, 28px) 0;
+  border-bottom: 1px solid var(--linha-papel);
 }
+.servico__desc { font-size: var(--fs-card-p); line-height: 1.4; color: var(--tinta-2); }
+/* o fio de cima fica na largura do conteúdo, igual aos outros fios */
+.svc-lista { border-top: 0; }
+.svc-lista .servico:first-child { border-top: 1px solid var(--linha-papel); }
+.servico__nome {
+  font-size: clamp(50px, 9.4vw, 158px); font-weight: 500; line-height: .95; letter-spacing: -.055em;
+  color: #CDD2DA; will-change: transform;
+  transition: color .5s var(--ease), transform .7s var(--ease-out);
+}
+.servico:hover .servico__nome, .servico.is-active .servico__nome { color: var(--tinta); transform: translateX(18px); }
 .cuidamos__pe { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--linha-papel); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .cuidamos__pe p { font-size: 18px; }
 .cuidamos__pe p span { color: var(--tinta-2); }
@@ -1143,21 +1165,20 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
   .cuidamos { padding: 88px 0 96px; }
   .cuidamos__head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px; }
   .cuidamos__lead { justify-self: start; }
-  .cards { grid-template-columns: 1fr; gap: 0; background: #fff; border: 1px solid rgba(10,15,26,.06); border-radius: var(--raio-card); box-shadow: var(--sombra-card); overflow: hidden; }
-  .card { display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ico nome" "ico txt"; column-gap: 16px; align-items: start;
-    min-height: 0; padding: 18px 18px 18px 14px; border: 0; border-bottom: 1px solid var(--linha-papel); border-radius: 0; box-shadow: none; }
-  .card:last-child { border-bottom: 0; }
-  .card__ico { grid-area: ico; width: 64px; height: 64px; margin: -4px 0 0; }
-  .card__nome { grid-area: nome; margin-top: 4px; padding-top: 0; }
-  .card__txt { grid-area: txt; margin-top: 4px; }
+  .cuidamos .cuidamos__head { margin-bottom: 36px; }
+  .servico { gap: 8px; padding: 18px 0; }
+  .servico__nome { color: var(--tinta); transition: color .35s var(--ease); }
+  .servico__desc { font-size: 15px; }
+  .servico:hover .servico__nome, .servico.is-active .servico__nome { transform: none; }
   .cuidamos__pe { flex-direction: column; align-items: stretch; gap: 16px; }
   .cuidamos__pe .pill { width: 100%; }
   .footer__legal { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card, .card__ico, .chips--sinais label, .chips--sinais .marca, .chips--sinais .marca svg { transition: none; }
-  .card:hover, .card:hover .card__ico { transform: none; }
+  .chips--sinais label, .chips--sinais .marca, .chips--sinais .marca svg { transition: none; }
+  .servico__nome { color: var(--tinta); transition: none; }
+  .servico:hover .servico__nome, .servico.is-active .servico__nome { transform: none; }
 }
 
 /* ---------- cor: correções AA do 10 Cor (05/11/2026), só papéis, sem trocar a cor da marca ---------- */
@@ -1233,3 +1254,31 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
   .sinal { grid-template-columns: 28px 1fr; }
   .sinais__fecho { grid-column: auto; margin-top: 32px; }
 }
+
+/* ---------- divisão entre seções (Vitor, 05/11/2026): borda reta de ponta a ponta, sem raio, e degradê para a cor da próxima ---------- */
+/* sem backdrop-filter: só um linear-gradient por seção. Exceções do Vitor: corte seco da abertura para a L2 e dos cases para Quem está por trás; L2 para o Reconhece e Reconhece para os serviços em degradê curto */
+:root { --fade-secao: 140px; --fade-curto: 56px; }
+@media (max-width: 900px) { :root { --fade-secao: 100px; --fade-curto: 40px; } }
+.manifesto, .servicos, .metodo, .cuidamos, .equipe, .orcamento, .footer, .priv-doc { border-radius: 0; }
+.footer { margin-top: 0; }
+.servicos, .sinais, .cuidamos, .equipe, .orcamento { position: relative; isolation: isolate; }
+.servicos::after, .sinais::after, .cuidamos::after, .equipe::after, .orcamento::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: calc(var(--fade-secao) + 1px);
+  z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--fade-para));
+}
+/* L2 para o Reconhece e Reconhece para os serviços: curto e com curva suave (smoothstep), sem faixa cinza larga */
+.servicos::after, .sinais::after {
+  height: calc(var(--fade-curto) + 1px);
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--fade-para) 16%, transparent) 25%,
+    color-mix(in srgb, var(--fade-para) 50%, transparent) 50%,
+    color-mix(in srgb, var(--fade-para) 84%, transparent) 75%,
+    var(--fade-para) 100%);
+}
+.servicos { --fade-para: var(--preto); }
+.sinais { --fade-para: var(--papel); }
+.cuidamos { --fade-para: var(--preto); }
+.equipe { --fade-para: var(--azul); }
+.orcamento { --fade-para: var(--preto); }

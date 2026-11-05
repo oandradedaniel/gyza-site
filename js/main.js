@@ -201,6 +201,17 @@
     });
   }
 
+  /* ---------- serviços: a linha acende no meio da tela (igual ao site oficial) ---------- */
+  function svcLista() {
+    const itens = $$('.svc-lista .servico');
+    if (!itens.length) return;
+    if (reduce) { itens.forEach(li => li.classList.add('is-active')); return; }
+    itens.forEach(li => ScrollTrigger.create({
+      trigger: li, start: 'top 58%', end: 'bottom 42%',
+      toggleClass: { targets: li, className: 'is-active' },
+    }));
+  }
+
   /* ---------- 360: a pirâmide gira com a rolagem ---------- */
   function frentes() {
     const panels = $$('.frente');
@@ -554,11 +565,34 @@
     });
   }
 
+  /* ---------- cases: círculo azul com a seta segue o mouse sobre a imagem ---------- */
+  function caseCursor() {
+    const track = $('[data-cases]');
+    if (!track || reduce || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const el = document.createElement('div');
+    el.className = 'case-cursor';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+    document.body.appendChild(el);
+    document.documentElement.classList.add('tem-case-cursor');
+    const cx = gsap.quickTo(el, 'x', { duration: 0.35, ease: 'power3' });
+    const cy = gsap.quickTo(el, 'y', { duration: 0.35, ease: 'power3' });
+    let on = false;
+    const liga = v => { if (v === on) return; on = v; el.classList.toggle('is-on', v); document.body.classList.toggle('no-case', v); };
+    // delegação: vale também para as cópias que o trilho cria para a passagem contínua
+    track.addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      cx(e.clientX); cy(e.clientY);
+      liga(!!e.target.closest('.case--open .case__media') && !track.classList.contains('is-drag'));
+    });
+    track.addEventListener('pointerleave', () => liga(false));
+    window.addEventListener('scroll', () => liga(false), { passive: true });
+  }
+
   /* ---------- sinais e cards: entram em cascata uma vez ---------- */
   function sinais() {
     if (reduce) return;
     gsap.from($$('.sinal'), { y: 18, opacity: 0, duration: .7, ease: 'expo.out', stagger: .06, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.sinais__lista', start: 'top 85%' } });
-    gsap.from($$('.card'), { y: 24, opacity: 0, duration: .9, ease: 'expo.out', stagger: .05, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.cards', start: 'top 85%' } });
   }
 
   /* ---------- análise: envia pelo WhatsApp ---------- */
@@ -651,9 +685,11 @@
     reveals();
     form();
     sinais();
+    svcLista();
     trilho($('[data-cases]'), '.case', 'cases');
     trilho($('[data-equipe]'), '.pessoa', 'equipe');
     projetos();
+    caseCursor();
     if (!reduce) {
       heroScroll();
       footer();

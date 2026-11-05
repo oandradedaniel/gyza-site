@@ -311,18 +311,127 @@
     });
   }
 
-  /* ---------- trabalhos: cartões empilham ---------- */
-  function trabalhos() {
-    const cases = $$('.case');
-    cases.forEach((c, i) => {
-      c.style.setProperty('--k', i);
-      if (i < cases.length - 1) {
-        gsap.to($('.case__media', c), {
-          scale: 0.92, opacity: 0.4, ease: 'none',
-          scrollTrigger: { trigger: cases[i + 1], start: 'top bottom', end: 'top 12%', scrub: true },
-        });
-      }
+  /* ---------- cases: trilho lateral (arrastar, setas ou deslizar) ---------- */
+  function cases() {
+    const track = $('[data-cases]');
+    const items = $$('.case', track);
+    const n = $('[data-cases-n]');
+    const prev = $('[data-cases-prev]'), next = $('[data-cases-next]');
+    const at = () => {
+      const x = track.scrollLeft;
+      let best = 0;
+      items.forEach((c, i) => { if (Math.abs(c.offsetLeft - items[0].offsetLeft - x) < Math.abs(items[best].offsetLeft - items[0].offsetLeft - x)) best = i; });
+      return best;
+    };
+    const go = i => track.scrollTo({ left: items[Math.max(0, Math.min(items.length - 1, i))].offsetLeft - items[0].offsetLeft, behavior: 'smooth' });
+    const sync = () => {
+      const i = at();
+      n.textContent = String(i + 1).padStart(2, '0');
+      prev.disabled = track.scrollLeft < 4;
+      next.disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
+    };
+    prev.addEventListener('click', () => go(at() - 1));
+    next.addEventListener('click', () => go(at() + 1));
+    track.addEventListener('scroll', sync, { passive: true });
+    sync();
+
+    // mouse: arrastar para o lado, com um empurrão no fim; um arrasto não conta como clique
+    let down = false, moved = 0, x0 = 0, s0 = 0, i0 = 0;
+    track.addEventListener('pointerdown', e => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true; moved = 0; x0 = e.clientX; s0 = track.scrollLeft; i0 = at();
     });
+    window.addEventListener('pointermove', e => {
+      if (!down) return;
+      moved = Math.max(moved, Math.abs(e.clientX - x0));
+      if (moved > 6) { track.classList.add('is-drag'); track.scrollLeft = s0 - (e.clientX - x0); }
+    });
+    window.addEventListener('pointerup', e => {
+      if (!down) return;
+      down = false;
+      if (!track.classList.contains('is-drag')) return;
+      track.classList.remove('is-drag');
+      const dx = e.clientX - x0;
+      go(Math.abs(dx) > 60 ? i0 + (dx < 0 ? 1 : -1) : i0);
+    });
+    track.addEventListener('click', e => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+  }
+
+  /* ---------- projeto: o card cresce até virar uma página ---------- */
+  function projetos() {
+    let open = null, card = null;
+    const clipOf = el => {
+      const r = el.getBoundingClientRect();
+      return `inset(${r.top}px ${innerWidth - r.right}px ${innerHeight - r.bottom}px ${r.left}px round 28px)`;
+    };
+    // enquanto o projeto está aberto, o resto da página fica inerte (sem foco nem leitor de tela)
+    const isolar = on => {
+      Array.from(document.body.children).forEach(el => {
+        if (el.classList.contains('proj') || el.tagName === 'SCRIPT') return;
+        el.toggleAttribute('inert', on);
+      });
+    };
+    const abrir = (c, push = true) => {
+      const proj = $(`#proj-${c.dataset.projOpen}`);
+      if (!proj || open) return;
+      open = proj; card = c;
+      const media = $('.case__media', c);
+      proj.hidden = false;
+      $('[data-proj-scroll]', proj).scrollTop = 0;
+      document.body.classList.add('is-proj');
+      isolar(true);
+      if (push) history.pushState({ proj: c.dataset.projOpen }, '');
+      if (reduce) return proj.focus();
+      gsap.timeline()
+        .fromTo(proj, { clipPath: clipOf(media) }, { clipPath: 'inset(0px 0px 0px 0px round 0px)', duration: 1.05, ease: 'expo.inOut', clearProps: 'clipPath' })
+        .fromTo($('.proj__cover img', proj), { scale: 1.12 }, { scale: 1, duration: 1.4, ease: 'expo.out' }, 0.1)
+        .fromTo([$('.proj__close', proj), ...$$('.proj__head > *', proj)], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', stagger: 0.06 }, 0.75)
+        .add(() => proj.focus({ preventScroll: true }));
+    };
+    const fechar = (pop = false) => {
+      if (!open) return;
+      const proj = open, media = $('.case__media', card);
+      open = null;
+      const done = () => {
+        proj.hidden = true;
+        gsap.set(proj, { clearProps: 'all' });
+        document.body.classList.remove('is-proj');
+        isolar(false);
+        // devolve o foco ao card que abriu o projeto (sem rolar a página)
+        const volta = $('.case__ver', card) || card;
+        if (volta) volta.focus({ preventScroll: true });
+      };
+      if (!pop && history.state?.proj) history.back();
+      if (reduce) return done();
+      const sc = $('[data-proj-scroll]', proj);
+      if (sc.scrollTop > innerHeight * 0.5) {
+        // já desceu bastante: some com um fade, sem voltar ao card
+        gsap.to(proj, { opacity: 0, duration: 0.45, ease: 'power2.out', onComplete: done });
+      } else {
+        gsap.to(proj, { clipPath: clipOf(media), duration: 0.85, ease: 'expo.inOut', onComplete: done });
+      }
+    };
+    $$('[data-proj-open]').forEach(c => c.addEventListener('click', () => abrir(c)));
+    $$('[data-proj-close]').forEach(b => b.addEventListener('click', e => {
+      const href = b.getAttribute('href');
+      if (href) {
+        // botão de orçamento: fecha e desce até o formulário
+        e.preventDefault();
+        fechar();
+        setTimeout(() => $(href).scrollIntoView({ behavior: 'smooth' }), 950);
+      } else fechar();
+    }));
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') return fechar();
+      if (e.key !== 'Tab' || !open) return;
+      // foco preso dentro do projeto: o X é o primeiro item
+      const f = $$('button, a[href]', open).filter(el => el.getClientRects().length);
+      if (!f.length) return;
+      const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && (i === f.length - 1 || i === -1)) { e.preventDefault(); f[0].focus(); }
+    });
+    window.addEventListener('popstate', () => fechar(true));
   }
 
   /* ---------- rodapé ---------- */
@@ -451,11 +560,12 @@
     reveals();
     form();
     servicos();
+    cases();
+    projetos();
     if (!reduce) {
       heroScroll();
       frentes();
       ScrollTrigger.matchMedia({ '(min-width: 901px)': metodo, '(max-width: 900px)': metodoMobile });
-      trabalhos();
       footer();
       pointer();
     }

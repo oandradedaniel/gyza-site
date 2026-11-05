@@ -776,82 +776,54 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
   .menu-aberto .nav__pontos i:last-child { transform: translateY(-6px) scaleX(.2); }
 }
 
-/* ===== teste do botão de baixo: variações por URL (?cta=1, 2, 3). Sem parâmetro: o botão atual ===== */
-.cta-grupo { display: contents; }
-.cta-wa, .cta-baixo__l2 { display: none; }
-.cta-baixo__txt { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
-@property --cta-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
-
-/* ---- 1. Sólido de alto contraste, duas linhas, sem respiração ---- */
-html[data-cta="1"] .cta-baixo, html[data-cta="1"] .cta-baixo.is-light {
-  height: 64px; padding: 0 12px 0 28px; gap: 18px; animation: none;
-  background: #1F4FD8; backdrop-filter: none; -webkit-backdrop-filter: none; text-shadow: none;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 0 0 1px rgba(255,255,255,.18), 0 14px 36px rgba(8,20,80,.45);
+/* ===== botão de baixo (padrão): vidro líquido azul, compacto ao rolar, WhatsApp como segunda ação ===== */
+.cta-grupo {
+  --gx: 50%; --gy: 0%;
+  position: fixed; left: 0; right: 0; bottom: 16px; z-index: 60;
+  display: flex; align-items: center; gap: 10px; width: fit-content; margin-inline: auto;
+  transition: opacity .4s var(--ease), translate .5s var(--ease-out);
 }
-html[data-cta="1"] .cta-baixo::before { background: #163DAE; }
-html[data-cta="1"] .cta-baixo__txt { align-items: flex-start; }
-html[data-cta="1"] .cta-baixo__l1 { font-weight: 600; font-size: 17px; }
-html[data-cta="1"] .cta-baixo__l2 { display: block; font-size: 14px; font-weight: 400; color: rgba(255,255,255,.82); margin-top: 2px; }
-html[data-cta="1"] .cta-baixo__seta { box-sizing: content-box; width: 20px; height: 20px; padding: 10px; border-radius: 50%; background: #fff; stroke: #1F4FD8; }
-html[data-cta="1"] .cta-baixo:hover { scale: 1.02; }
-@media (max-width: 600px) { html[data-cta="1"] .cta-baixo { justify-content: space-between; } }
-
-/* ---- 2. Vidro escuro com borda luminosa que gira ---- */
-html[data-cta="2"] .cta-baixo, html[data-cta="2"] .cta-baixo.is-light {
-  height: 58px; padding: 0 12px 0 28px; gap: 16px; animation: none; overflow: visible;
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0)), rgba(8, 12, 28, .86);
-  backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: 0 12px 36px rgba(0,0,0,.4), 0 0 28px rgba(58,102,242,.28);
-  text-shadow: none;
+body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
+.cta-grupo:has(.is-off), .menu-aberto .cta-grupo { opacity: 0; translate: 0 140%; pointer-events: none; }
+.cta-baixo, .cta-baixo.is-light {
+  position: relative; inset: auto; margin: 0; width: auto; height: 58px; padding: 0 8px 0 26px; gap: 14px;
+  animation: none; translate: none;
+  --fg: #fff; color: #fff; text-shadow: 0 1px 6px rgba(10,20,80,.3);
+  background:
+    radial-gradient(130px 64px at var(--gx) var(--gy), rgba(255,255,255,.28), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0) 55%),
+    rgba(31, 79, 216, .93);
+  backdrop-filter: blur(14px) saturate(200%); -webkit-backdrop-filter: blur(14px) saturate(200%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(255,255,255,.1), inset 0 0 20px rgba(160,190,255,.22), 0 10px 30px rgba(31,79,216,.4);
+  transition: color .4s var(--ease), scale .35s var(--ease-out), box-shadow .4s var(--ease);
 }
-html[data-cta="2"] .cta-baixo::before { display: none; }
-html[data-cta="2"] .cta-baixo::after {
-  padding: 2px; z-index: 1;
-  background: conic-gradient(from var(--cta-ang), rgba(255,255,255,.08) 0deg, rgba(255,255,255,.08) 200deg, #7FA6FF 280deg, #fff 330deg, rgba(255,255,255,.08) 360deg);
-  animation: cta-gira 4.5s linear infinite;
+.cta-baixo::before { background: var(--azul-vivo); }
+.cta-baixo.is-off { translate: none !important; opacity: 1; pointer-events: auto; }
+.cta-baixo:hover, .cta-baixo.is-light:hover { scale: 1.03; color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 0 24px rgba(180,205,255,.3), 0 14px 40px rgba(31,79,216,.55); }
+.cta-baixo .cta-baixo__txt { display: grid; align-items: center; justify-items: start; align-self: center; line-height: 1.15; }
+.cta-baixo .cta-baixo__l1, .cta-baixo .cta-baixo__l2 { grid-area: 1/1; display: block; margin: 0; padding: 0; line-height: 1.15; white-space: nowrap; font-weight: 600; font-size: 17px; transition: opacity .3s var(--ease); }
+.cta-baixo .cta-baixo__l2 { opacity: 0; }
+.cta-baixo.is-compacto:not(:hover):not(:focus-visible) .cta-baixo__l1 { opacity: 0; }
+.cta-baixo.is-compacto:not(:hover):not(:focus-visible) .cta-baixo__l2 { opacity: 1; }
+.cta-baixo__seta { flex: none; box-sizing: content-box; width: 18px; height: 18px; padding: 10px; border-radius: 50%; background: #fff; stroke: var(--azul); }
+.cta-wa {
+  display: grid; place-items: center; flex: none; width: 58px; height: 58px; border-radius: 50%; color: #fff;
+  background:
+    radial-gradient(70px 40px at var(--gx) var(--gy), rgba(255,255,255,.28), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0) 55%),
+    rgba(31, 79, 216, .93);
+  backdrop-filter: blur(14px) saturate(200%); -webkit-backdrop-filter: blur(14px) saturate(200%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(255,255,255,.1), inset 0 0 20px rgba(160,190,255,.22), 0 10px 30px rgba(31,79,216,.4);
+  transition: scale .3s var(--ease-out), box-shadow .4s var(--ease);
 }
-@keyframes cta-gira { to { --cta-ang: 360deg; } }
-html[data-cta="2"] .cta-baixo__l1 { font-weight: 500; font-size: 17px; }
-html[data-cta="2"] .cta-baixo__seta { box-sizing: content-box; width: 18px; height: 18px; padding: 10px; border-radius: 50%; background: #1F4FD8; stroke: #fff; }
-html[data-cta="2"] .cta-baixo:hover, html[data-cta="2"] .cta-baixo.is-light:hover { box-shadow: 0 14px 40px rgba(0,0,0,.45), 0 0 40px rgba(58,102,242,.5); }
-@media (max-width: 600px) { html[data-cta="2"] .cta-baixo { justify-content: space-between; } }
-@media (prefers-reduced-motion: reduce) { html[data-cta="2"] .cta-baixo::after { animation: none; --cta-ang: 250deg; } }
-
-/* ---- 3. Compacta que expande + WhatsApp como segunda ação ---- */
-html[data-cta="3"] .cta-grupo {
-  display: flex; align-items: center; gap: 10px; position: fixed; left: 0; right: 0; bottom: 16px; z-index: 60;
-  width: fit-content; margin-inline: auto; transition: opacity .4s var(--ease), translate .5s var(--ease-out);
-}
-html[data-cta="3"] body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
-html[data-cta="3"] .cta-grupo:has(.is-off), html[data-cta="3"] .menu-aberto .cta-grupo { opacity: 0; translate: 0 140%; pointer-events: none; }
-html[data-cta="3"] .cta-baixo, html[data-cta="3"] .cta-baixo.is-light {
-  position: relative; inset: auto; bottom: auto; margin: 0; width: auto; height: 56px; padding: 0 8px 0 24px; gap: 12px; animation: none;
-  background: #1F4FD8; backdrop-filter: none; -webkit-backdrop-filter: none; text-shadow: none;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 0 0 1px rgba(255,255,255,.16), 0 12px 32px rgba(8,20,80,.45);
-  transition: color .4s var(--ease), scale .35s var(--ease-out), padding .5s var(--ease-out);
-}
-html[data-cta="3"] .cta-baixo.is-off { translate: none !important; opacity: 1; pointer-events: auto; }
-html[data-cta="3"] .cta-baixo::before { background: #163DAE; }
-html[data-cta="3"] .cta-baixo__l1 { font-weight: 600; font-size: 17px; }
-html[data-cta="3"] .cta-baixo__seta { box-sizing: content-box; width: 18px; height: 18px; padding: 10px; border-radius: 50%; background: #fff; stroke: #1F4FD8; }
-html[data-cta="3"] .cta-wa {
-  display: grid; place-items: center; flex: none; width: 56px; height: 56px; border-radius: 50%; color: #fff;
-  background: rgba(10,14,26,.78); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 0 0 1px rgba(255,255,255,.2), 0 12px 32px rgba(0,0,0,.4);
-  transition: background .3s var(--ease), scale .3s var(--ease-out);
-}
-html[data-cta="3"] .cta-wa svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-html[data-cta="3"] .cta-wa:hover { background: #1FA855; scale: 1.06; }
-/* compacta: o texto some e só fica "Orçamento" */
-html[data-cta="3"] .cta-baixo__txt { display: grid; }
-html[data-cta="3"] .cta-baixo__l1 { grid-area: 1/1; transition: opacity .3s var(--ease); }
-html[data-cta="3"] .cta-baixo__l2 { display: block; grid-area: 1/1; opacity: 0; font-size: 17px; font-weight: 600; line-height: 1.15; transition: opacity .3s var(--ease); }
-html[data-cta="3"] .cta-baixo__l2::before { content: "Orçamento"; }
-html[data-cta="3"] .cta-baixo__l2 { font-size: 0; }
-html[data-cta="3"] .cta-baixo__l2::before { font-size: 17px; }
-html[data-cta="3"] .cta-baixo.is-compacto:not(:hover):not(:focus-visible) .cta-baixo__l1 { opacity: 0; }
-html[data-cta="3"] .cta-baixo.is-compacto:not(:hover):not(:focus-visible) .cta-baixo__l2 { opacity: 1; }
+.cta-wa svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.cta-wa:hover { scale: 1.06; box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 0 24px rgba(180,205,255,.3), 0 14px 40px rgba(31,79,216,.55); }
 @media (max-width: 600px) {
-  html[data-cta="3"] .cta-grupo { left: 16px; right: 16px; width: auto; }
-  html[data-cta="3"] .cta-baixo { flex: 1; justify-content: space-between; }
+  .cta-grupo { left: 16px; right: 16px; width: auto; }
+  .cta-baixo { flex: 1; justify-content: space-between; }
 }
+@media (prefers-reduced-motion: reduce) { .cta-baixo, .cta-baixo:hover, .cta-wa, .cta-wa:hover { scale: 1; } }
+
+/* respiro no pé de cada seção: o botão fixo não cobre o último texto */
+.servicos, .equipe { padding-bottom: max(var(--section), 104px); }
+.trabalhos { padding-bottom: max(calc(var(--section) * .6), 104px); }

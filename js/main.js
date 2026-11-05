@@ -100,14 +100,14 @@
       const passo = () => {
         if (rolou) { alvoX = 50 + Math.sin(scrollY / 180) * 45; rolou = 0; }
         x += (alvoX - x) * 0.12; y += (alvoY - y) * 0.12;
-        cta.style.setProperty('--gx', x.toFixed(1) + '%');
-        cta.style.setProperty('--gy', y.toFixed(1) + '%');
+        cta.parentElement.style.setProperty('--gx', x.toFixed(1) + '%');
+        cta.parentElement.style.setProperty('--gy', y.toFixed(1) + '%');
         requestAnimationFrame(passo);
       };
       requestAnimationFrame(passo);
     }
-    // variação ?cta=3: compacta ao descer, expande ao subir ou ao parar no topo
-    if (cta && document.documentElement.dataset.cta === '3') {
+    // botão de baixo: compacta ao descer, expande ao subir ou ao parar no topo
+    if (cta) {
       let ult = 0;
       addEventListener('scroll', () => {
         const y = scrollY;

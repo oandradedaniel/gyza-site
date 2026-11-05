@@ -1001,3 +1001,31 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 /* lâmina 3: título da jornada com texto de apoio */
 .jornada__titulo h3 { font: inherit; letter-spacing: inherit; margin: 0; max-width: 22ch; }
 .jornada__sub { margin-top: 14px; font-size: var(--fs-lead); font-weight: 400; letter-spacing: 0; line-height: 1.5; color: var(--tinta-2); max-width: 52ch; }
+
+/* cases: passagem lenta sozinha (o JS só liga a classe durante o movimento, para o encaixe não brigar com ele) */
+.cases.is-auto { scroll-snap-type: none; }
+.cases.is-auto .case { pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .cases.is-auto { scroll-snap-type: x mandatory; } }
+
+/* equipe: mesmo trilho lateral dos cases (a lógica é o mesmo componente trilho() do main.js) */
+.equipe__grid { display: block; }
+.equipe__head { grid-column: auto; margin-bottom: clamp(40px, 5vw, 72px); }
+.equipe__trilho {
+  --edge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  display: flex; gap: clamp(16px, 2vw, 32px);
+  margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+  scrollbar-width: none; cursor: grab;
+}
+.equipe__trilho::-webkit-scrollbar { display: none; }
+.equipe__trilho.is-drag { scroll-snap-type: none; cursor: grabbing; }
+.equipe__trilho.is-drag .pessoa { pointer-events: none; }
+.equipe__trilho.is-auto { scroll-snap-type: none; }
+.equipe__trilho .pessoa { flex: 0 0 clamp(250px, 26vw, 380px); margin: 0; grid-column: auto; scroll-snap-align: start; user-select: none; }
+.equipe__trilho .pessoa img { -webkit-user-drag: none; }
+.equipe .cases__count { color: var(--tinta-2); }
+.equipe .cases__count b { color: var(--tinta); }
+.equipe .round--line { color: var(--tinta); border-color: rgba(0,0,0,.18); }
+@media (max-width: 900px) { .equipe__trilho .pessoa { flex-basis: 72vw; } .equipe__trilho .pessoa + .pessoa { margin-top: 0; } }
+@media (prefers-reduced-motion: reduce) { .equipe__trilho.is-auto { scroll-snap-type: x mandatory; } }

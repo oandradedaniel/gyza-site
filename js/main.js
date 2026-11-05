@@ -311,12 +311,13 @@
     });
   }
 
-  /* ---------- cases: trilho lateral (arrastar, setas ou deslizar) ---------- */
-  function cases() {
-    const track = $('[data-cases]');
-    const items = $$('.case', track);
-    const n = $('[data-cases-n]');
-    const prev = $('[data-cases-prev]'), next = $('[data-cases-next]');
+  /* ---------- trilhos laterais: cases e equipe (arrastar, setas, deslizar e passagem lenta sozinha) ---------- */
+  // componente único dos dois trilhos (cases e equipe): troque só o seletor dos itens e os atributos de contador e setas
+  function trilho(track, itemSel, attr) {
+    if (!track) return;
+    const items = $$(itemSel, track);
+    const n = $(`[data-${attr}-n]`);
+    const prev = $(`[data-${attr}-prev]`), next = $(`[data-${attr}-next]`);
     const at = () => {
       const x = track.scrollLeft;
       let best = 0;
@@ -355,6 +356,58 @@
       go(Math.abs(dx) > 60 ? i0 + (dx < 0 ? 1 : -1) : i0);
     });
     track.addEventListener('click', e => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    // passagem lenta sozinha: de card em card (2s, ease in-out), parada de 4,2s em cada um, e volta ao primeiro com a mesma suavidade.
+    // Só mexe em scrollLeft (sem layout), pausa em hover, toque, arrasto, foco, projeto aberto, trilho fora da tela e aba escondida.
+    if (reduce || items.length < 2) return;
+    const HOLD = 4200, DUR = 2000, RESUME = 5000;
+    let visible = false, hover = false, focus = false, touch = false, timer = 0, raf = 0;
+    const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const paused = () => !visible || hover || focus || touch || down || document.hidden || document.body.classList.contains('is-proj');
+    const stop = () => { cancelAnimationFrame(raf); raf = 0; track.classList.remove('is-auto'); };
+    const arm = (ms = HOLD) => { clearTimeout(timer); timer = setTimeout(tick, ms); };
+    const tween = to => {
+      const from = track.scrollLeft, d = to - from, t0 = performance.now();
+      const dur = Math.max(DUR, Math.abs(d) / track.clientWidth * 1100);
+      track.classList.add('is-auto');
+      const step = now => {
+        const t = Math.min(1, (now - t0) / dur);
+        track.scrollLeft = from + d * ease(t);
+        if (paused()) return stop();
+        if (t < 1) raf = requestAnimationFrame(step); else { stop(); arm(); }
+      };
+      raf = requestAnimationFrame(step);
+    };
+    function tick() {
+      if (paused()) return arm(800);
+      const max = track.scrollWidth - track.clientWidth;
+      const i = at();
+      const atEnd = track.scrollLeft >= max - 4 || i >= items.length - 1;
+      const to = atEnd ? 0 : Math.min(max, items[i + 1].offsetLeft - items[0].offsetLeft);
+      tween(to);
+    }
+    // qualquer gesto do usuário vence a animação; retoma depois de um tempo parado
+    const user = (ms = RESUME) => { stop(); arm(ms); };
+    track.addEventListener('mouseenter', () => { hover = true; stop(); });
+    track.addEventListener('mouseleave', () => { hover = false; arm(); });
+    track.addEventListener('focusin', () => { focus = true; stop(); });
+    track.addEventListener('focusout', () => { focus = false; arm(); });
+    track.addEventListener('touchstart', () => { touch = true; stop(); }, { passive: true });
+    track.addEventListener('touchend', () => { touch = false; arm(RESUME); }, { passive: true });
+    track.addEventListener('touchcancel', () => { touch = false; arm(RESUME); }, { passive: true });
+    track.addEventListener('pointerdown', () => user(), { passive: true });
+    track.addEventListener('wheel', () => user(), { passive: true });
+    prev.addEventListener('click', () => user());
+    next.addEventListener('click', () => user());
+    window.addEventListener('pointerup', () => { if (down === false) arm(RESUME); });
+    document.addEventListener('visibilitychange', () => { stop(); arm(); });
+    let projOn = document.body.classList.contains('is-proj');
+    new MutationObserver(() => {
+      const on = document.body.classList.contains('is-proj');
+      if (on === projOn) return;
+      projOn = on; stop(); arm(RESUME);
+    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) arm(); else stop(); }, { threshold: .4 }).observe(track);
   }
 
   /* ---------- projeto: o card cresce até virar uma página ---------- */
@@ -560,7 +613,8 @@
     reveals();
     form();
     servicos();
-    cases();
+    trilho($('[data-cases]'), '.case', 'cases');
+    trilho($('[data-equipe]'), '.pessoa', 'equipe');
     projetos();
     if (!reduce) {
       heroScroll();

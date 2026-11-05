@@ -88,6 +88,14 @@
   /* ---------- menu: tema e esconder ---------- */
   function navTheme() {
     const nav = $('[data-nav]');
+    const cta = $('.cta-baixo');
+    // o botão de baixo segue o tema da seção que está embaixo dele
+    if (cta) $$('[data-theme]').forEach(sec => {
+      ScrollTrigger.create({
+        trigger: sec, start: 'top bottom-=50', end: 'bottom bottom-=50',
+        onToggle: s => { if (s.isActive) cta.classList.toggle('is-light', sec.dataset.theme === 'light'); },
+      });
+    });
     $$('[data-theme]').forEach(sec => {
       ScrollTrigger.create({
         trigger: sec, start: 'top 48px', end: 'bottom 48px',

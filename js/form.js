@@ -171,7 +171,7 @@
       // plano B: se o pedido não chegar ao painel, o WhatsApp abre com a mensagem pronta e o lead não se perde
       const abreWhats = () => { if (!window.open(wa, '_blank', 'noopener')) location.href = wa; };
       const servicos = d.getAll('servico');
-      enviaPainel({
+      const pedido = {
         p_nome: (d.get('nome') || '').trim(),
         p_email: (d.get('email') || '').trim(),
         p_celular: (d.get('celular') || '').trim(),
@@ -182,7 +182,11 @@
         p_origem: /contato/.test(location.pathname) ? 'contato' : 'index',
         p_instagram_site: (d.get('perfil') || '').trim(),
         p_site: d.get('site') || '',
-      }).then(ok => {
+      };
+      let origem = {};
+      try { origem = (window.gyzaOrigem && window.gyzaOrigem()) || {}; } catch (_) {}
+      // origem do primeiro contato (utm, ?ref=): se o banco ainda não conhece estes campos, tenta de novo sem eles
+      enviaPainel(Object.assign({}, pedido, origem)).then(ok => ok || !origem.p_fonte && !origem.p_afiliado ? ok : enviaPainel(pedido)).then(ok => {
         if (ok) { if (window.gyzaMetrica) window.gyzaMetrica('form_enviado'); vai(3); } else { if (window.gyzaMetrica) window.gyzaMetrica('form_whatsapp'); btnTxt.textContent = 'Abrindo o WhatsApp...'; abreWhats(); }
       });
       setTimeout(() => {

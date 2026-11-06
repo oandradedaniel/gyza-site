@@ -1623,3 +1623,11 @@ p, li { text-wrap: pretty; }
   .case--open:hover .case__media { transform: none; }
 }
 .case__info .case__link { color: var(--azul-claro); font-size: 14px; }
+/* no hover o + vira uma seta (o + girando 45 graus parecia um X de fechar) */
+.case__ver-mais svg path { transform-box: fill-box; transform-origin: center; transition: opacity .3s var(--ease), transform .5s var(--ease-out); stroke-linejoin: round; }
+.case__ver-mais .i-seta { opacity: 0; transform: translateX(-6px); }
+.case--open:hover .case__ver-mais svg, .case__ver:focus-visible .case__ver-mais svg { transform: none; }
+.case--open:hover .case__ver-mais .i-mais, .case__ver:focus-visible .case__ver-mais .i-mais { opacity: 0; transform: rotate(90deg) scale(.6); }
+.case--open:hover .case__ver-mais .i-seta, .case__ver:focus-visible .case__ver-mais .i-seta { opacity: 1; transform: none; }
+@media (hover: none) { .case__ver-mais .i-mais { opacity: 0; } .case__ver-mais .i-seta { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .case__ver-mais svg path { transition: none; } }

@@ -4,6 +4,17 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
+  // o formulário liga antes de tudo e não depende do GSAP: se o cdnjs falhar, o envio continua pelo WhatsApp e nada vai para a URL
+  form();
+  if (!(window.gsap && window.ScrollTrigger)) {
+    // sem GSAP: a página aparece parada, sem a abertura animada
+    document.body.classList.remove('is-loading');
+    document.body.classList.add('is-revealed');
+    const intro0 = document.querySelector('.intro');
+    if (intro0) intro0.classList.add('is-done');
+    try { menuCelular(); } catch (e) { /* o menu do celular fica só com os links */ }
+    return;
+  }
   gsap.registerPlugin(ScrollTrigger);
   window.__pyr = 0;
 
@@ -635,7 +646,6 @@
         `WhatsApp: ${d.get('whatsapp')}`,
         d.get('perfil') ? `Instagram ou site: ${d.get('perfil')}` : '',
       ].filter(Boolean).join('\n');
-      window.__gyzaUltimaMsg = msg;
       if (enviando) return;
       enviando = true;
       btn.disabled = true; btn.setAttribute('aria-busy', 'true');
@@ -699,7 +709,6 @@
   function start() {
     menuCelular();
     reveals();
-    form();
     trilho($('[data-cases]'), '.case', 'cases');
     trilho($('[data-equipe]'), '.pessoa', 'equipe', -1);
     projetos();

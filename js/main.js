@@ -413,7 +413,8 @@
     // desliza sozinho, bem devagar (px por segundo); para quando a pessoa encosta e volta depois
     if (loop) {
       const step = 1 / (window.devicePixelRatio || 1);
-      const speed = innerWidth < 600 ? 20 : 32;
+      // cases no dobro da velocidade (Vitor, 05/11/2026): 40 px/s no celular e 65 no computador
+      const speed = attr === 'cases' ? (innerWidth < 600 ? 37 : 65) : (innerWidth < 600 ? 20 : 32);
       let acc = 0, t0 = performance.now();
       // no sentido inverso começa no fim da primeira cópia, para ter para onde andar
       if (dir < 0) { track.scrollLeft = left(N); expect = track.scrollLeft; }

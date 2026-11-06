@@ -208,7 +208,7 @@ function pyramid() {
     canvas.dataset.poster = '1';
     const img = new Image();
     img.className = 'pyr-poster'; img.alt = '';
-    img.src = canvas.clientWidth < 600 ? 'assets/img/pyr-poster-m.webp?v=5' : 'assets/img/pyr-poster.webp?v=5';
+    img.src = canvas.clientWidth < 600 ? 'assets/img/pyr-poster-m.webp?v=5' : 'assets/img/pyr-poster.webp?v=6';
     canvas.after(img);
     canvas.style.display = 'none';
     const lab = document.querySelector('.pyr-labels'); if (lab) lab.style.display = 'none';
@@ -358,7 +358,7 @@ function pyramid() {
     // no celular a câmera chega mais perto: pirâmide maior na tela
     if (!OPT) {
       const near = w < 600;
-      camera.position.set(0, near ? 0.2 : 0.55, near ? 8.4 : 10.4);
+      camera.position.set(0, near ? 0.2 : 0.5, near ? 8.4 : 8.9);   // computador: 8.9 deixa a pirâmide uns 17% maior (Diretor de Produto, 05/11)
       camera.lookAt(0, near ? -0.55 : 0.05, 0);
     }
     camera.updateProjectionMatrix();

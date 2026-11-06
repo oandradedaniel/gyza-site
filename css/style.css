@@ -1405,3 +1405,18 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
 @media (prefers-reduced-motion: reduce) and (max-width: 900px) {
   .pyr-wrap { position: relative; top: auto; height: auto; min-height: 120vw; }
 }
+
+/* Dor: as duas frases do apoio em linhas próprias; no computador a primeira cabe inteira numa linha (Vitor, 05/11/2026) */
+@media (min-width: 901px) { .servicos__lead { max-width: 540px; } }
+
+/* ajustes finos do Diretor de Produto (05/11/2026): título e apoio da Dor e dos Cases na mesma grade, apoio alinhado na mesma coluna,
+   e menos preto entre a pirâmide e os Cases */
+@media (min-width: 901px) {
+  .servicos__head, .trabalhos__head { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  .servicos__lead, .trabalhos__lead { justify-self: start; max-width: 540px; }
+  /* o título dos cases usa a largura toda (a 1ª linha não quebra) e o apoio fica na 2ª coluna, na altura da linha curta de baixo */
+  .trabalhos__head .h2 { grid-column: 1 / -1; grid-row: 1; }
+  .trabalhos__head .h2 .line:first-child { white-space: nowrap; }
+  .trabalhos__lead { grid-column: 2; grid-row: 1; align-self: end; }
+  .trabalhos { padding-top: clamp(64px, 6vw, 104px); }
+}

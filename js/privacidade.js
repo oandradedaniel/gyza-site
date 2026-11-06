@@ -1,4 +1,4 @@
-/* GYZA, política de privacidade: só o menu do celular (o mesmo do index, sem animação de página) */
+/* GYZA, páginas internas (privacidade, método e contato): só o menu do celular, o mesmo do index, sem animação de página */
 (() => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s, r = document) => r.querySelector(s);

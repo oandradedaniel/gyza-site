@@ -500,8 +500,8 @@
       if (dir < 0) { track.scrollLeft = left(N); expect = track.scrollLeft; }
       // já anda antes de a seção aparecer (uma tela de antecedência): quem chega nos cases encontra o trilho passando
       new IntersectionObserver(([e]) => { vis = e.isIntersecting; }, { rootMargin: '100% 0px' }).observe(track);
-      track.addEventListener('mouseenter', () => { hover = true; });
-      track.addEventListener('mouseleave', () => { hover = false; segura(1200); });
+      // a passagem continua com o mouse em cima (pedido do Vitor); pausa só ao arrastar ou tocar, com projeto aberto, aba escondida e reduced-motion
+
       // só o foco de teclado pausa; o foco devolvido ao card depois de fechar um projeto não trava a passagem
       track.addEventListener('focusin', e => { focus = e.target.matches(':focus-visible'); });
       track.addEventListener('focusout', () => { focus = false; segura(1200); });

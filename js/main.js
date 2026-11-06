@@ -284,6 +284,7 @@
     const dots = $$('.frentes__dots li');
     const N = panels.length;
     if (!N) return;
+    const sec = $('.frentes');
     let cur = 0;
     const show = i => {
       if (i === cur) return;
@@ -305,6 +306,8 @@
       onUpdate: s => {
         window.__pyr = s.progress;
         show(Math.min(N - 1, Math.floor(s.progress * N)));
+        // começou a rolar pelas camadas: o apoio sai e fica só o título; no começo da seção ele volta
+        sec.classList.toggle('is-camadas', s.progress > 0.02);
       },
     });
   }
@@ -470,7 +473,8 @@
       let acc = 0, t0 = performance.now();
       // no sentido inverso começa no fim da primeira cópia, para ter para onde andar
       if (dir < 0) { track.scrollLeft = left(N); expect = track.scrollLeft; }
-      new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(track);
+      // já anda antes de a seção aparecer (uma tela de antecedência): quem chega nos cases encontra o trilho passando
+      new IntersectionObserver(([e]) => { vis = e.isIntersecting; }, { rootMargin: '100% 0px' }).observe(track);
       track.addEventListener('mouseenter', () => { hover = true; });
       track.addEventListener('mouseleave', () => { hover = false; segura(1200); });
       // só o foco de teclado pausa; o foco devolvido ao card depois de fechar um projeto não trava a passagem
@@ -684,10 +688,16 @@
         if (bad) i.setAttribute('aria-describedby', 'form-nota'); else i.removeAttribute('aria-describedby');
         if (bad) ok = false;
       });
-      if (!ok) {
-        note.textContent = 'Preencha nome, empresa e WhatsApp com DDD.';
+      // serviço desejado: pelo menos um marcado
+      const caixas = $('[data-servicos]', f);
+      const algum = !!$('input[name="servico"]:checked', f);
+      caixas.classList.toggle('is-error', !algum);
+      if (!algum) caixas.setAttribute('aria-describedby', 'form-nota'); else caixas.removeAttribute('aria-describedby');
+      if (!ok || !algum) {
+        note.textContent = !ok && !algum ? 'Preencha nome, empresa e WhatsApp com DDD e marque pelo menos um serviço.'
+          : !ok ? 'Preencha nome, empresa e WhatsApp com DDD.' : 'Marque pelo menos um serviço desejado.';
         note.classList.add('is-error');
-        $('input.is-error', f).focus();
+        ($('input.is-error', f) || $('input[name="servico"]', f)).focus();
         return;
       }
       note.innerHTML = original;
@@ -699,6 +709,7 @@
         `Empresa: ${d.get('empresa')}`,
         `WhatsApp: ${d.get('whatsapp')}`,
         d.get('perfil') ? `Instagram ou site: ${d.get('perfil')}` : '',
+        `Serviço desejado: ${d.getAll('servico').join(', ')}`,
       ].filter(Boolean).join('\n');
       if (enviando) return;
       enviando = true;
@@ -711,6 +722,9 @@
         btnTxt.textContent = btnOriginal;
       }, 3000);
     });
+    $$('input[name="servico"]', f).forEach(i => i.addEventListener('change', () => {
+      const c = $('[data-servicos]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby');
+    }));
     $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); }));
     // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
     const tel = $('input[name="whatsapp"]', f);

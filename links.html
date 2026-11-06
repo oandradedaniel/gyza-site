@@ -91,6 +91,17 @@ nav>*:nth-child(1){animation-delay:.24s}nav>*:nth-child(2){animation-delay:.3s}n
 .btn.principal{animation:sobe .8s cubic-bezier(.2,.8,.2,1) .24s both,pulso 2.2s ease-out 1.4s infinite,pulsoescala 2.2s ease-in-out 1.4s infinite}
 .btn.principal:hover,.btn.principal:active{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.btn.principal{animation:none}}
+/* botões mais compactos, no tamanho dos links de bio de referência (Vitor, 06/11/2026) */
+nav{gap:10px}
+.btn{min-height:56px;padding:7px 16px 7px 7px;border-radius:16px;font-size:15.5px;gap:12px}
+.ico{width:42px;height:42px;border-radius:11px}
+.ico svg{width:20px;height:20px}
+.btn .ico svg.gz{width:20px;height:20px}
+.btn.principal{min-height:60px;font-size:16.5px;padding:7px 8px 7px 20px;border-radius:16px}
+.btn.principal .txt{padding-left:0}
+.btn.principal .go{width:44px;height:44px}
+.btn.principal .go svg{width:17px;height:17px}
+.sep{margin:6px 8px 4px}
 </style>
 </head>
 <body>

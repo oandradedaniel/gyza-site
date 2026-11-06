@@ -2019,3 +2019,12 @@ p, li { text-wrap: pretty; }
 .socios__areas button { -webkit-appearance: none; appearance: none; background: none; border: 0; font: inherit; font-size: 15px; cursor: pointer; }
 .socio__marca svg { width: 15px; height: 13px; display: block; }
 @media (max-width: 900px) { .socios__lado { justify-items: start; gap: 18px; } .socios__lado .socios__lead { justify-self: start; } .socios__areas { margin-bottom: 0; } }
+/* Quem somos mais clean (Dani, 06/11/2026): sem a grade, sem os feixes e sem o selo do A; fundo com os gradientes azuis do site */
+.socios::before { content: none; }
+.socios__luz { display: none; }
+.socios {
+  background:
+    radial-gradient(90% 70% at 72% -18%, rgba(31,79,216,.5), rgba(31,79,216,.15) 45%, transparent 70%),
+    radial-gradient(55% 60% at 0% 100%, rgba(31,79,216,.26), transparent 70%),
+    var(--preto);
+}

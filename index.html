@@ -23,7 +23,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF-latin.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793978500">
+<link rel="stylesheet" href="css/style.css?v=1793978600">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" }, "integrity": { "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js": "sha384-Qvl1RLjZOCDFOOH2bKcGnaDHMM8MVv3zVtMvhy3juQdiIOs6RgQ/7zYdM1FbpHzI" } }
 </script>
@@ -375,13 +375,13 @@
           <label class="field"><span>Celular</span><input name="celular" type="tel" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required></label>
           <label class="field"><span>Empresa</span><input name="empresa" autocomplete="organization" placeholder="Nome da sua empresa" required></label>
         </div>
-        <div class="form__row form__row--um">
-          <label class="field"><span>Instagram ou site <em>(opcional)</em></span><input name="perfil" maxlength="120" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="@suaempresa ou www.suaempresa.com.br"></label>
-        </div>
         <button class="pill pill--blue form__send" type="button" data-proximo><span>Próximo</span></button>
         </div>
         <div class="form__etapa" data-etapa="2" hidden inert aria-hidden="true">
         <button class="form__voltar" type="button" data-voltar>Voltar</button>
+        <div class="form__row form__row--um">
+          <label class="field"><span>Instagram ou site <em>(opcional)</em></span><input name="perfil" maxlength="120" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="@suaempresa ou www.suaempresa.com.br"></label>
+        </div>
         <fieldset class="servico-campo" data-servicos>
           <legend>Serviço desejado<span aria-hidden="true">*</span><span class="sr-only"> (obrigatório, marque pelo menos um)</span></legend>
           <ul class="servico-campo__lista" role="list">
@@ -402,8 +402,12 @@
         <div class="servico-campo aceite" data-aceite>
           <label><input type="checkbox" name="aceite" value="sim"><span class="caixa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Li e concordo com a <a href="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a></span></label>
         </div>
-        <p class="form__aviso">Você será levado ao WhatsApp para enviar o pedido.</p>
         <button class="pill pill--blue form__send" type="submit"><span>Enviar</span></button>
+        </div>
+        <div class="form__etapa form__sucesso" data-etapa="3" hidden inert aria-hidden="true">
+          <p class="form__sucesso-t" tabindex="-1">Pedido recebido.</p>
+          <p class="form__sucesso-p">A GYZA vai entrar em contato pelo seu WhatsApp em breve.</p>
+          <button class="form__voltar" type="button" data-outro-pedido>Enviar outro pedido</button>
         </div>
         <p class="form__note" id="form-nota" data-form-note aria-live="polite"></p>
       </form>
@@ -581,8 +585,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="js/nav-servicos.js?v=1793978500"></script>
-<script src="js/form.js?v=1793978500"></script>
-<script src="js/main.js?v=1793978500"></script>
+<script src="js/nav-servicos.js?v=1793978600"></script>
+<script src="js/form.js?v=1793978600"></script>
+<script src="js/main.js?v=1793978600"></script>
 </body>
 </html>

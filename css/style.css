@@ -1790,3 +1790,9 @@ p, li { text-wrap: pretty; }
   transition: color .25s var(--ease);
 }
 .form__voltar:hover { color: var(--tinta); }
+
+/* Formulário: estado de sucesso depois do envio ao painel (Vitor, 06/11/2026) */
+.form__sucesso { justify-items: center; text-align: center; gap: 10px; padding: clamp(28px, 5vw, 56px) 0; }
+.form__sucesso-t { font-size: clamp(26px, 3vw, 36px); font-weight: 500; letter-spacing: -.03em; line-height: 1.1; color: var(--tinta); outline: none; }
+.form__sucesso-p { font-size: 16px; line-height: 1.5; color: var(--tinta-2); max-width: 34ch; }
+.form__sucesso .form__voltar { justify-self: center; margin-top: 10px; }

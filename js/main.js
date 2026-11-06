@@ -315,7 +315,7 @@
     const N = panels.length;
     if (!N) return;
     const sec = $('.frentes'), area = $('.pyr-wrap'), lista = $('.frentes__panels'), dica = $('.pyr-dica');
-    const VEL = 4 / 13;               // camadas por segundo: 360 graus em 13 s
+    const VEL = 4 / 16;               // camadas por segundo: 360 graus em 16 s (um pouco mais lenta, Vitor 06/11/2026)
     const ESPERA = 2500, RAMPA = 1;   // parada depois de soltar (ms) e aceleração de volta (s)
     const K = 34, C = 2 * Math.sqrt(K);   // mola criticamente amortecida: assenta sem sobra
     const mod = (n, m) => ((n % m) + m) % m;

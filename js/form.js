@@ -18,7 +18,7 @@
       body: JSON.stringify(dados),
       signal: ctrl ? ctrl.signal : undefined,
       keepalive: true,
-    }).then(r => (r.ok ? r.json() : null)).catch(() => null).finally(() => clearTimeout(limite));
+    }).then(r => r.ok).catch(() => false).finally(() => clearTimeout(limite));
   }
 
   function form() {
@@ -54,14 +54,6 @@
     // etapa 1: nome, e-mail, celular, empresa e Instagram ou site (opcional)
     const valida1 = () => {
       let ok = true;
-      const perfil = $('input[name="perfil"]', f);
-      if (perfil) {
-        const longo = perfil.value.trim().length > 120;
-        perfil.classList.toggle('is-error', longo);
-        if (longo) perfil.setAttribute('aria-invalid', 'true'); else perfil.removeAttribute('aria-invalid');
-        erro(perfil, perfil, 'perfil', longo ? 'Use até 120 caracteres.' : '');
-        if (longo) ok = false;
-      }
       $$('input[required]', f).forEach(i => {
         const m = (MSG[i.name] || (v => !v && 'Campo obrigatório.'))(i.value.trim()) || '';
         i.classList.toggle('is-error', !!m);
@@ -105,7 +97,7 @@
       } catch (_) { mostra(); }
       limpa();
       girando = false;
-      const alvo = $('input:not([disabled])', etapas[para - 1]);
+      const alvo = $('input:not([disabled])', etapas[para - 1]) || $('[tabindex="-1"]', etapas[para - 1]);
       if (alvo) alvo.focus({ preventScroll: true });
       if (window.ScrollTrigger) window.ScrollTrigger.refresh();
     };
@@ -129,6 +121,14 @@
       if (enviando) return;
       if (etapa === 1) { proximo(); return; }
       let ok = true;
+      const perfil = $('input[name="perfil"]', f);
+      if (perfil) {
+        const longo = perfil.value.trim().length > 120;
+        perfil.classList.toggle('is-error', longo);
+        if (longo) perfil.setAttribute('aria-invalid', 'true'); else perfil.removeAttribute('aria-invalid');
+        erro(perfil, perfil, 'perfil', longo ? 'Use até 120 caracteres.' : '');
+        if (longo) ok = false;
+      }
       // serviço desejado: pelo menos um marcado
       const caixas = $('[data-servicos]', f);
       const algum = !!$('input[name="servico"]:checked', f);
@@ -165,13 +165,10 @@
       if (enviando) return;
       enviando = true;
       btn.disabled = true; btn.setAttribute('aria-busy', 'true');
-      btnTxt.textContent = 'Abrindo o WhatsApp...';
+      btnTxt.textContent = 'Enviando...';
       const wa = `https://wa.me/5547992606871?text=${encodeURIComponent(msg)}`;
-      // a aba do WhatsApp abre já no clique (senão o navegador bloqueia) e recebe o endereço depois que o pedido foi para o painel
-      const aba = window.open('', '_blank');
-      if (aba) aba.opener = null;
-      const abreWhats = () => { if (aba && !aba.closed) aba.location.href = wa; else window.open(wa, '_blank', 'noopener'); };
-      // o pedido vai para o painel da GYZA (Supabase); com sucesso, erro ou demora de 4 s, o WhatsApp abre do mesmo jeito
+      // plano B: se o pedido não chegar ao painel, o WhatsApp abre com a mensagem pronta e o lead não se perde
+      const abreWhats = () => { if (!window.open(wa, '_blank', 'noopener')) location.href = wa; };
       const servicos = d.getAll('servico');
       enviaPainel({
         p_nome: (d.get('nome') || '').trim(),
@@ -184,12 +181,24 @@
         p_origem: /contato/.test(location.pathname) ? 'contato' : 'index',
         p_instagram_site: (d.get('perfil') || '').trim(),
         p_site: d.get('site') || '',
-      }).finally(abreWhats);
+      }).then(ok => {
+        if (ok) { vai(3); } else { btnTxt.textContent = 'Abrindo o WhatsApp...'; abreWhats(); }
+      });
       setTimeout(() => {
         enviando = false;
         btn.disabled = false; btn.removeAttribute('aria-busy');
         btnTxt.textContent = btnOriginal;
       }, 3000);
+    });
+    // Enviar outro pedido: limpa tudo e volta à etapa 1 com o giro
+    $('[data-outro-pedido]', f).addEventListener('click', () => {
+      f.reset();
+      $$('.campo-erro', f).forEach(e => { e.textContent = ''; });
+      $$('.is-error', f).forEach(e => e.classList.remove('is-error'));
+      $$('[aria-invalid],[aria-describedby]', f).forEach(e => { e.removeAttribute('aria-invalid'); e.removeAttribute('aria-describedby'); });
+      const o = $('[data-outros]', f), ob = $('[data-outro-box]', f);
+      o.setAttribute('aria-expanded', 'false'); ob.classList.remove('is-open'); $('input[name="servico_outro"]', f).disabled = true;
+      vai(1);
     });
     // Outros: abre o campo de texto logo abaixo; desmarcar fecha e o texto não vai
     const outros = $('[data-outros]', f), outroBox = $('[data-outro-box]', f), outroIn = $('input[name="servico_outro"]', f);

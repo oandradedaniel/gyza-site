@@ -1910,3 +1910,6 @@ p, li { text-wrap: pretty; }
     radial-gradient(50% 50% at 85% 0%, rgba(31,79,216,.24), transparent 70%),
     var(--preto);
 }
+/* Método começa direto na linha do tempo (Dani, 06/11/2026): respiro para o topo fixo */
+.etapas-m--abre { padding-top: clamp(150px, 14vw, 210px); }
+@media (max-width: 900px) { .etapas-m--abre { padding-top: calc(128px + env(safe-area-inset-top, 0px)); } }

@@ -1528,3 +1528,21 @@ p, li { text-wrap: pretty; }
 
 /* seção da pirâmide: o apoio entra palavra por palavra, como o da abertura */
 .frentes__intro .hw { display: inline-block; }
+
+/* rodapé no celular (Vitor, 05/11/2026): compacto e alinhado; Navegue em 2 colunas, Contato logo abaixo, Onde estamos numa linha,
+   logo com a mesma margem do texto, linha legal com quebra controlada e os links legais numa linha só */
+.footer__cnpj { white-space: nowrap; }
+@media (max-width: 900px) {
+  .footer { padding-top: 40px; }
+  .footer__cols { grid-template-columns: 1fr; gap: 18px; margin-bottom: 32px; }
+  .footer__cols .footer__h { font-size: 12px; margin-bottom: 0; min-height: 0; line-height: 1.4; }
+  .footer__cols > div > a, .footer__cols .footer__txt { min-height: 44px; font-size: 15px; line-height: 1.2; }
+  .footer__cols > div:first-child { grid-template-columns: 1fr 1fr; grid-template-rows: auto 44px 44px; grid-auto-flow: column; column-gap: 16px; }
+  .footer__cols > div:first-child .footer__h { grid-column: 1 / -1; grid-row: 1; }
+  .footer__cols > div:last-child { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .footer__cols > div:last-child .footer__txt { min-height: 0; font-size: 14px; color: var(--cinza); }
+  .footer__mark { width: calc(100% - 2 * var(--gutter)); max-width: none; margin: 0 var(--gutter); fill: #fff; --topo: #fff; }
+  .footer__legal { padding-top: 18px; padding-bottom: calc(28px + env(safe-area-inset-bottom)); gap: 8px; font-size: 13px; }
+  .footer__legal-txt > span { display: block; }
+  .footer__links { display: flex; gap: 24px; }
+}

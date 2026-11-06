@@ -1824,60 +1824,18 @@ p, li { text-wrap: pretty; }
 .footer__r { transform: translate(653.8px, -.2px) scale(.85); }
 @media (max-width: 900px) { .footer__r { transform: translate(655.6px, -1px) scale(1.2); } }
 
-/* ---------- topo das páginas internas: a pirâmide de vidro como assinatura, trilha GYZA / página e um pé com linha fina ---------- */
+/* ---------- topo das páginas internas: trilha GYZA / página e entrada do texto ---------- */
 .topo-sub { position: relative; overflow: hidden; isolation: isolate; }
-@media (min-width: 901px) {
-  .topo-sub:not(.topo-sub--curto) { min-height: clamp(640px, 86svh, 880px); display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: clamp(56px, 4.6vw, 72px); }
-}
-.topo-sub__arte { position: absolute; z-index: -1; bottom: 100%; right: calc(var(--gutter) + clamp(0px, 3vw, 48px)); width: min(32vw, 540px); margin-bottom: -2px;
-  pointer-events: none; animation: topo-arte 1.8s var(--ease-out) .15s both; }
-.topo-sub__arte img { display: block; width: 100%; height: auto; transform-origin: 50% 100%; animation: topo-flutua 9s ease-in-out 2s infinite alternate; }
-.topo-sub--curto .topo-sub__arte { width: min(22vw, 300px); }
-.contato-topo .topo-sub__arte { width: min(40vw, 640px); right: calc(var(--gutter) - 2vw); }
-@keyframes topo-arte { from { opacity: 0; transform: translateY(48px) scale(.96); } to { opacity: 1; transform: none; } }
-@keyframes topo-flutua { from { transform: translateY(0); } to { transform: translateY(-10px); } }
-
-/* trilha: GYZA, um traço fino e o nome da página */
 .topo-sub :is(.priv-kicker, .s-kicker) { display: inline-flex; align-items: center; }
-.topo-sub :is(.priv-kicker, .s-kicker)::before { content: "GYZA"; color: var(--apoio); padding-right: 44px; margin-right: 0;
+.topo-sub :is(.priv-kicker, .s-kicker)::before { content: "GYZA"; color: var(--apoio); padding-right: 44px;
   background: linear-gradient(rgba(234,234,234,.3), rgba(234,234,234,.3)) right 8px center / 26px 1px no-repeat; }
-
-/* entrada do texto, na curva do site */
 @keyframes topo-entra { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-.topo-sub:not(.s-hero) > .wrap:not(.topo-sub__pe) > :not(.contato-topo__copy, .contato-topo__dados),
+.topo-sub:not(.s-hero) > .wrap > :not(.contato-topo__copy, .contato-topo__dados),
 .contato-topo__copy > *, .contato-topo__dados { animation: topo-entra 1.1s var(--ease-out) both; }
 .topo-sub > .wrap > :nth-child(2), .contato-topo__copy > :nth-child(2) { animation-delay: .08s; }
 .topo-sub > .wrap > :nth-child(3), .contato-topo__copy > :nth-child(3) { animation-delay: .16s; }
 .topo-sub > .wrap > :nth-child(4), .contato-topo__copy > :nth-child(4), .contato-topo__dados { animation-delay: .24s; }
-
-/* pé do topo: linha fina que se desenha e o convite para rolar com um ponto descendo */
-.topo-sub__pe { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 24px;
-  margin-top: clamp(56px, 6vw, 96px); padding-top: 20px; font-size: 13px; letter-spacing: .02em; color: var(--cinza); }
-.topo-sub__pe::before { content: ""; position: absolute; left: var(--gutter); right: var(--gutter); top: 0; height: 1px;
-  background: linear-gradient(90deg, rgba(234,234,234,.24), rgba(234,234,234,.08) 62%, rgba(127,166,255,.4));
-  transform-origin: left; animation: topo-linha 1.6s var(--ease-out) .45s both; }
-@keyframes topo-linha { from { transform: scaleX(0); } to { transform: none; } }
-.topo-sub__role { display: inline-flex; align-items: center; gap: 14px; }
-.topo-sub__role i { position: relative; width: 1px; height: 28px; overflow: hidden; background: rgba(234,234,234,.18); }
-.topo-sub__role i::after { content: ""; position: absolute; left: 0; top: 0; width: 1px; height: 40%; background: var(--azul-claro); animation: topo-role 2.4s var(--ease) infinite; }
-@keyframes topo-role { from { transform: translateY(-100%); } to { transform: translateY(260%); } }
-.topo-sub--curto .topo-sub__pe { margin-top: clamp(40px, 4vw, 56px); }
-
-/* Contato: o cartão dos dados vira vidro de verdade por cima da pirâmide */
-.topo-sub .contato-topo__dados { position: relative; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)), rgba(10,14,24,.42);
-  -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 30px 60px -30px rgba(0,0,0,.6); }
-
-@media (max-width: 900px) {
-  /* celular: a pirâmide ganha o próprio espaço entre o texto e a linha, centralizada; em Serviços fica pequena à direita do título */
-  .topo-sub__arte, .contato-topo .topo-sub__arte { width: min(68vw, 340px); right: 50%; translate: 50% 0; }
-  .topo-sub--curto .topo-sub__arte { width: 30vw; right: var(--gutter); translate: none; }
-  .topo-sub__pe { margin-top: calc(min(68vw, 340px) * .708 + 56px); font-size: 12px; }
-  .topo-sub--curto .topo-sub__pe { margin-top: 36px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .topo-sub__arte, .topo-sub__arte img, .topo-sub__pe::before, .topo-sub__role i::after,
-  .topo-sub > .wrap > *, .contato-topo__copy > *, .contato-topo__dados { animation: none; }
-}
+@media (prefers-reduced-motion: reduce) { .topo-sub > .wrap > *, .contato-topo__copy > *, .contato-topo__dados { animation: none; } }
 
 /* ---------- Método: linha do tempo refeita. Trilho de 1 px, preenchimento na mesma cor do ponto, um brilho na ponta
    e cada etapa acende quando a linha chega nela. A linha passa por trás dos pontos (antes passava por cima) ---------- */
@@ -1912,16 +1870,43 @@ p, li { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   .etapa-m.is-on .etapa-m__n::before { animation: none; }
 }
-/* luz azul no chão, embaixo da pirâmide, onde ela encosta na linha */
-.topo-sub__arte::after { content: ""; position: absolute; left: 14%; right: 14%; bottom: -16px; height: 32px; pointer-events: none;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(90,140,255,.42), rgba(90,140,255,0) 70%); }
 /* Serviços: o servicos.css zera raio e margem das camadas; aqui as claras voltam a ter o canto e a sobreposição */
 .serv .camada.camada--light { border-radius: var(--raio-secao); margin-top: calc(-1 * var(--raio-secao)); z-index: 5; }
 .serv .camada--light + .camada, .serv .camada--light + .s-fecho { margin-top: calc(-1 * var(--raio-secao)); }
-/* Contato: a pirâmide fica inteira atrás do cartão de vidro, só como luz desfocada */
-@media (min-width: 901px) {
-  .contato-topo .topo-sub__arte { width: min(22vw, 340px); right: calc(var(--gutter) + 3vw); bottom: calc(100% + clamp(56px, 6vw, 96px) + 40px); }
-  .contato-topo .topo-sub__arte::after { content: none; }
-}
 /* home: a L2 começa logo abaixo da abertura, sem subir sobre o GYZA grande (os cantos mostram o preto da abertura) */
 .hero + .servicos { margin-top: 0; }
+
+/* páginas internas: as seções escuras ganham os gradientes azuis leves da home (arco de luz em cima, brilho subindo da base),
+   no lugar do preto chapado. Só background, sem elemento novo */
+.topo-sub {
+  background:
+    radial-gradient(90% 70% at 72% -18%, rgba(31,79,216,.58), rgba(31,79,216,.18) 45%, transparent 70%),
+    radial-gradient(55% 60% at 0% 100%, rgba(31,79,216,.30), transparent 70%),
+    var(--preto);
+}
+.topo-sub .priv-hero__halo, .topo-sub .s-hero__halo { display: none; }
+.etapas-m {
+  background:
+    radial-gradient(60% 45% at 8% 12%, rgba(31,79,216,.34), transparent 70%),
+    radial-gradient(70% 50% at 100% 100%, rgba(31,79,216,.30), transparent 72%),
+    var(--preto);
+}
+.etapas-m::before { content: none; }
+.serv .camada--dark {
+  background:
+    radial-gradient(55% 50% at 12% 28%, rgba(31,79,216,.32), transparent 70%),
+    radial-gradient(60% 55% at 92% 88%, rgba(31,79,216,.26), transparent 72%),
+    var(--preto);
+}
+.serv #camada-conteudo {
+  background:
+    radial-gradient(55% 50% at 88% 24%, rgba(31,79,216,.32), transparent 70%),
+    radial-gradient(60% 55% at 8% 90%, rgba(31,79,216,.26), transparent 72%),
+    var(--preto);
+}
+.serv .s-fecho {
+  background:
+    radial-gradient(70% 80% at 50% 100%, rgba(31,79,216,.6), rgba(31,79,216,.2) 45%, transparent 75%),
+    radial-gradient(50% 50% at 85% 0%, rgba(31,79,216,.24), transparent 70%),
+    var(--preto);
+}

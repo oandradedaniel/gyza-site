@@ -2028,3 +2028,6 @@ p, li { text-wrap: pretty; }
     radial-gradient(55% 60% at 0% 100%, rgba(31,79,216,.26), transparent 70%),
     var(--preto);
 }
+/* rótulo Quem somos igual aos outros rótulos do site: só texto azul, sem cápsula e sem ponto */
+.socios__kicker { display: block; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--azul-claro); font-size: 14px; letter-spacing: .02em; margin-bottom: 18px; }
+.socios__kicker::before { content: none; }

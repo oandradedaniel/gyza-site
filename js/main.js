@@ -244,8 +244,15 @@
   /* ---------- linhas e palavras ---------- */
   function reveals() {
     if (reduce) return;   // sem movimento: o texto já aparece no lugar
+    // seção da pirâmide: título e apoio entram como a abertura (linhas subindo da máscara e palavras com leve desfoque)
+    const fr = $('.frentes');
+    if (fr) {
+      const tf = gsap.timeline({ scrollTrigger: { trigger: fr, start: 'top 70%', once: true } });
+      tf.from($$('.frentes__title .line > span'), { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, 0)
+        .from($$('.frentes__intro .hw'), { opacity: 0, y: 10, filter: 'blur(6px)', duration: 0.7, ease: 'power3.out', stagger: 0.04 }, 0.45);
+    }
     $$('[data-lines]').forEach(el => {
-      if (el.closest('.hero')) return;
+      if (el.closest('.hero') || el.closest('.frentes')) return;
       gsap.from($$('.line > span', el), {
         yPercent: 110, duration: 1.2, ease: 'expo.out', stagger: 0.09,
         scrollTrigger: { trigger: el, start: 'top 85%' },

@@ -1525,3 +1525,6 @@ p, li { text-wrap: pretty; }
 /* ponta do A branca como as letras, na intro e no GYZA da abertura (decisão final do Vitor, 05/11/2026) */
 .hero__mark { --topo: var(--gelo); }
 .mark__a .topo { fill: var(--gelo); }
+
+/* seção da pirâmide: o apoio entra palavra por palavra, como o da abertura */
+.frentes__intro .hw { display: inline-block; }

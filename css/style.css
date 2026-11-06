@@ -1913,3 +1913,109 @@ p, li { text-wrap: pretty; }
 /* Método começa direto na linha do tempo (Dani, 06/11/2026): respiro para o topo fixo */
 .etapas-m--abre { padding-top: clamp(150px, 14vw, 210px); }
 @media (max-width: 900px) { .etapas-m--abre { padding-top: calc(128px + env(safe-area-inset-top, 0px)); } }
+
+/* =====================================================================
+   Quem somos: os 4 sócios (Dani, 06/11/2026). Foto em preto e branco, vidro líquido, detalhes em azul.
+   Fundo com grade fina e feixes de luz azul no canto, cards 4:5 com etiqueta de vidro, nome na base e botão azul que abre o texto
+   ===================================================================== */
+.socios { position: relative; overflow: hidden; isolation: isolate; padding: var(--section) 0 calc(var(--section) + var(--raio-secao)); color: var(--gelo);
+  background:
+    radial-gradient(60% 50% at 100% 0%, rgba(31,79,216,.30), transparent 70%),
+    radial-gradient(50% 50% at 0% 100%, rgba(31,79,216,.14), transparent 70%),
+    var(--preto); }
+/* grade fina que some nas bordas */
+.socios::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(rgba(234,234,234,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(234,234,234,.045) 1px, transparent 1px);
+  background-size: 72px 72px; background-position: center top;
+  -webkit-mask-image: radial-gradient(80% 70% at 60% 30%, #000 30%, transparent 85%); mask-image: radial-gradient(80% 70% at 60% 30%, #000 30%, transparent 85%); }
+/* feixes de luz diagonais no canto de cima à direita */
+.socios__luz { position: absolute; z-index: -1; top: -10%; right: -8%; width: 58%; height: 70%; pointer-events: none; filter: blur(14px); }
+.socios__luz i { position: absolute; top: 0; right: 0; height: 160%; transform-origin: top right; transform: rotate(38deg);
+  background: linear-gradient(180deg, rgba(127,166,255,.0), rgba(127,166,255,.55) 35%, rgba(31,79,216,.25) 70%, transparent); }
+.socios__luz i:nth-child(1) { width: 70px; right: 8%; opacity: .7; }
+.socios__luz i:nth-child(2) { width: 26px; right: 22%; opacity: .5; }
+.socios__luz i:nth-child(3) { width: 140px; right: -4%; opacity: .45; }
+
+.socios__head { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: end; margin-bottom: var(--r-conteudo, 64px); }
+.socios__kicker { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 7px 14px 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--gelo);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03)); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 0 1px rgba(255,255,255,.10); }
+.socios__kicker::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--azul-claro); box-shadow: 0 0 10px 2px rgba(127,166,255,.7); }
+.socios__lead { justify-self: end; max-width: 40ch; font-size: var(--fs-lead); color: var(--apoio); }
+
+/* frentes: linha com traços, como um índice; clicar destaca o sócio daquela frente */
+.socios__areas { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 28px; }
+.socios__areas i { width: 28px; height: 1px; background: rgba(234,234,234,.22); }
+.socios__areas button { min-height: 44px; padding: 0 2px; font-size: 15px; color: var(--cinza); transition: color .3s var(--ease); }
+.socios__areas button:hover { color: var(--gelo); }
+.socios__areas button[aria-pressed="true"] { color: var(--azul-claro); }
+
+.socios__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.4vw, 22px); }
+.socio { position: relative; aspect-ratio: 4 / 5; border-radius: 24px; overflow: hidden; isolation: isolate; background: #111;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); transition: opacity .5s var(--ease), transform .6s var(--ease-out), box-shadow .5s var(--ease); }
+.socio__foto { position: absolute; inset: 0; margin: 0; z-index: -1; }
+.socio__foto img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) contrast(1.08) brightness(.95); transform: scale(1.01); transition: transform 1.2s var(--ease-out); user-select: none; -webkit-user-drag: none; }
+/* escurece a base para o nome e deixa um brilho frio em cima */
+.socio__foto::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(5,5,5,.92) 0%, rgba(5,5,5,.55) 26%, rgba(5,5,5,0) 52%), radial-gradient(90% 60% at 80% 0%, rgba(127,166,255,.14), transparent 70%); }
+.socio:hover .socio__foto img { transform: scale(1.05); }
+.socio:hover { box-shadow: inset 0 0 0 1px rgba(127,166,255,.45), 0 24px 60px -30px rgba(31,79,216,.6); }
+
+/* vidro líquido: etiqueta do cargo e o A da marca */
+.socio__tag, .socio__marca {
+  position: absolute; top: 14px; display: inline-flex; align-items: center; height: 32px; border-radius: 999px; color: #fff; font-size: 13px; font-weight: 500;
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.06)); -webkit-backdrop-filter: blur(14px) saturate(170%); backdrop-filter: blur(14px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(255,255,255,.16), 0 6px 18px rgba(0,0,0,.25); }
+.socio__tag { left: 14px; gap: 8px; padding: 0 13px 0 11px; }
+.socio__tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--azul-claro); box-shadow: 0 0 8px 1px rgba(127,166,255,.8); }
+.socio__marca { right: 14px; width: 32px; justify-content: center; }
+.socio__marca svg { width: 15px; height: auto; fill: #fff; --topo: var(--azul-claro); }
+
+.socio__pe { position: absolute; left: 20px; right: 74px; bottom: 18px; transition: opacity .4s var(--ease), transform .5s var(--ease-out); }
+.socio__nome { font-size: clamp(22px, 1.8vw, 28px); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; }
+.socio__sub { margin-top: 6px; font-size: 13px; line-height: 1.35; color: rgba(234,234,234,.72); }
+
+/* botão azul em vidro; abre o texto do sócio num painel de vidro que sobe da base */
+.socio__mais { position: absolute; right: 16px; bottom: 16px; z-index: 2; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; cursor: pointer;
+  background: radial-gradient(70% 70% at 30% 25%, rgba(255,255,255,.35), transparent 60%), var(--azul);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.18), 0 0 0 4px rgba(31,79,216,.18), 0 10px 26px rgba(31,79,216,.55);
+  transition: transform .5s var(--ease-out), box-shadow .4s var(--ease); }
+.socio__mais svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .5s var(--ease-out); }
+.socio__mais:hover { transform: scale(1.06); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 0 0 1px rgba(255,255,255,.22), 0 0 0 6px rgba(31,79,216,.22), 0 12px 32px rgba(31,79,216,.7); }
+.socio.is-aberto .socio__mais svg { transform: rotate(180deg); }
+.socio__bio { position: absolute; left: 10px; right: 10px; bottom: 10px; padding: 20px 70px 20px 18px; border-radius: 18px; min-height: 66px;
+  background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05)), rgba(10,14,24,.35); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.12);
+  opacity: 0; transform: translateY(16px); visibility: hidden; transition: opacity .45s var(--ease), transform .6s var(--ease-out), visibility 0s linear .6s; }
+.socio__bio p { font-size: 14px; line-height: 1.5; color: #fff; }
+.socio.is-aberto .socio__bio { opacity: 1; transform: none; visibility: visible; transition: opacity .45s var(--ease), transform .6s var(--ease-out), visibility 0s; }
+.socio.is-aberto .socio__pe { opacity: 0; transform: translateY(8px); }
+
+/* destaque por frente */
+.socios__grid.is-filtro .socio:not(.is-dest) { opacity: .32; transform: scale(.98); }
+.socios__grid.is-filtro .socio.is-dest { box-shadow: inset 0 0 0 1px rgba(127,166,255,.6), 0 24px 60px -30px rgba(31,79,216,.7); }
+
+@media (max-width: 1100px) and (min-width: 901px) { .socios__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .socio { aspect-ratio: 4 / 4.4; } }
+@media (max-width: 900px) {
+  .socios__head { grid-template-columns: 1fr; gap: 20px; margin-bottom: 32px; }
+  .socios__lead { justify-self: start; }
+  .socios__areas { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * var(--gutter)) 20px; padding: 0 var(--gutter); gap: 12px; }
+  .socios__areas::-webkit-scrollbar { display: none; }
+  .socios__areas i { flex: none; width: 20px; }
+  .socios__areas button { flex: none; }
+  /* celular: os 4 cards passam para o lado, com encaixe */
+  .socios__grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 12px; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter); scroll-padding-inline: var(--gutter); }
+  .socios__grid::-webkit-scrollbar { display: none; }
+  .socio { flex: 0 0 78vw; scroll-snap-align: start; border-radius: 22px; }
+  .socios__luz { width: 90%; height: 40%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .socio, .socio__foto img, .socio__bio, .socio__pe, .socio__mais, .socio__mais svg { transition: none; }
+  .socio:hover .socio__foto img { transform: scale(1.01); }
+}
+/* frentes ao lado do título, embaixo do apoio */
+.socios__lado { display: grid; gap: 22px; justify-items: end; }
+.socios__lado .socios__lead { justify-self: end; }
+.socios__areas { margin-bottom: 0; }
+.socios__areas button { -webkit-appearance: none; appearance: none; background: none; border: 0; font: inherit; font-size: 15px; cursor: pointer; }
+.socio__marca svg { width: 15px; height: 13px; display: block; }
+@media (max-width: 900px) { .socios__lado { justify-items: start; gap: 18px; } .socios__lado .socios__lead { justify-self: start; } .socios__areas { margin-bottom: 0; } }

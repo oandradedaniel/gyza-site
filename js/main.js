@@ -853,7 +853,37 @@
     matchMedia('(min-width: 901px)').addEventListener('change', m => { if (m.matches && aberto()) fechar(false); });
   }
 
+  /* ---------- Quem somos: abre o texto do sócio no painel de vidro e destaca a frente escolhida ----------
+     A seção fica escondida até as fotos reais chegarem; /?socios mostra a prévia. */
+  function socios() {
+    const sec = $('.socios');
+    if (!sec) return;
+    if (/[?&]socios\b/.test(location.search)) sec.hidden = false;
+    if (sec.hidden) return;
+    const cards = $$('.socio', sec), grid = $('.socios__grid', sec), btns = $$('[data-area-btn]', sec);
+    const fecha = c => { c.classList.remove('is-aberto'); $('.socio__mais', c).setAttribute('aria-expanded', 'false'); };
+    cards.forEach(c => {
+      const b = $('.socio__mais', c);
+      b.addEventListener('click', () => {
+        const abre = !c.classList.contains('is-aberto');
+        cards.forEach(fecha);
+        if (abre) { c.classList.add('is-aberto'); b.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+    btns.forEach(b => b.addEventListener('click', () => {
+      const area = b.dataset.areaBtn;
+      btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      grid.classList.toggle('is-filtro', area !== 'todos');
+      cards.forEach(c => c.classList.toggle('is-dest', c.dataset.area === area));
+      // no celular os cards passam para o lado: leva até o sócio da frente
+      const alvo = cards.find(c => c.dataset.area === area);
+      if (alvo && grid.scrollWidth > grid.clientWidth) grid.scrollTo({ left: alvo.offsetLeft - grid.offsetLeft - parseFloat(getComputedStyle(grid).paddingLeft), behavior: reduce ? 'auto' : 'smooth' });
+    }));
+    addEventListener('keydown', e => { if (e.key === 'Escape') cards.forEach(fecha); });
+  }
+
   function start() {
+    socios();
     menuCelular();
     reveals();
     trilho($('[data-cases]'), '.case', 'cases');

@@ -16,15 +16,28 @@
     f.addEventListener('submit', e => {
       e.preventDefault();
       if (enviando) return;
-      const req = $$('input[required]', f);
+      // erro ao lado de cada campo (texto curto), além da nota geral embaixo do botão
+      const erro = (alvo, depois, chave, msg) => {
+        let el = $(`#erro-${chave}`, f);
+        if (!el) { el = document.createElement('p'); el.className = 'campo-erro'; el.id = `erro-${chave}`; depois.after(el); }
+        el.textContent = msg || '';
+        const ids = msg ? `erro-${chave} form-nota` : '';
+        if (ids) alvo.setAttribute('aria-describedby', ids); else alvo.removeAttribute('aria-describedby');
+        return !msg;
+      };
+      const MSG = {
+        nome: v => !v && 'Falta o seu nome.',
+        email: v => !v ? 'Falta o e-mail.' : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) && 'Confira o e-mail (ex.: voce@suaempresa.com.br).',
+        celular: v => v.replace(/\D/g, '').length < 10 && 'Falta o celular com DDD.',
+        empresa: v => !v && 'Falta o nome da empresa.',
+      };
       let ok = true;
-      req.forEach(i => {
-        const v = i.value.trim();
-        const bad = !v || (i.name === 'celular' && v.replace(/\D/g, '').length < 10) || (i.name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v));
-        i.classList.toggle('is-error', bad);
-        i.setAttribute('aria-invalid', String(bad));
-        if (bad) i.setAttribute('aria-describedby', 'form-nota'); else i.removeAttribute('aria-describedby');
-        if (bad) ok = false;
+      $$('input[required]', f).forEach(i => {
+        const m = (MSG[i.name] || (v => !v && 'Campo obrigatório.'))(i.value.trim()) || '';
+        i.classList.toggle('is-error', !!m);
+        i.setAttribute('aria-invalid', String(!!m));
+        erro(i, i, i.name, m);
+        if (m) ok = false;
       });
       // serviço desejado: pelo menos um marcado
       const caixas = $('[data-servicos]', f);
@@ -33,23 +46,18 @@
       const outroInput = $('input[name="servico_outro"]', f);
       const outroFalta = $('[data-outros]', f).checked && !outroInput.value.trim();
       outroInput.classList.toggle('is-error', outroFalta);
-      if (outroFalta) { outroInput.setAttribute('aria-invalid', 'true'); outroInput.setAttribute('aria-describedby', 'form-nota'); }
-      else { outroInput.removeAttribute('aria-invalid'); outroInput.removeAttribute('aria-describedby'); }
-      if (outroFalta) ok = false;
+      if (outroFalta) outroInput.setAttribute('aria-invalid', 'true'); else outroInput.removeAttribute('aria-invalid');
+      erro(outroInput, outroInput, 'outro', outroFalta ? 'Conte o que você precisa.' : '');
       caixas.classList.toggle('is-error', !algum);
-      if (!algum) caixas.setAttribute('aria-describedby', 'form-nota'); else caixas.removeAttribute('aria-describedby');
+      erro(caixas, $('.servico-campo__lista', caixas), 'servico', algum ? '' : 'Marque pelo menos um serviço.');
       // política de privacidade: a caixa precisa estar marcada
       const aceiteBox = $('[data-aceite]', f);
       const aceite = $('input[name="aceite"]', f).checked;
       aceiteBox.classList.toggle('is-error', !aceite);
-      if (!aceite) aceiteBox.setAttribute('aria-describedby', 'form-nota'); else aceiteBox.removeAttribute('aria-describedby');
-      if (!ok || !algum || !aceite) {
-        const faltas = [];
-        if (!ok) faltas.push(outroFalta && !$$('input[required].is-error', f).length ? 'conte o que você precisa em Outros' : 'preencha nome, e-mail, celular com DDD e empresa' + (outroFalta ? ' e conte o que você precisa em Outros' : ''));
-        if (!algum) faltas.push('marque pelo menos um serviço');
-        if (!aceite) faltas.push('confirme que leu a Política de Privacidade');
-        const txt = faltas.length > 1 ? faltas.slice(0, -1).join(', ') + ' e ' + faltas[faltas.length - 1] : faltas[0];
-        note.textContent = txt.charAt(0).toUpperCase() + txt.slice(1) + '.';
+      erro($('input[name="aceite"]', f), $('label', aceiteBox), 'aceite', aceite ? '' : 'Confirme que leu a Política de Privacidade.');
+      if (!ok || !algum || !aceite || outroFalta) {
+        const n = $$('.campo-erro', f).filter(e => e.textContent).length;
+        note.textContent = n > 1 ? `Faltam ${n} itens: veja os campos marcados em vermelho.` : 'Falta 1 item: veja o campo marcado em vermelho.';
         note.classList.add('is-error');
         ($('input.is-error', f) || (!algum && $('input[name="servico"]', f)) || $('input[name="aceite"]', f)).focus();
         return;
@@ -86,14 +94,14 @@
       if (on) setTimeout(() => outroIn.focus({ preventScroll: true }), reduce ? 0 : 120);
       else { outroIn.value = ''; outroIn.classList.remove('is-error'); outroIn.removeAttribute('aria-invalid'); }
     });
-    outroIn.addEventListener('input', () => { outroIn.classList.remove('is-error'); outroIn.removeAttribute('aria-invalid'); });
+    outroIn.addEventListener('input', () => { outroIn.classList.remove('is-error'); outroIn.removeAttribute('aria-invalid'); outroIn.removeAttribute('aria-describedby'); const e = $('#erro-outro', f); if (e) e.textContent = ''; });
     $('input[name="aceite"]', f).addEventListener('change', () => {
-      const c = $('[data-aceite]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby');
+      const c = $('[data-aceite]', f); c.classList.remove('is-error'); $('input[name="aceite"]', f).removeAttribute('aria-describedby'); const e = $('#erro-aceite', f); if (e) e.textContent = '';
     });
     $$('input[name="servico"]', f).forEach(i => i.addEventListener('change', () => {
-      const c = $('[data-servicos]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby');
+      const c = $('[data-servicos]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby'); const e = $('#erro-servico', f); if (e) e.textContent = '';
     }));
-    $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); }));
+    $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); const e = $(`#erro-${i.name}`, f); if (e) e.textContent = ''; }));
     // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
     const tel = $('input[name="celular"]', f);
     tel.maxLength = 15;

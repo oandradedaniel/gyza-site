@@ -1638,3 +1638,9 @@ main:focus { outline: none; }
 
 /* menu do celular: Falar no WhatsApp logo abaixo do Solicite sua análise, mesma largura e altura, 12 px entre eles (Vitor, 05/11/2026) */
 .mmenu__wa { width: 100%; height: 56px; margin-top: -2px; gap: 10px; justify-content: center; }
+
+/* formulário: erro ao lado de cada campo e aviso de que o envio segue pelo WhatsApp (revisão final, 05/11/2026) */
+.campo-erro { margin: 6px 0 0 4px; font-size: 13px; line-height: 1.35; color: #BC3326; }
+.campo-erro:empty { display: none; }
+.servico-campo .campo-erro { margin-left: 0; }
+.form__aviso { font-size: 14px; color: var(--tinta-2); text-align: center; margin-bottom: -6px; }

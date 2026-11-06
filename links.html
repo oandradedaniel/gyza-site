@@ -74,18 +74,11 @@ nav>*:nth-child(1){animation-delay:.24s}nav>*:nth-child(2){animation-delay:.3s}n
 @media (prefers-reduced-motion:reduce){.btn,.btn:before,.seta,.thumbs img{transition:none}.btn.principal:after{display:none}}
 @media (min-width:900px){body{padding-top:84px}}
 
-/* cores das redes (Vitor, 06/11/2026): WhatsApp verde igual ao site, LinkedIn azul, Instagram com o logo colorido, Site por último */
-.btn.wa{border-color:rgba(190,255,215,.42);background:radial-gradient(160px 70px at var(--mx) var(--my),rgba(255,255,255,.16),transparent 70%),linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 55%),rgba(21,128,61,.97);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 18px rgba(120,240,170,.16),0 10px 26px -8px rgba(10,90,40,.55);color:#fff}
-.btn.wa:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.62),inset 0 0 24px rgba(140,250,185,.24),0 16px 34px -10px rgba(10,90,40,.7)}
-.btn.li{border-color:rgba(170,205,255,.42);background:radial-gradient(160px 70px at var(--mx) var(--my),rgba(255,255,255,.16),transparent 70%),linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 55%),rgba(10,102,194,.97);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 18px rgba(140,190,255,.16),0 10px 26px -8px rgba(8,60,130,.6);color:#fff}
-.btn.li:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.62),inset 0 0 24px rgba(150,200,255,.24),0 16px 34px -10px rgba(8,60,130,.75)}
-.btn.wa:before,.btn.li:before{background:radial-gradient(180px circle at var(--mx) var(--my),rgba(255,255,255,.16),transparent 70%)}
-.btn.wa .ico,.btn.li .ico{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3)}
-.btn.wa .ico svg .f,.btn.li .ico svg .f{fill:#fff}
-.btn.wa .seta,.btn.li .seta,.btn.wa:hover .seta,.btn.li:hover .seta{stroke:#fff}
-.btn.ig .ico{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);border-color:rgba(255,255,255,.25);box-shadow:0 6px 16px -6px rgba(214,36,159,.6)}
-.btn.ig .ico svg .f{fill:#fff}
-.btn.ig:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 18px 40px -16px rgba(214,36,159,.55)}
+/* cores das redes (Vitor, 06/11/2026): botões neutros em vidro; a cor fica só no quadrado do logo (WhatsApp verde do site, LinkedIn azul, Instagram colorido) */
+.btn.wa .ico{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%),#15803D;border-color:rgba(190,255,215,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 16px -6px rgba(21,128,61,.7)}
+.btn.li .ico{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%),#0A66C2;border-color:rgba(170,205,255,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 16px -6px rgba(10,102,194,.7)}
+.btn.ig .ico{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);border-color:rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 16px -6px rgba(214,36,159,.6)}
+.btn.wa .ico svg .f,.btn.li .ico svg .f,.btn.ig .ico svg .f{fill:#fff}
 </style>
 </head>
 <body>

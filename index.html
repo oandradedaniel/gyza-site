@@ -240,7 +240,7 @@
       <div class="frentes__copy">
         <h2 class="h2 frentes__title" id="frentes-t" data-lines>360° da marca.</h2>
         <p class="frentes__intro" data-hl>Marca firme começa pela base, cada camada sustenta a próxima.</p>
-        <div class="frentes__panels">
+        <div class="frentes__panels" aria-live="off">
           <article class="frente is-on">
             <h3 class="frente__nome">Branding</h3>
             <p class="frente__txt">A personalidade da marca, antes de qualquer cor ou logo.</p>
@@ -263,9 +263,10 @@
           </article>
         </div>
       </div>
-      <div class="pyr-wrap" aria-hidden="true">
-        <canvas class="pyr-gl"></canvas>
-        <div class="pyr-labels"><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Branding</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Identidade visual</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Site</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Conteúdo</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Performance</p></div></div>
+      <div class="pyr-wrap">
+        <canvas class="pyr-gl" aria-hidden="true"></canvas>
+        <div class="pyr-labels" aria-hidden="true"><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Branding</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Identidade visual</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Site</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Conteúdo</p></div><div class="call"><i class="call__dot"></i><i class="call__line"></i><p class="call__txt">Performance</p></div></div>
+        <p class="pyr-dica" aria-hidden="true">Arraste para girar</p>
       </div>
     </div>
   </section>
@@ -277,26 +278,26 @@
     </div>
     <!-- os cases correm para os lados: quem quiser segue rolando o site para baixo -->
     <div class="cases" data-cases role="region" aria-label="Cases" tabindex="0">
-      <article class="case case--open" data-proj-open="dandrade">
-        <div class="case__media">
-          <img class="case__img" src="assets/img/cases/case-01.webp" srcset="assets/img/cases/case-01-1200.webp 1200w, assets/img/cases/case-01.webp 2880w" sizes="(max-width: 700px) 84vw, 1080px" width="2880" height="1610" alt="Cartões de visita da Dandrade Design com a identidade visual criada pela GYZA" loading="lazy" decoding="async" draggable="false">
-          <button class="case__ver" type="button" aria-label="Ver projeto Dandrade Design"><span class="case__ver-mais" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="i-mais" d="M12 5v14M5 12h14"/><path class="i-seta" d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="case__ver-txt" aria-hidden="true">Ver projeto</span></button>
-        </div>
-        <div class="case__info"><h3>Dandrade Design</h3><span class="case__link" aria-hidden="true">Ver projeto <span class="case__link-seta">›</span></span></div>
-      </article>
-      <article class="case case--open" data-proj-open="laroche">
-        <div class="case__media">
-          <img class="case__img" src="assets/img/cases/laroche-capa.webp?v=2" srcset="assets/img/cases/laroche-capa-1200.webp?v=2 1200w, assets/img/cases/laroche-capa.webp?v=2 2880w" sizes="(max-width: 700px) 84vw, 1080px" width="2880" height="1571" alt="Logo da La Roche Café sobre a fachada, identidade visual criada pela GYZA" loading="lazy" decoding="async" draggable="false">
-          <button class="case__ver" type="button" aria-label="Ver projeto La Roche Café"><span class="case__ver-mais" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="i-mais" d="M12 5v14M5 12h14"/><path class="i-seta" d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="case__ver-txt" aria-hidden="true">Ver projeto</span></button>
-        </div>
-        <div class="case__info"><h3>La Roche Café</h3><span class="case__link" aria-hidden="true">Ver projeto <span class="case__link-seta">›</span></span></div>
-      </article>
       <article class="case case--open" data-proj-open="gremski">
         <div class="case__media">
           <img class="case__img" src="assets/img/cases/case-02.webp?v=2" srcset="assets/img/cases/case-02-1200.webp?v=2 1200w, assets/img/cases/case-02.webp?v=2 2880w" sizes="(max-width: 700px) 84vw, 1080px" width="2880" height="1610" alt="Logo da Gremski Arquitetura e Interiores sobre a fachada, identidade visual criada pela GYZA" loading="lazy" decoding="async" draggable="false">
           <button class="case__ver" type="button" aria-label="Ver projeto Gremski Arquitetura e Interiores"><span class="case__ver-mais" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="i-mais" d="M12 5v14M5 12h14"/><path class="i-seta" d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="case__ver-txt" aria-hidden="true">Ver projeto</span></button>
         </div>
         <div class="case__info"><h3>Gremski Arquitetura e Interiores</h3><span class="case__link" aria-hidden="true">Ver projeto <span class="case__link-seta">›</span></span></div>
+      </article>
+      <article class="case case--open" data-proj-open="laroche">
+        <div class="case__media">
+          <img class="case__img" src="assets/img/cases/laroche-card.webp" srcset="assets/img/cases/laroche-card-1200.webp 1200w, assets/img/cases/laroche-card.webp 2880w" sizes="(max-width: 700px) 84vw, 1080px" width="2880" height="1620" alt="Logo da La Roche Café sobre a fachada, identidade visual criada pela GYZA" loading="lazy" decoding="async" draggable="false">
+          <button class="case__ver" type="button" aria-label="Ver projeto La Roche Café"><span class="case__ver-mais" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="i-mais" d="M12 5v14M5 12h14"/><path class="i-seta" d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="case__ver-txt" aria-hidden="true">Ver projeto</span></button>
+        </div>
+        <div class="case__info"><h3>La Roche Café</h3><span class="case__link" aria-hidden="true">Ver projeto <span class="case__link-seta">›</span></span></div>
+      </article>
+      <article class="case case--open" data-proj-open="dandrade">
+        <div class="case__media">
+          <img class="case__img" src="assets/img/cases/case-01.webp" srcset="assets/img/cases/case-01-1200.webp 1200w, assets/img/cases/case-01.webp 2880w" sizes="(max-width: 700px) 84vw, 1080px" width="2880" height="1610" alt="Cartões de visita da Dandrade Design com a identidade visual criada pela GYZA" loading="lazy" decoding="async" draggable="false">
+          <button class="case__ver" type="button" aria-label="Ver projeto Dandrade Design"><span class="case__ver-mais" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="i-mais" d="M12 5v14M5 12h14"/><path class="i-seta" d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="case__ver-txt" aria-hidden="true">Ver projeto</span></button>
+        </div>
+        <div class="case__info"><h3>Dandrade Design</h3><span class="case__link" aria-hidden="true">Ver projeto <span class="case__link-seta">›</span></span></div>
       </article>
     </div>
   </section>

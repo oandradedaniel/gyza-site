@@ -300,17 +300,27 @@
     });
   }
 
-  /* ---------- 360: a pirâmide passa sozinha pelas camadas (Vitor, 06/11/2026) ----------
-     sem prender a rolagem: a seção tem uma tela e a página passa direto. As camadas trocam sozinhas em loop
-     (Branding, Identidade visual, Site, Conteúdo, Performance e volta), 90 graus de giro por camada, a cada 3,5 s,
-     só com a seção na tela e a aba visível. O gl.js lê window.__pyrCamada (camada acesa) e window.__pyrGiro (giros acumulados). */
+  /* ---------- 360: a pirâmide gira sozinha, sem parar, e gira com o dedo ou o mouse (Vitor, 06/11/2026) ----------
+     sem prender a rolagem: a seção tem uma tela e a página passa direto.
+     Sozinha: giro contínuo e constante, uma volta de 360 graus em 13 s (cada camada de 90 graus em uns 3,25 s, sem parar entre elas);
+     a camada acesa, o nome e a frase trocam quando a face seguinte fica de frente.
+     Ao encostar (dedo ou mouse) o giro automático para na hora e a pirâmide segue o arrasto 1:1, para os dois lados.
+     Ao soltar: inércia curta pela velocidade do gesto, assenta na camada mais próxima com mola sem quique e, 2,5 s depois,
+     volta a acelerar devagar (1 s) até a velocidade normal, no mesmo sentido de sempre.
+     Já gira uma tela antes de a seção chegar e segue girando durante a rolagem; só para com o arrasto, com a aba escondida ou sem movimento. Setas do teclado trocam a camada (com o foco aqui o giro sozinho para).
+     O gl.js lê window.__pyrGiro (giro contínuo, 1 = 90 graus) e window.__pyrCamada (camada acesa). */
   function frentes() {
     const panels = $$('.frente');
     const N = panels.length;
     if (!N) return;
-    const sec = $('.frentes');
-    const PASSO = 3500;
-    let cur = 0, giro = 0, timer = 0, naTela = false;
+    const sec = $('.frentes'), area = $('.pyr-wrap'), lista = $('.frentes__panels'), dica = $('.pyr-dica');
+    const VEL = 4 / 13;               // camadas por segundo: 360 graus em 13 s
+    const ESPERA = 2500, RAMPA = 1;   // parada depois de soltar (ms) e aceleração de volta (s)
+    const K = 34, C = 2 * Math.sqrt(K);   // mola criticamente amortecida: assenta sem sobra
+    const mod = (n, m) => ((n % m) + m) % m;
+    let cur = 0, naTela = false, focada = false;
+    // modo: 'auto' (girando sozinha), 'mao' (arrasto), 'assenta' (mola até a camada), 'parada' (esperando para voltar)
+    let modo = 'auto', pos = 0, vel = 0, alvo = 0, rampa = 1, voltaEm = 0, raf = 0, ultimo = 0;
     window.__pyrCamada = 0; window.__pyrGiro = 0;
     const show = i => {
       if (i === cur) return;
@@ -329,18 +339,110 @@
         { opacity: 0, yPercent: 40, clipPath: 'inset(0 0 100% 0)' },
         { opacity: 1, yPercent: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.75, delay: 0.1, stagger: 0.08, ease: 'expo.out', clearProps: 'clipPath' });
     };
-    const avanca = () => {
-      giro += 1;
-      window.__pyrGiro = giro;
-      window.__pyrCamada = giro % N;
-      show(giro % N);
-      agenda();
+    // publica o giro para a cena; a camada da vez é a face que está mais de frente
+    const publica = () => {
+      window.__pyrGiro = pos;
+      const c = mod(Math.round(pos), N);
+      window.__pyrCamada = c;
+      show(c);
     };
-    const agenda = () => { clearTimeout(timer); timer = (naTela && !document.hidden) ? setTimeout(avanca, PASSO) : 0; };
+    const anda = () => naTela && !document.hidden;
+    const quadro = t => {
+      raf = 0;
+      if (!anda()) { ultimo = 0; return; }
+      const dt = ultimo ? Math.min(0.05, (t - ultimo) / 1000) : 1 / 60;
+      ultimo = t;
+      if (modo === 'auto') {
+        // volta acelerando devagar (ease-in) e depois segue constante
+        if (rampa < 1) rampa = Math.min(1, rampa + dt / RAMPA);
+        pos += VEL * rampa * rampa * dt;
+      } else if (modo === 'assenta') {
+        const n = Math.max(1, Math.ceil(dt / 0.008)), h = dt / n;
+        for (let j = 0; j < n; j++) { vel += (K * (alvo - pos) - C * vel) * h; pos += vel * h; }
+        if (Math.abs(alvo - pos) < 1e-4 && Math.abs(vel) < 1e-3) { pos = alvo; vel = 0; modo = 'parada'; voltaEm = t + ESPERA; }
+      } else if (modo === 'parada') {
+        if (!focada && t >= voltaEm) { modo = 'auto'; rampa = 0; }
+      }
+      publica();
+      raf = requestAnimationFrame(quadro);
+    };
+    const liga = () => { if (!raf && anda()) { ultimo = 0; raf = requestAnimationFrame(quadro); } };
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(([e]) => { naTela = e.isIntersecting; agenda(); }, { threshold: 0.35 }).observe(sec);
-    } else { naTela = true; agenda(); }
-    document.addEventListener('visibilitychange', agenda);
+      new IntersectionObserver(([e]) => { naTela = e.isIntersecting; liga(); }, { rootMargin: '100% 0px' }).observe(sec);   // uma tela de antecedência: já chega girando
+    } else { naTela = true; liga(); }
+    document.addEventListener('visibilitychange', liga);
+    // assenta numa camada partindo com a velocidade dada, sem passar do alvo
+    const assenta = (destino, v) => {
+      alvo = destino;
+      const x = pos - alvo, w = Math.sqrt(K);
+      vel = (x !== 0 && Math.sign(v) === -Math.sign(x)) ? Math.sign(v) * Math.min(Math.abs(v), w * Math.abs(x)) : 0;
+      modo = 'assenta'; liga();
+    };
+    if (!area) return;
+    // só com movimento a pirâmide vira controle (sem movimento as camadas ficam em lista)
+    area.tabIndex = 0;
+    area.setAttribute('role', 'group');
+    area.setAttribute('aria-label', 'Pirâmide das camadas: arraste ou use as setas para trocar de camada');
+
+    // a dica some na primeira interação
+    const usou = () => { if (dica) dica.classList.add('is-off'); };
+
+    // arrasto com Pointer Events; no toque só assume o gesto quando ele é claramente horizontal (a rolagem vertical segue com o navegador)
+    let id = null, toque = false, x0 = 0, y0 = 0, p0 = 0, lx = 0, lt = 0, vx = 0;
+    const pxPorCamada = () => Math.max(140, Math.min(320, area.clientWidth * 0.36));
+    const pega = e => {
+      modo = 'mao'; vel = 0; usou();
+      area.classList.add('is-drag');
+      try { area.setPointerCapture(e.pointerId); } catch (_) {}
+      p0 = pos; x0 = lx = e.clientX; lt = e.timeStamp; vx = 0;
+      liga();
+    };
+    area.addEventListener('pointerdown', e => {
+      if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      id = e.pointerId; toque = e.pointerType !== 'mouse';
+      x0 = lx = e.clientX; y0 = e.clientY; lt = e.timeStamp; vx = 0;
+      // mouse: encostou, o giro para na hora; toque: espera ver se o gesto é horizontal (pode ser só a rolagem da página)
+      if (!toque) { e.preventDefault(); pega(e); }
+    });
+    area.addEventListener('pointermove', e => {
+      if (e.pointerId !== id) return;
+      if (modo !== 'mao') {
+        const dx = e.clientX - x0, dy = e.clientY - y0;
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        if (Math.abs(dx) < Math.abs(dy) * 1.2) { id = null; return; }   // vertical: é rolagem, fica com o navegador
+        pega(e);
+      }
+      // segue o dedo 1:1: arrastar para a direita leva a face da frente para a direita
+      pos = p0 - (e.clientX - x0) / pxPorCamada();
+      const dt = Math.max(1, e.timeStamp - lt);
+      const v = -(e.clientX - lx) / pxPorCamada() / (dt / 1000);
+      vx = vx * 0.5 + v * 0.5;
+      lx = e.clientX; lt = e.timeStamp;
+    });
+    const solta = e => {
+      if (e.pointerId !== id) return;
+      id = null;
+      if (modo !== 'mao') return;
+      area.classList.remove('is-drag');
+      // parado há mais de 80 ms: sem inércia; senão uma inércia curta pela velocidade do gesto
+      const v = e.timeStamp - lt > 80 ? 0 : Math.max(-5, Math.min(5, vx));
+      const destino = Math.round(pos + v * 0.18);
+      assenta(Math.max(Math.round(pos) - 1, Math.min(Math.round(pos) + 1, destino)), v);
+    };
+    area.addEventListener('pointerup', solta);
+    area.addEventListener('pointercancel', solta);
+    // a captura implícita do toque fica no canvas e passa para a área ao pegar o gesto: só conta quando a própria área perde a captura
+    area.addEventListener('lostpointercapture', e => { if (e.target === area) solta(e); });
+
+    // teclado: setas trocam a camada; com o foco aqui o giro sozinho para e o nome é anunciado
+    area.addEventListener('focus', () => { if (!area.matches(':focus-visible')) return; focada = true; if (lista) lista.setAttribute('aria-live', 'polite'); if (modo === 'auto') assenta(Math.round(pos), 0); });
+    area.addEventListener('blur', () => { focada = false; if (lista) lista.setAttribute('aria-live', 'off'); });
+    area.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault(); usou();
+      const base = modo === 'assenta' ? alvo : Math.round(pos);
+      assenta(base + (e.key === 'ArrowRight' ? 1 : -1), 0);
+    });
   }
 
   /* ---------- método: trilho horizontal ---------- */

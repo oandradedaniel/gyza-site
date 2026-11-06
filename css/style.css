@@ -544,7 +544,8 @@ a.fi:hover i { background: var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,2
   .case__media { aspect-ratio: 4 / 3; border-radius: 22px; }
   .case__ver { right: 14px; bottom: 14px; width: 52px; height: 52px; }
 
-  .proj__cover { height: 62svh; }
+  /* celular: capa do projeto inteira, sem zoom (Vitor, 06/11/2026) */
+  .proj__cover { height: auto; } .proj__cover img { height: auto; }
   .proj__body { margin-top: -6vh; }
   .proj__head, .proj__txt { grid-template-columns: 1fr; }
   .proj__title { font-size: clamp(48px, 15vw, 72px); }
@@ -1676,3 +1677,30 @@ p, li { text-wrap: pretty; }
 
 /* pirâmide sem prender a rolagem (Vitor, 06/11/2026): a seção tem exatamente uma tela no celular, inclusive em 375x667 */
 @media (max-width: 900px) and (prefers-reduced-motion: no-preference) { .frentes__stage { min-height: 0; } }
+
+/* pirâmide: gira com o dedo e com o mouse (Vitor, 06/11/2026); o navegador segue com a rolagem vertical no celular */
+.pyr-wrap { touch-action: pan-y; cursor: grab; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; outline: none; }
+.pyr-wrap.is-drag { cursor: grabbing; }
+.pyr-wrap:focus-visible { outline: 2px solid var(--azul-claro); outline-offset: -2px; border-radius: 24px; }
+.pyr-gl { cursor: inherit; }
+.pyr-dica { position: absolute; left: 50%; bottom: clamp(56px, 9vh, 96px); translate: -50% 0; margin: 0; pointer-events: none;
+  font-size: 12px; letter-spacing: .04em; color: rgba(234, 234, 234, .5); white-space: nowrap; transition: opacity .6s var(--ease); }
+.pyr-dica.is-off { opacity: 0; }
+@media (max-width: 900px) { .pyr-dica { bottom: 20px; font-size: 11px; } }
+@media (prefers-reduced-motion: reduce) { .pyr-wrap { cursor: auto; } .pyr-dica { display: none; } }
+
+/* capas dos cases com acabamento de estúdio (Vitor, 06/11/2026): logo no centro do card em 16:9 e em 4:3,
+   vinheta leve nas bordas e, no celular, um degradê curto só embaixo, onde fica a pílula Ver projeto */
+.case__media::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(130% 100% at 50% 50%, rgba(0,0,0,0) 58%, rgba(0,0,0,.32) 100%); }
+.case__ver { z-index: 2; }
+.case[data-proj-open="gremski"] .case__img { object-position: 48% 50%; }
+.case[data-proj-open="dandrade"] .case__img { object-position: 53% 50%; }
+@media (max-width: 900px) {
+  .case[data-proj-open="gremski"] .case__img { object-position: 43% 50%; }
+  .case[data-proj-open="dandrade"] .case__img { object-position: 55% 50%; }
+}
+@media (hover: none) {
+  .case__media::after { background: radial-gradient(130% 100% at 50% 45%, rgba(0,0,0,0) 58%, rgba(0,0,0,.3) 100%), linear-gradient(to top, rgba(0,0,0,.38), rgba(0,0,0,0) 32%); }
+}
+

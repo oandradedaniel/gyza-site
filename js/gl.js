@@ -367,23 +367,7 @@ function pyramid() {
   resize();
   window.addEventListener('resize', resize);
 
-  // girar com o mouse, com inércia, e voltar para a face do scroll
-  let drag = 0, vel = 0, dragging = false, lastX = 0;
-  canvas.style.touchAction = 'pan-y';
-  canvas.style.cursor = 'grab';
-  canvas.addEventListener('pointerdown', e => {
-    dragging = true; lastX = e.clientX; vel = 0;
-    canvas.style.cursor = 'grabbing';
-    canvas.setPointerCapture(e.pointerId);
-  });
-  canvas.addEventListener('pointermove', e => {
-    if (!dragging) return;
-    const dx = e.clientX - lastX; lastX = e.clientX;
-    vel = dx * 0.006; drag += vel;
-  });
-  const release = () => { dragging = false; canvas.style.cursor = 'grab'; };
-  canvas.addEventListener('pointerup', release);
-  canvas.addEventListener('pointercancel', release);
+  // o arrasto (mouse e dedo), a inércia e o encaixe ficam no main.js, na área da pirâmide; aqui a cena só segue window.__pyrGiro
 
   // rótulo lateral: um ponto na face que está mais de frente e uma linha fina que aparece com fade suave (sem piscar)
   const calls = [...document.querySelectorAll('.pyr-labels .call')];
@@ -410,9 +394,11 @@ function pyramid() {
       v3.set(Math.sin(a) * faceD, main.position.y + s.mid + s.off, Math.cos(a) * faceD).project(camera);
       const x = (v3.x * 0.5 + 0.5) * w, py = (-v3.y * 0.5 + 0.5) * h;
       // só a frente ativa aparece, e só quando a face já está de frente
-      const target = sliceOf(i) === active ? 1 : 0;
+      // a nova só começa depois que a anterior recolheu (no celular os rótulos ficam no mesmo lugar e não podem se sobrepor)
+      const outros = grow.reduce((m, g, q) => q === i ? m : Math.max(m, g), 0);
+      const target = sliceOf(i) === active && outros < 0.08 ? 1 : 0;
       // suavização independente da taxa de quadros: a linha se desenha junto com o giro e recolhe rápido
-      grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * 5));
+      grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * (target ? 5 : 16)));
       const drawn = 1 - Math.pow(1 - grow[i], 3);
       el.style.transform = `translate(${x}px, ${py}px)`;
       el.style.opacity = Math.min(1, grow[i] * 3).toFixed(3);
@@ -457,21 +443,18 @@ function pyramid() {
   const acorda = () => { quietos = 0; renderer.setAnimationLoop(loop); };
   if (reduce) {
     window.addEventListener('resize', acorda);
-    canvas.addEventListener('pointerdown', acorda);
   }
   const loop = time => {
     if (!visible) { lastT = 0; return; }
-    if (reduce && !dragging && Math.abs(vel) < 1e-4 && Math.abs(drag) < 1e-3 && ++quietos > 30) { renderer.setAnimationLoop(null); return; }
+    if (reduce && ++quietos > 30) { renderer.setAnimationLoop(null); return; }
     const now = time / 1000;
     const dt = lastT ? Math.min(0.05, now - lastT) : 1 / 60;
     lastT = now;
     const t = reduce ? 0 : now;
-    if (!dragging) { vel *= Math.pow(0.92, dt * 60); drag += vel; drag = lerp(drag, 0, 1 - Math.pow(1 - 0.035, dt * 60)); }
-    // camadas passando sozinhas (Vitor, 06/11/2026): o main.js conta os giros; 90 graus por camada, seguido suave (sem mola nem sobra)
+    // 90 graus por camada; o main.js já entrega o giro suave (dedo 1:1, inércia e mola sem quique), então a cena segue direto
     const giros = window.__pyrGiro || 0;
-    const alvoRot = ROT0 - giros * Math.PI / 2;
-    rot.x = reduce ? alvoRot : lerp(rot.x, alvoRot, 1 - Math.exp(-dt * 4));
-    const y = OPT ? OPT.rotY : rot.x + drag;
+    rot.x = ROT0 - giros * Math.PI / 2;
+    const y = OPT ? OPT.rotY : rot.x;
     const para = 0;
 
     main.rotation.y = y;

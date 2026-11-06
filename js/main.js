@@ -649,7 +649,8 @@
     const cur = $('.cursor');
     const cx = gsap.quickTo(cur, 'x', { duration: 0.2, ease: 'power3' });
     const cy = gsap.quickTo(cur, 'y', { duration: 0.2, ease: 'power3' });
-    window.addEventListener('mousemove', e => { cx(e.clientX); cy(e.clientY); cur.style.opacity = 1; });
+    // o pontinho que acompanha o mouse some na análise e nos campos (ali ele parecia um elemento solto ao lado dos rótulos)
+    window.addEventListener('mousemove', e => { cx(e.clientX); cy(e.clientY); cur.style.opacity = e.target.closest && e.target.closest('#analise, form, input, label') ? 0 : 1; });
     $$('a, button').forEach(el => {
       el.addEventListener('mouseenter', () => cur.classList.add('is-big'));
       el.addEventListener('mouseleave', () => cur.classList.remove('is-big'));

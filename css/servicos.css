@@ -144,3 +144,16 @@
   .it summary:hover i { border-color: var(--azul-claro); }
   .camada--light .it summary:hover i { border-color: var(--azul); }
 }
+
+/* ritmo único de respiro (Vitor, 05/11/2026), o mesmo da folha geral */
+.camada__head { gap: var(--r-titulo); }
+.s-fecho__in { gap: var(--r-titulo); }
+.s-fecho .pill { margin-top: 8px; }
+.s-hero__lead { margin-top: var(--r-titulo); }
+@media (max-width: 900px) {
+  .camada__grid { gap: var(--r-conteudo); }
+  .s-hero__ctas { margin-top: 28px; }
+}
+
+/* nome grande da camada (regra restaurada: tinha saído junto com a limpeza das pirâmides) */
+.camada__nome { font-size: var(--fs-h2); font-weight: 500; line-height: .98; letter-spacing: -.05em; }

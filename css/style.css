@@ -1546,3 +1546,33 @@ p, li { text-wrap: pretty; }
   .footer__legal-txt > span { display: block; }
   .footer__links { display: flex; gap: 24px; }
 }
+
+/* =====================================================================
+   Ritmo único de respiro (Vitor, 05/11/2026): título para apoio 24 px (20 no celular); apoio para o conteúdo 64 px (48 no celular).
+   O vão nunca passa do tamanho do próprio bloco de texto. Textos e alinhamentos aprovados não mudam.
+   ===================================================================== */
+:root { --r-titulo: 24px; --r-conteudo: clamp(48px, 4.6vw, 64px); }
+@media (max-width: 900px) { :root { --r-titulo: 20px; --r-conteudo: 48px; } }
+/* abertura da home */
+.hero__content { gap: var(--r-titulo); }
+@media (max-width: 900px) {
+  .hero { padding-bottom: calc(120vw * 200.45 / 750 * 1.02 + 56px); }
+}
+/* aberturas das páginas internas */
+.priv-hero__lead { margin-top: var(--r-titulo); }
+.contato-topo__ctas { margin-top: calc(var(--r-titulo) + 8px); }
+/* cabeçalhos de seção (título e apoio) */
+.servicos__head, .trabalhos__head { row-gap: var(--r-titulo); }
+.trabalhos__head { margin-bottom: var(--r-conteudo); }
+.orcamento__copy { gap: var(--r-titulo); }
+.etapas-m__head { gap: var(--r-titulo); }
+.fecho-m__inner { gap: var(--r-titulo); }
+.fecho-m__cta { margin-top: 8px; }
+@media (max-width: 900px) {
+  .frentes__copy { gap: 16px; }
+  .orcamento__inner { gap: var(--r-conteudo); }
+  .orcamento__conversa { margin-top: 4px; }
+  .manifesto-m__grid, .etapas-m__grid { gap: var(--r-conteudo); }
+  .contato-topo__grid { gap: var(--r-conteudo); }
+  .contato-topo__ctas { margin-top: 28px; }
+}

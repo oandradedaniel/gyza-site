@@ -20,7 +20,20 @@
     $$('main > section[data-theme]').forEach(s => o.observe(s));
   };
   seguir(nav, '-4% 0px -95% 0px');   // o topo olha a faixa de cima
-  seguir(rail, '-12% 0px -87% 0px'); // o trilho olha um pouco mais abaixo
+  // o trilho pega o tom da seção que está de fato embaixo dele (escuro sobre escuro, claro sobre claro)
+  if (rail) {
+    const secs = $$('main > section[data-theme]');
+    let pedido = 0;
+    const tom = () => {
+      pedido = 0;
+      const r = rail.getBoundingClientRect(), y = r.top + r.height / 2;
+      const s = secs.find(x => { const b = x.getBoundingClientRect(); return b.top <= y && b.bottom > y; });
+      if (s) rail.classList.toggle('is-light', s.dataset.theme === 'light');
+    };
+    addEventListener('scroll', () => { if (!pedido) pedido = requestAnimationFrame(tom); }, { passive: true });
+    addEventListener('resize', tom);
+    tom();
+  }
   seguir(cta, '-93% 0px -4% 0px');   // o botão fixo olha a faixa de baixo
 
   // trilho: camada em leitura

@@ -157,3 +157,13 @@
 
 /* nome grande da camada (regra restaurada: tinha saído junto com a limpeza das pirâmides) */
 .camada__nome { font-size: var(--fs-h2); font-weight: 500; line-height: .98; letter-spacing: -.05em; }
+
+/* abertura de Serviços (Vitor, 05/11/2026): o trilho começa dentro da primeira camada (abaixo da divisa), fica fixo só enquanto as camadas
+   passam e pega o tom do fundo que está embaixo dele; divisões retas como no resto do site; botão da abertura no azul da marca */
+.s-rail { margin: 32px auto -86px; }
+.s-rail + .camada { margin-top: 0; padding-top: calc(clamp(96px, 11vw, 168px) + 54px); }
+.camada, .s-fecho { border-radius: 0; margin-top: 0; }
+.s-hero__ctas .pill { --bg: var(--azul); --fg: #fff; }
+.s-hero__ctas .pill::before { background: var(--azul-vivo); }
+.s-hero__ctas .pill:hover { color: #fff; }
+@media (max-width: 900px) { .s-rail { margin: 24px auto -78px; } }

@@ -1466,3 +1466,21 @@ p, li { text-wrap: pretty; }
 
 /* formulário: linha fina separando Serviço desejado (e o Outros) da caixa da política; 20 px de respiro em cima e embaixo (Vitor, 05/11/2026) */
 .aceite { border-top: 1px solid var(--linha-papel); margin-top: 2px; padding-top: 20px; }
+
+/* Contato (Vitor, 05/11/2026): página de contato de verdade no topo, com os dados e os botões; o formulário de análise fica na seção de baixo, sem repetir os dados */
+.contato-topo__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 96px); align-items: end; }
+.contato-topo__ctas { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+.contato__mail { --bg: var(--gelo); --fg: var(--preto); }
+.contato-topo__dados { display: grid; gap: 18px; padding: clamp(24px, 3vw, 36px); border-radius: var(--raio-card); border: 1px solid var(--linha);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); }
+.contato__marca { font-size: 22px; font-weight: 600; letter-spacing: .04em; color: var(--gelo); }
+.contato-topo__dados .contato__lista dt { color: var(--apoio); }
+.contato-topo__dados .contato__lista dd, .contato-topo__dados .contato__lista a { color: var(--gelo); }
+.contato-topo__dados .contato__lista a { border-bottom-color: rgba(234,234,234,.35); }
+@media (max-width: 900px) {
+  .contato-topo__grid { grid-template-columns: 1fr; gap: 32px; }
+  .contato-topo__ctas .pill { width: 100%; }
+}
+
+/* rodapé: GYZA grande com a ponta do A branca como as letras e uns 18% menor, centralizado (Vitor, 05/11/2026); o da abertura não muda */
+.footer__mark { --topo: var(--gelo); width: calc((100% - 2 * var(--gutter)) * .82); max-width: calc((var(--max) - 2 * var(--gutter)) * .82); }

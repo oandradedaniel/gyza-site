@@ -1474,3 +1474,6 @@ p, li { text-wrap: pretty; }
 .servico-campo__lista .caixa { margin-top: 0; }
 @media (max-width: 400px) { .servico-campo__lista { column-gap: 10px; } .servico-campo__lista label { gap: 10px; font-size: 15px; } }
 .servico-outro .field { padding: 8px 2px 4px 0; }   /* o campo de Outros na largura toda, embaixo das duas colunas */
+
+/* formulário: linha fina separando Serviço desejado (e o Outros) da caixa da política; 20 px de respiro em cima e embaixo (Vitor, 05/11/2026) */
+.aceite { border-top: 1px solid var(--linha-papel); margin-top: 2px; padding-top: 20px; }

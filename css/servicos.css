@@ -143,3 +143,15 @@
 @media (max-width: 900px) {
   .s-rail { top: 84px; -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
 }
+
+/* sem as pirâmides grandes da abertura e do fecho (pedido do Vitor, 05/11/2026): o texto ocupa a largura.
+   Abertura: título à esquerda e o apoio com os botões à direita, alinhados pela base, como os outros títulos do site. */
+.s-hero__grid { grid-template-columns: 1fr; }
+@media (min-width: 901px) {
+  .s-hero__copy { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); column-gap: 40px; align-items: end; }
+  .s-hero__copy .s-kicker { grid-column: 1; grid-row: 1; }
+  .s-hero__copy .s-hero__t { grid-column: 1; grid-row: 2; }
+  .s-hero__copy .s-hero__lead { grid-column: 2; grid-row: 2; margin-top: 0; }
+  .s-hero__copy .s-hero__ctas { grid-column: 2; grid-row: 3; }
+  .s-fecho__t { max-width: 20ch; }
+}

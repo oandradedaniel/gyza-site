@@ -1528,3 +1528,9 @@ p, li { text-wrap: pretty; }
   .footer__cols > div > a { min-height: 44px; }
   .footer__cols .footer__h { margin-bottom: 4px; }
 }
+
+/* intro: a ponta nasce branca e vira vidro no pouso (Vitor, 05/11/2026); o vidro fica por baixo, o branco por cima é derretido pela máscara */
+.mark__a .topo-branco { fill: var(--gelo); }
+.mark__a .topo-onda { opacity: 0; }
+.mark__a .topo-aresta { fill: none; stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 16 84; stroke-dashoffset: 100; opacity: 0; filter: drop-shadow(0 0 3px rgba(190, 210, 255, .9)); }

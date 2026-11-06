@@ -23,7 +23,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF-latin.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793963400">
+<link rel="stylesheet" href="css/style.css?v=1793964000">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" }, "integrity": { "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js": "sha384-Qvl1RLjZOCDFOOH2bKcGnaDHMM8MVv3zVtMvhy3juQdiIOs6RgQ/7zYdM1FbpHzI" } }
 </script>
@@ -176,6 +176,21 @@
       <mask id="revela" maskUnits="userSpaceOnUse" x="-400" y="-100" width="1700" height="420">
         <polygon class="revela__faixa" points="0,-60 1400,-60 1400,260 -192,260" fill="#fff"/>
       </mask>
+      <!-- pouso da intro: o branco da ponta do A derrete de baixo para cima e revela o vidro; uma onda de luz sobe junto -->
+      <linearGradient id="derreteGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff"/>
+        <stop offset=".82" stop-color="#fff"/>
+        <stop offset="1" stop-color="#000"/>
+      </linearGradient>
+      <mask id="derrete" maskUnits="userSpaceOnUse" x="560" y="-160" width="140" height="260">
+        <rect class="derrete__rect" x="560" y="-12" width="140" height="96" fill="url(#derreteGrad)"/>
+      </mask>
+      <clipPath id="recorteTopo"><polygon points="588.92 70.96 631.55 0 674.19 70.96 588.92 70.96"/></clipPath>
+      <linearGradient id="ondaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset=".5" stop-color="#E4ECFF" stop-opacity=".85"/>
+        <stop offset="1" stop-color="#7FA6FF" stop-opacity="0"/>
+      </linearGradient>
       <linearGradient id="topoLuz" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#4C86F2"/>
         <stop offset="1" stop-color="#1F4FD8"/>
@@ -192,6 +207,9 @@
         <polygon class="perna perna--d" points="704.31 197.13 633.49 79.27 679.18 79.27 750 197.13 704.31 197.13"/>
         <polygon class="topo" points="588.92 70.96 631.55 0 674.19 70.96 588.92 70.96"/>
         <polygon class="topo-brilho" points="588.92 70.96 631.55 0 674.19 70.96 588.92 70.96"/>
+        <polygon class="topo-branco" points="588.92 70.96 631.55 0 674.19 70.96 588.92 70.96" mask="url(#derrete)"/>
+        <g class="topo-onda" clip-path="url(#recorteTopo)"><rect x="560" y="74" width="140" height="14" fill="url(#ondaGrad)"/></g>
+        <polygon class="topo-aresta" points="588.92 70.96 631.55 0 674.19 70.96 588.92 70.96" pathLength="100"/>
       </g>
     </g>
   </svg>
@@ -595,7 +613,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="js/form.js?v=1793963400"></script>
-<script src="js/main.js?v=1793963400"></script>
+<script src="js/form.js?v=1793964000"></script>
+<script src="js/main.js?v=1793964000"></script>
 </body>
 </html>

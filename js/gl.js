@@ -466,17 +466,13 @@ function pyramid() {
     const dt = lastT ? Math.min(0.05, now - lastT) : 1 / 60;
     lastT = now;
     const t = reduce ? 0 : now;
-    const p = window.__pyr || 0;
     if (!dragging) { vel *= Math.pow(0.92, dt * 60); drag += vel; drag = lerp(drag, 0, 1 - Math.pow(1 - 0.035, dt * 60)); }
-    // movimento ligado à rolagem (Vitor, 05/11/2026): o giro das camadas e um leve parallax vertical, com amortecimento crítico; a camada da vez vem da rolagem
-    // giro de 360 graus ao longo da seção: 90 graus por camada, no começo do trecho de cada uma, seguido suave (sem mola nem sobra)
-    const q = Math.min(NS - 0.001, p * NS), kq = Math.floor(q), fq = q - kq;
-    const suave = x => x * x * (3 - 2 * x);
-    const passo = kq === 0 ? 0 : kq - 1 + suave(Math.min(1, fq / 0.4));
-    const alvoRot = ROT0 - passo * Math.PI / 2;
-    rot.x = reduce ? alvoRot : lerp(rot.x, alvoRot, 1 - Math.exp(-dt * 6));
+    // camadas passando sozinhas (Vitor, 06/11/2026): o main.js conta os giros; 90 graus por camada, seguido suave (sem mola nem sobra)
+    const giros = window.__pyrGiro || 0;
+    const alvoRot = ROT0 - giros * Math.PI / 2;
+    rot.x = reduce ? alvoRot : lerp(rot.x, alvoRot, 1 - Math.exp(-dt * 4));
     const y = OPT ? OPT.rotY : rot.x + drag;
-    const para = reduce ? 0 : (0.5 - p) * 0.14;
+    const para = 0;
 
     main.rotation.y = y;
     main.position.y = FLOOR + 0.06 + (OPT ? OPT.lift || 0 : para);
@@ -484,8 +480,8 @@ function pyramid() {
     mats.forEach(m => { m.uniforms.uTime.value = 0; });   // sem faixa de luz correndo: o vidro fica parado
     const dist = camera.position.length();
     edgeMats.forEach(m => { m.uniforms.uNear.value = dist - 0.9; m.uniforms.uFar.value = dist + 1.2; });
-    // camada da vez: o trecho da rolagem (cinco partes iguais)
-    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(NS - 1, Math.floor(p * NS))));
+    // camada da vez: a que o main.js acendeu
+    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(NS - 1, window.__pyrCamada || 0)));
     const sw = 2;   // sem o brilho que percorria a camada
     slices.forEach((s, i) => {
       const S = s.sp;

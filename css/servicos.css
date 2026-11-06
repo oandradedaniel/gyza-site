@@ -167,3 +167,12 @@
 .s-hero__ctas .pill::before { background: var(--azul-vivo); }
 .s-hero__ctas .pill:hover { color: #fff; }
 @media (max-width: 900px) { .s-rail { margin: 24px auto -78px; } }
+
+/* abertura enxuta (Vitor, 06/11/2026): sem a historinha; só o título da página e a página entra direto nas camadas */
+.s-hero { padding: clamp(132px, 11vw, 168px) 0 clamp(40px, 4vw, 56px); }
+.s-hero__copy { display: block; }
+.s-hero__t { font-size: clamp(40px, 4.4vw, 64px); line-height: 1; letter-spacing: -.045em; }
+@media (max-width: 900px) {
+  .s-hero { padding: calc(124px + env(safe-area-inset-top, 0px)) 0 28px; }
+}
+@media (min-width: 901px) { .s-rail + .camada { padding-top: calc(clamp(72px, 7vw, 112px) + 54px); } }

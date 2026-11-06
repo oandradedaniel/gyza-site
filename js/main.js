@@ -300,14 +300,18 @@
     });
   }
 
-  /* ---------- 360: a pirâmide gira com a rolagem ---------- */
+  /* ---------- 360: a pirâmide passa sozinha pelas camadas (Vitor, 06/11/2026) ----------
+     sem prender a rolagem: a seção tem uma tela e a página passa direto. As camadas trocam sozinhas em loop
+     (Branding, Identidade visual, Site, Conteúdo, Performance e volta), 90 graus de giro por camada, a cada 3,5 s,
+     só com a seção na tela e a aba visível. O gl.js lê window.__pyrCamada (camada acesa) e window.__pyrGiro (giros acumulados). */
   function frentes() {
     const panels = $$('.frente');
-    const dots = [];   // sem os tracinhos de progresso (pedido do Vitor)
     const N = panels.length;
     if (!N) return;
     const sec = $('.frentes');
-    let cur = 0;
+    const PASSO = 3500;
+    let cur = 0, giro = 0, timer = 0, naTela = false;
+    window.__pyrCamada = 0; window.__pyrGiro = 0;
     const show = i => {
       if (i === cur) return;
       cur = i;
@@ -324,19 +328,19 @@
       gsap.fromTo($$('.frente__nome, .frente__txt', panels[i]),
         { opacity: 0, yPercent: 40, clipPath: 'inset(0 0 100% 0)' },
         { opacity: 1, yPercent: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.75, delay: 0.1, stagger: 0.08, ease: 'expo.out', clearProps: 'clipPath' });
-      dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
     };
-    ScrollTrigger.create({
-      trigger: '.frentes', start: 'top top', end: '+=400%', pin: true, scrub: true, anticipatePin: 1,
-      onUpdate: s => {
-        window.__pyr = s.progress;
-        show(Math.min(N - 1, Math.floor(s.progress * N)));
-        // começou a rolar pelas camadas: o apoio sai e fica só o título; no começo da seção ele volta
-        sec.classList.toggle('is-camadas', s.progress > 0.02);
-        // indicador de continuar rolando: some ao chegar na última camada (Performance)
-        sec.classList.toggle('is-fim', s.progress >= (N - 1) / N);
-      },
-    });
+    const avanca = () => {
+      giro += 1;
+      window.__pyrGiro = giro;
+      window.__pyrCamada = giro % N;
+      show(giro % N);
+      agenda();
+    };
+    const agenda = () => { clearTimeout(timer); timer = (naTela && !document.hidden) ? setTimeout(avanca, PASSO) : 0; };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => { naTela = e.isIntersecting; agenda(); }, { threshold: 0.35 }).observe(sec);
+    } else { naTela = true; agenda(); }
+    document.addEventListener('visibilitychange', agenda);
   }
 
   /* ---------- método: trilho horizontal ---------- */

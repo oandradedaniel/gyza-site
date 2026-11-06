@@ -739,18 +739,15 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
     transition: clip-path .5s cubic-bezier(.6, 0, .4, 1), visibility 0s linear .5s;
   }
   .mmenu.is-open { clip-path: circle(150% at calc(100% - 36px) 40px); visibility: visible; transition: clip-path .76s cubic-bezier(.2, .7, 0, 1), visibility 0s; }
-  .mmenu__inner { min-height: 100%; display: flex; flex-direction: column; padding: 104px var(--gutter) 40px; }
+  /* enxuto (Vitor, 06/11/2026): 4 links em tamanho moderado com linha fina, e no pé só os dois botões */
+  .mmenu__inner { min-height: 100%; display: flex; flex-direction: column; padding: calc(96px + env(safe-area-inset-top, 0px)) var(--gutter) calc(32px + env(safe-area-inset-bottom, 0px)); }
   .mmenu__links { display: grid; border-top: 1px solid var(--linha); }
-  .mmenu__links a { display: flex; align-items: baseline; gap: 16px; padding: 16px 0 14px; border-bottom: 1px solid var(--linha); }
+  .mmenu__links a { display: flex; align-items: center; min-height: 56px; padding: 0; border-bottom: 1px solid var(--linha); }
   .mmenu__t { display: block; overflow: hidden; padding-bottom: .08em; }
-  .mmenu__t > span { display: block; font-size: clamp(30px, 8.6vw, 40px); font-weight: 500; line-height: 1.05; letter-spacing: -.04em; }
-  .mmenu__pe { margin-top: auto; padding-top: 40px; display: grid; gap: 14px; justify-items: start; }
-  .mmenu__cta { --bg: var(--azul); --fg: #fff; width: 100%; gap: 10px; }
+  .mmenu__t > span { display: block; font-size: 22px; font-weight: 500; line-height: 1.2; letter-spacing: -.02em; }
+  .mmenu__pe { margin-top: auto; padding-top: 32px; display: grid; gap: 12px; }
+  .mmenu__cta { --bg: var(--azul); --fg: #fff; width: 100%; height: 52px; justify-content: center; font-weight: 500; }
   .mmenu__cta::before { background: var(--azul-vivo); }
-  .mmenu__cta svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .mmenu__rot { margin-top: 18px; font-size: 13px; font-weight: 500; color: var(--cinza); }
-  .mmenu__contato { display: flex; gap: 24px; font-size: 17px; }
-  .mmenu__onde { font-size: 14px; color: var(--apoio); }
 
   /* entrada: as palavras sobem por trás da linha, uma depois da outra; o pé aparece por último */
   .mmenu__t > span { transform: translateY(105%); transition: transform .5s var(--ease-out); }
@@ -1182,8 +1179,6 @@ main:focus { outline: none; }
 
 /* pirâmide: quando as camadas começam a passar, o apoio some (fade e leve subida) e fica só o título; o espaço fica, então nada pula */
 .frentes__intro { transition: opacity .5s var(--ease-out), transform .6s var(--ease-out); }
-.frentes.is-camadas .frentes__intro { opacity: 0; transform: translateY(-10px); pointer-events: none; }
-@media (prefers-reduced-motion: reduce) { .frentes.is-camadas .frentes__intro { opacity: 1; transform: none; } }
 
 /* formulário: o que a pessoa quer melhorar (os 5 serviços da pirâmide), em pílulas de vidro que acendem em azul (Vitor, 05/11/2026) */
 
@@ -1359,7 +1354,7 @@ main:focus { outline: none; }
 }
 
 /* menu do celular: Falar no WhatsApp logo abaixo do Solicite sua análise, mesma largura e altura, 12 px entre eles (Vitor, 05/11/2026) */
-.mmenu__wa { width: 100%; height: 56px; margin-top: -2px; gap: 10px; justify-content: center; }
+.mmenu__wa { width: 100%; height: 52px; gap: 10px; justify-content: center; }
 
 /* formulário: erro ao lado de cada campo e aviso de que o envio segue pelo WhatsApp (revisão final, 05/11/2026) */
 .campo-erro { margin: 6px 0 0 4px; font-size: 13px; line-height: 1.35; color: #BC3326; }
@@ -1376,8 +1371,7 @@ main:focus { outline: none; }
 .footer__cols a[aria-current="page"] { color: var(--gelo); font-weight: 600; }
 /* âncoras não ficam atrás do topo fixo */
 #analise, #trabalhos { scroll-margin-top: 72px; }
-/* alvos de toque de 44 px: contatos do menu do celular e índice da privacidade */
-.mmenu__contato a { display: inline-flex; align-items: center; min-height: 44px; }
+/* alvos de toque de 44 px: índice da privacidade */
 @media (max-width: 900px) { .priv-toc a { display: flex; align-items: center; min-height: 44px; padding: 0; } }
 .nav__links { padding-bottom: 4px; margin-bottom: -4px; }   /* espaço para o traço da página atual (o menu corta o que passa da caixa) */
 
@@ -1660,24 +1654,25 @@ p, li { text-wrap: pretty; }
   .priv-hero, .s-hero { padding-top: calc(132px + env(safe-area-inset-top)); }
 }
 
-/* pirâmide: indicador discreto de continuar rolando (Vitor, 05/11/2026): mouse com a rodinha no computador, seta subindo no celular;
-   embaixo e centralizado, sem cobrir texto nem a pirâmide; some na última camada; parado e sem loop com reduced-motion */
-.rolar { position: absolute; left: 50%; bottom: 22px; z-index: 3; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: rgba(234, 234, 234, .55); pointer-events: none; transition: opacity .6s var(--ease), translate .6s var(--ease-out); }
-.rolar svg { width: 18px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.rolar__txt { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: rgba(234, 234, 234, .5); white-space: nowrap; }
-.rolar__dedo { display: none; }
-.rolar__roda { animation: rolar-roda 1.8s var(--ease-out) infinite; }
-.rolar__seta { animation: rolar-seta 1.8s var(--ease-out) infinite; }
-@keyframes rolar-roda { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(7px); opacity: 0; } 100% { transform: translateY(0); opacity: 0; } }
-@keyframes rolar-seta { 0% { transform: translateY(6px); opacity: 0; } 30% { opacity: 1; } 80% { transform: translateY(-6px); opacity: 0; } 100% { opacity: 0; } }
-.frentes.is-fim .rolar { opacity: 0; translate: 0 8px; }
+/* celular: Solicite sua análise no topo, em vidro líquido como o círculo do menu, encostado nele (Vitor, 06/11/2026) */
 @media (max-width: 900px) {
-  .rolar { bottom: 14px; gap: 6px; }
-  .rolar__mouse { display: none; }
-  .rolar__dedo { display: block; }
-  .rolar__txt { font-size: 10px; }
+  .nav .nav__cta {
+    display: inline-flex; position: absolute; top: 50%; right: 54px; translate: 0 -50%;
+    height: 44px; padding: 0 16px; margin: 0; font-size: 13.5px; font-weight: 500; letter-spacing: 0; white-space: nowrap;
+    color: currentColor;
+    background: radial-gradient(60% 80% at 30% 20%, rgba(255,255,255,.14), transparent 70%), linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.03)), rgba(20,26,38,.22);
+    backdrop-filter: blur(14px) saturate(190%); -webkit-backdrop-filter: blur(14px) saturate(190%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(255,255,255,.08), inset 0 0 14px rgba(150,180,255,.14), 0 8px 24px rgba(0,0,0,.3);
+    transition: color .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease), opacity .3s var(--ease);
+  }
+  .nav .nav__cta::before { display: none; }
+  .nav.is-light .nav__cta { color: var(--tinta); background: radial-gradient(60% 80% at 30% 20%, rgba(255,255,255,.9), transparent 70%), linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.35)); box-shadow: inset 0 1px 0 #fff, 0 8px 24px rgba(10,15,26,.14); }
+  .nav.is-scrolled .nav__cta { background: rgba(5,5,5,.85); }
+  .nav.is-light.is-scrolled .nav__cta { background: rgba(242,244,247,.85); }
+  .nav .nav__cta:focus-visible { outline: 2px solid var(--azul-claro); outline-offset: 2px; }
+  .menu-aberto .nav .nav__cta { opacity: 0; pointer-events: none; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .rolar { display: none; }
-}
+@media (max-width: 380px) { .nav .nav__cta { padding: 0 13px; font-size: 13px; } }
+
+/* pirâmide sem prender a rolagem (Vitor, 06/11/2026): a seção tem exatamente uma tela no celular, inclusive em 375x667 */
+@media (max-width: 900px) and (prefers-reduced-motion: no-preference) { .frentes__stage { min-height: 0; } }

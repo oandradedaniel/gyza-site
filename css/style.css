@@ -1653,3 +1653,25 @@ p, li { text-wrap: pretty; }
   .nav { top: max(16px, env(safe-area-inset-top)); }
   .priv-hero, .s-hero { padding-top: calc(132px + env(safe-area-inset-top)); }
 }
+
+/* pirâmide: indicador discreto de continuar rolando (Vitor, 05/11/2026): mouse com a rodinha no computador, seta subindo no celular;
+   embaixo e centralizado, sem cobrir texto nem a pirâmide; some na última camada; parado e sem loop com reduced-motion */
+.rolar { position: absolute; left: 50%; bottom: 22px; z-index: 3; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(234, 234, 234, .55); pointer-events: none; transition: opacity .6s var(--ease), translate .6s var(--ease-out); }
+.rolar svg { width: 18px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.rolar__txt { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: rgba(234, 234, 234, .5); white-space: nowrap; }
+.rolar__dedo { display: none; }
+.rolar__roda { animation: rolar-roda 1.8s var(--ease-out) infinite; }
+.rolar__seta { animation: rolar-seta 1.8s var(--ease-out) infinite; }
+@keyframes rolar-roda { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(7px); opacity: 0; } 100% { transform: translateY(0); opacity: 0; } }
+@keyframes rolar-seta { 0% { transform: translateY(6px); opacity: 0; } 30% { opacity: 1; } 80% { transform: translateY(-6px); opacity: 0; } 100% { opacity: 0; } }
+.frentes.is-fim .rolar { opacity: 0; translate: 0 8px; }
+@media (max-width: 900px) {
+  .rolar { bottom: 14px; gap: 6px; }
+  .rolar__mouse { display: none; }
+  .rolar__dedo { display: block; }
+  .rolar__txt { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rolar { display: none; }
+}

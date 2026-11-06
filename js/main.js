@@ -333,6 +333,8 @@
         show(Math.min(N - 1, Math.floor(s.progress * N)));
         // começou a rolar pelas camadas: o apoio sai e fica só o título; no começo da seção ele volta
         sec.classList.toggle('is-camadas', s.progress > 0.02);
+        // indicador de continuar rolando: some ao chegar na última camada (Performance)
+        sec.classList.toggle('is-fim', s.progress >= (N - 1) / N);
       },
     });
   }

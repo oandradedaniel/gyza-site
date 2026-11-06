@@ -308,12 +308,15 @@
         if (k === i) return;
         gsap.killTweensOf(p);
         p.classList.remove('is-on');
-        gsap.to(p, { opacity: 0, y: -12, duration: 0.25, ease: 'power2.in' });
+        gsap.to(p, { opacity: 0, duration: 0.3, ease: 'power2.out' });
       });
       gsap.killTweensOf(panels[i]);
       panels[i].classList.add('is-on');
-      gsap.fromTo(panels[i], { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.55, delay: 0.15, ease: 'expo.out' });
-      gsap.fromTo($$('.frente__nome, .frente__txt', panels[i]), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.2, stagger: 0.06, ease: 'expo.out' });
+      gsap.set(panels[i], { opacity: 1 });
+      // a frase é a protagonista: o nome e a frase sobem de dentro de uma máscara, com fade, na curva expo do site
+      gsap.fromTo($$('.frente__nome, .frente__txt', panels[i]),
+        { opacity: 0, yPercent: 40, clipPath: 'inset(0 0 100% 0)' },
+        { opacity: 1, yPercent: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.75, delay: 0.1, stagger: 0.08, ease: 'expo.out', clearProps: 'clipPath' });
       dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
     };
     ScrollTrigger.create({

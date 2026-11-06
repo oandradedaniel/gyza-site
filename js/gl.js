@@ -384,18 +384,9 @@ function pyramid() {
   canvas.addEventListener('pointerup', release);
   canvas.addEventListener('pointercancel', release);
 
-  // callouts: um ponto em cada face e uma linha fina que se desenha quando a face vem para a frente
+  // rótulo lateral: um ponto na face que está mais de frente e uma linha fina que aparece com fade suave (sem piscar)
   const calls = [...document.querySelectorAll('.pyr-labels .call')];
   const faceAng = k => Math.PI / 4 + k * Math.PI / 2;
-  const stepRot = s => Math.PI / 4 - s * Math.PI / 2;
-  const faceOfStep = calls.map((_, s) => {
-    let best = 0, bestZ = -2;
-    for (let k = 0; k < 4; k++) {
-      const z = Math.cos(faceAng(k) + stepRot(s));
-      if (z > bestZ) { bestZ = z; best = k; }
-    }
-    return best;
-  });
   const v3 = new THREE.Vector3();
   const grow = calls.map(() => 0);
   function placeCalls(y, active, dt) {
@@ -410,16 +401,17 @@ function pyramid() {
     }
     for (let i = 0; i < calls.length; i++) {
       const el = calls[i];
-      const k = faceOfStep[i];
+      let k = 0, bz = -2;
+      for (let q = 0; q < 4; q++) { const z = Math.cos(faceAng(q) + y); if (z > bz) { bz = z; k = q; } }
       const a = faceAng(k) + y;
       const s = slices[sliceOf(i)];
       const faceD = (half * (1 - s.mid / H)) * (s.grow || 1) + 0.02;
       v3.set(Math.sin(a) * faceD, main.position.y + s.mid + s.off, Math.cos(a) * faceD).project(camera);
       const x = (v3.x * 0.5 + 0.5) * w, py = (-v3.y * 0.5 + 0.5) * h;
       // só a frente ativa aparece, e só quando a face já está de frente
-      const target = sliceOf(i) === active ? Math.max(0, Math.min(1, (Math.cos(a) - 0.9) / 0.08)) : 0;
+      const target = sliceOf(i) === active ? 1 : 0;
       // suavização independente da taxa de quadros: a linha se desenha junto com o giro e recolhe rápido
-      grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * (target > grow[i] ? 7 : 16)));
+      grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * 5));
       const drawn = 1 - Math.pow(1 - grow[i], 3);
       el.style.transform = `translate(${x}px, ${py}px)`;
       el.style.opacity = Math.min(1, grow[i] * 3).toFixed(3);
@@ -447,7 +439,6 @@ function pyramid() {
   }
 
   let visible = false;
-  let introAt = null;                                  // a pirâmide monta quando a seção aparece
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.01 }).observe(canvas);
 
   // mola amortecida, estável em qualquer taxa de quadros; sem movimento, vai direto ao alvo
@@ -457,8 +448,8 @@ function pyramid() {
     for (let j = 0; j < n; j++) { o.v += (k * (target - o.x) - c * o.v) * h; o.x += o.v * h; }
   };
   const ROT0 = Math.PI / 4;
-  const rot = { x: reduce ? ROT0 : ROT0 + 0.9, v: 0 };   // entra girando e assenta na face da Marca
-  let lastT = 0, prevAct = -1, sweepAt = -1, step = 0;
+  const rot = { x: ROT0, v: 0 };   // quase parada: sem entrada girando
+  let lastT = 0;
   // sem movimento: a cena fica parada, então desenha poucos quadros e para; volta só ao arrastar ou mudar o tamanho
   let quietos = 0;
   const acorda = () => { quietos = 0; renderer.setAnimationLoop(loop); };
@@ -472,40 +463,32 @@ function pyramid() {
     const now = time / 1000;
     const dt = lastT ? Math.min(0.05, now - lastT) : 1 / 60;
     lastT = now;
-    if (introAt === null) introAt = now;
     const t = reduce ? 0 : now;
     const p = window.__pyr || 0;
     if (!dragging) { vel *= Math.pow(0.92, dt * 60); drag += vel; drag = lerp(drag, 0, 1 - Math.pow(1 - 0.035, dt * 60)); }
-    // uma face por camada: gira 90 graus a cada quinto da rolagem
-    // cada frente gira no começo do seu trecho de rolagem e depois fica parada
-    const q = Math.min(NS - 0.001, p * NS), k = Math.floor(q), f = q - k;
-    const ease = x => x * x * (3 - 2 * x);
-    step = k === 0 ? 0 : k - 1 + ease(Math.min(1, f / 0.4));
-    // mola da rotação: acelera, chega e assenta com um respiro mínimo
-    spring(rot, ROT0 - step * Math.PI / 2, dt, 70, 0.86);
-    const y = OPT ? OPT.rotY : rot.x + drag + Math.sin(t * 0.5) * 0.05;
-    const bob = Math.sin(t * 0.8) * 0.05;
+    // movimento discreto, só ligado à rolagem (Vitor, 05/11/2026): rotação lenta de poucos graus e um leve parallax vertical,
+    // seguidos com amortecimento crítico (sem mola, sem salto); a camada da vez vem da rolagem
+    const alvoRot = ROT0 - p * 0.32;
+    rot.x = reduce ? alvoRot : lerp(rot.x, alvoRot, 1 - Math.exp(-dt * 4));
+    const y = OPT ? OPT.rotY : rot.x + drag;
+    const para = reduce ? 0 : (0.5 - p) * 0.14;
 
     main.rotation.y = y;
-    main.position.y = FLOOR + 0.06 + (OPT ? OPT.lift || 0 : bob);
+    main.position.y = FLOOR + 0.06 + (OPT ? OPT.lift || 0 : para);
     if (OPT) { main.rotation.x = OPT.tiltX || 0; main.rotation.z = OPT.tiltZ || 0; }
-    mats.forEach(m => { m.uniforms.uTime.value = t; });
+    mats.forEach(m => { m.uniforms.uTime.value = 0; });   // sem faixa de luz correndo: o vidro fica parado
     const dist = camera.position.length();
     edgeMats.forEach(m => { m.uniforms.uNear.value = dist - 0.9; m.uniforms.uFar.value = dist + 1.2; });
-    // fatia ativa = a que está de frente de fato (segue a rotação com mola, não o alvo)
-    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(NS - 1, Math.round((ROT0 - rot.x) / (Math.PI / 2)))));
-    if (act !== prevAct) { if (prevAct >= 0 && !reduce) sweepAt = now; prevAct = act; }
-    const sw = sweepAt >= 0 ? (now - sweepAt) / 0.95 : 2;
-    if (sw >= 1) sweepAt = -1;
+    // camada da vez: o trecho da rolagem (cinco partes iguais)
+    const act = OPT ? -1 : sliceOf(Math.max(0, Math.min(NS - 1, Math.floor(p * NS))));
+    const sw = 2;   // sem o brilho que percorria a camada
     slices.forEach((s, i) => {
       const S = s.sp;
-      // entrada: de baixo para cima, como uma construção (o Branding primeiro, a Performance por último)
-      spring(S.app, reduce || now - introAt > 0.12 + (NS - 1 - i) * 0.15 ? 1 : 0, dt, 38, 0.62);
-      spring(S.glow, i === act ? 1 : 0, dt, 90, 0.9);
-      spring(S.dim, act >= 0 && i !== act ? 1 : 0, dt, 70, 0.95);
-      spring(S.grow, i === act ? 1.07 : 1, dt, 110, 0.72);
-      // a ativa sobe um pouco; as de cima afastam para cima e as de baixo para baixo, abrindo a fenda
-      spring(S.lift, act < 0 ? 0 : i === act ? 0.025 : i < act ? 0.065 : -0.035, dt, 80, 0.8);
+      // sem montagem, sem pulo e sem crescer: a camada da vez só clareia, devagar (amortecimento crítico, sem sobra)
+      S.app.x = 1;
+      spring(S.glow, i === act ? 1 : 0, dt, 22, 1);
+      spring(S.dim, act >= 0 && i !== act ? 0.6 : 0, dt, 22, 1);
+      S.grow.x = 1; S.lift.x = 0;
       s.off = S.lift.x - (1 - S.app.x) * 0.9;
       s.grow = S.grow.x * (1 - 0.012 * S.dim.x);
       s.glow = OPT ? OPT.glow[i] : S.glow.x;

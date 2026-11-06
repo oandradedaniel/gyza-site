@@ -347,7 +347,8 @@
   // componente único dos dois trilhos: troque só o seletor dos itens e o prefixo dos atributos (contador, setas, pausa)
   // dir: 1 = o conteúdo anda para a esquerda (cases); -1 = anda para a direita (equipe)
   function trilho(track, itemSel, attr, dir = 1) {
-    if (!track) return;
+    // trilho escondido (ex.: a seção da equipe com hidden) não tem largura: não monta, senão as cópias viram centenas
+    if (!track || !track.offsetWidth || track.closest('[hidden]')) return;
     const items = $$(itemSel, track);
     const N = items.length;
     const n = $(`[data-${attr}-n]`);
@@ -357,7 +358,7 @@
     if (loop) {
       const last = items[N - 1];
       const w0 = last.offsetLeft + last.offsetWidth - items[0].offsetLeft;
-      const copias = Math.max(1, Math.ceil(Math.max(innerWidth, screen.width || 0) / Math.max(1, w0)));
+      const copias = Math.min(4, Math.max(1, Math.ceil(Math.max(innerWidth, screen.width || 0) / Math.max(1, w0))));
       for (let c = 0; c < copias; c++) items.forEach(it => {
         const k = it.cloneNode(true);
         k.setAttribute('aria-hidden', 'true');

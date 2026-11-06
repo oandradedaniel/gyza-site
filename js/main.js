@@ -306,7 +306,7 @@
   /* ---------- 360: a pirâmide gira com a rolagem ---------- */
   function frentes() {
     const panels = $$('.frente');
-    const dots = $$('.frentes__dots li');
+    const dots = [];   // sem os tracinhos de progresso (pedido do Vitor)
     const N = panels.length;
     if (!N) return;
     const sec = $('.frentes');

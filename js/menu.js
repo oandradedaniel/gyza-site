@@ -11,7 +11,7 @@
       es.forEach(e => e.isIntersecting ? vistos.add(e.target) : vistos.delete(e.target));
       cta.classList.toggle('is-off', vistos.size > 0);
     }, { rootMargin: '0px 0px -20% 0px' });
-    [$('#analise'), $('#fecho'), $('.footer')].forEach(el => el && io.observe(el));
+    [$('#analise'), $('#fecho'), $('.fecho-m'), $('.footer')].forEach(el => el && io.observe(el));
   }
   // topo: troca de tom sobre as seções claras, para o logo não se perder no fundo (a página de Serviços tem o seu)
   const nav = $('.nav');

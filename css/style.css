@@ -1526,3 +1526,26 @@ main:focus { outline: none; }
   .orcamento__wa { background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 55%), rgba(21, 128, 61, .97); }
   .orcamento__wa:hover { scale: 1; }
 }
+
+/* celular: botão fixo clean (Vitor, 05/11/2026): só a pílula azul em vidro discreto, texto centralizado, sem seta e sem halo escuro */
+@media (max-width: 900px) {
+  .cta-grupo .cta-baixo, .cta-grupo .cta-baixo.is-light {
+    height: 54px; padding: 0 24px; justify-content: center; text-shadow: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,0) 60%), rgba(31, 79, 216, .94);
+    backdrop-filter: blur(12px) saturate(160%); -webkit-backdrop-filter: blur(12px) saturate(160%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px -6px rgba(15, 40, 120, .45);
+  }
+  .cta-grupo .cta-baixo::after { display: none; }
+  .cta-grupo .cta-baixo .cta-baixo__txt { justify-items: center; }
+  .cta-grupo .cta-baixo .cta-baixo__l1 { font-size: 17px; font-weight: 600; }
+  .cta-grupo .cta-baixo:hover { scale: 1; box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 8px 20px -6px rgba(15, 40, 120, .5); }
+}
+
+/* celular: a pirâmide é central, então título, apoio e o bloco da camada também ficam no meio (Vitor, 05/11/2026) */
+@media (max-width: 900px) {
+  .frentes__copy { justify-items: center; text-align: center; }
+  .frentes__intro, .frente .frente__txt { margin-inline: auto; }
+  .frentes__panels { justify-items: center; width: 100%; }
+  .frente { justify-self: stretch; }
+  .frentes__dots { justify-content: center; }
+}

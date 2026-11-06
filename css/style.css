@@ -1667,9 +1667,9 @@ p, li { text-wrap: pretty; }
     transition: color .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease), opacity .3s var(--ease);
   }
   .nav .nav__cta::before { display: none; }
-  .nav.is-light .nav__cta { color: var(--tinta); background: radial-gradient(60% 80% at 30% 20%, rgba(255,255,255,.9), transparent 70%), linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.35)); box-shadow: inset 0 1px 0 #fff, 0 8px 24px rgba(10,15,26,.14); }
+  /* sobre fundo claro: vidro tingido no azul da marca com letra branca (Vitor, 06/11/2026) */
+  .nav.is-light .nav__cta, .nav.is-light.is-scrolled .nav__cta { color: #fff; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 60%), var(--azul); box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 8px 22px rgba(31,79,216,.32); }
   .nav.is-scrolled .nav__cta { background: rgba(5,5,5,.85); }
-  .nav.is-light.is-scrolled .nav__cta { background: rgba(242,244,247,.85); }
   .nav .nav__cta:focus-visible { outline: 2px solid var(--azul-claro); outline-offset: 2px; }
   .menu-aberto .nav .nav__cta { opacity: 0; pointer-events: none; }
 }
@@ -1703,4 +1703,79 @@ p, li { text-wrap: pretty; }
 @media (hover: none) {
   .case__media::after { background: radial-gradient(130% 100% at 50% 45%, rgba(0,0,0,0) 58%, rgba(0,0,0,.3) 100%), linear-gradient(to top, rgba(0,0,0,.38), rgba(0,0,0,0) 32%); }
 }
+
+
+/* Serviços no topo (Vitor, 06/11/2026): setinha ao lado de Serviços e painel de vidro com as 5 camadas, fechado por padrão */
+.nav__drop { display: inline-flex; align-items: center; gap: 2px; }
+.nav__drop > a { opacity: .75; transition: opacity .3s var(--ease); }
+.nav__drop > a:hover, .nav__drop.is-open > a { opacity: 1; }
+.nav__drop > a[aria-current="page"] { opacity: 1; font-weight: 600; position: relative; }
+.nav__drop > a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; border-radius: 2px; background: var(--azul); }
+.nav__drop-btn { display: grid; place-items: center; width: 22px; height: 22px; margin: 0; padding: 0; border: 0; border-radius: 50%; background: none; color: inherit; cursor: pointer; opacity: .75; transition: opacity .3s var(--ease); }
+.nav__drop-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease-out); }
+.nav__drop-btn:hover, .nav__drop.is-open .nav__drop-btn { opacity: 1; }
+.nav__drop.is-open .nav__drop-btn svg { transform: rotate(180deg); }
+.nav__drop-btn:focus-visible { outline: 2px solid var(--azul-claro); outline-offset: 2px; }
+.nav__painel {
+  position: fixed; z-index: 51; translate: -50% 0;
+  display: grid; min-width: 220px; padding: 8px; border-radius: 20px; color: var(--gelo);
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03) 55%, rgba(255,255,255,.06)), rgba(12, 16, 26, .8);
+  backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.12), 0 16px 40px rgba(0,0,0,.35);
+  opacity: 0; transform: translateY(-6px); transition: opacity .25s var(--ease), transform .25s var(--ease-out), color .4s var(--ease), background .4s var(--ease);
+}
+.nav__painel.is-open { opacity: 1; transform: none; }
+.nav__painel[hidden] { display: none; }
+.nav__painel a { display: flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 12px; font-size: 14px; font-weight: 500; opacity: .82; transition: opacity .2s var(--ease), background .2s var(--ease); }
+.nav__painel a:hover, .nav__painel a:focus-visible { opacity: 1; background: rgba(255,255,255,.08); outline: none; }
+.nav__painel.is-light { color: var(--tinta); background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.55)), rgba(242,244,247,.45); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(10,15,26,.06), 0 16px 40px rgba(10,15,26,.14); }
+.nav__painel.is-light a:hover, .nav__painel.is-light a:focus-visible { background: rgba(10,15,26,.06); }
+@media (max-width: 900px) { .nav__painel { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .nav__painel, .nav__painel.is-open { transform: none; } .nav__drop-btn svg { transition: none; } }
+
+/* menu do celular: setinha ao lado de Serviços abre as 5 camadas embaixo, no mesmo tom enxuto */
+@media (max-width: 900px) {
+  .mmenu__item { display: grid; grid-template-columns: 1fr 48px; align-items: center; border-bottom: 1px solid var(--linha); }
+  .mmenu__item > a { border-bottom: 0 !important; }
+  .mmenu__abre { display: grid; place-items: center; width: 48px; height: 48px; margin: 0; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--gelo); cursor: pointer; opacity: .8; }
+  .mmenu__abre svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease-out); }
+  .mmenu__item.is-open .mmenu__abre svg { transform: rotate(180deg); }
+  .mmenu__abre:focus-visible { outline: 2px solid var(--azul-claro); outline-offset: -4px; }
+  .mmenu__sub { grid-column: 1 / -1; display: grid; padding: 0 0 12px 2px; }
+  .mmenu__sub[hidden] { display: none; }
+  .mmenu__sub a { display: flex; align-items: center; min-height: 40px; border-bottom: 0; font-size: 16px; color: var(--apoio); }
+  .mmenu__sub a:active { color: var(--gelo); }
+}
+@media (max-width: 900px) { .nav .nav__cta.is-off { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity .3s var(--ease), visibility 0s linear .3s; } }
+
+/* pirâmide: só o título 360° da marca., na mesma letra do nome da camada, em vidro líquido (Vitor, 06/11/2026).
+   Letra clara translúcida com aresta fina luminosa, profundidade suave por baixo e um reflexo largo que anda com o giro da pirâmide;
+   leve inclinação 3D acompanhando o giro. Sem movimento: parado e legível. */
+.frentes .h2.frentes__title { font-size: clamp(52px, 6vw, 104px); font-weight: 500; line-height: .95; letter-spacing: -.055em; perspective: 900px; }
+.frentes__title { --incl: 0deg; --luz: 30%; }
+.frentes__title .line { overflow: visible; transform: rotateY(var(--incl)); transform-style: preserve-3d; }
+.frentes__title .line > span {
+  color: rgba(236, 241, 255, .9);
+  background: linear-gradient(105deg, rgba(255,255,255,0) calc(var(--luz) - 22%), rgba(255,255,255,.95) var(--luz), rgba(255,255,255,0) calc(var(--luz) + 22%)), linear-gradient(180deg, rgba(240,244,255,.96), rgba(196,212,255,.82));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, .28);
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.18)) drop-shadow(0 14px 28px rgba(31, 79, 216, .38));
+}
+@media (max-width: 900px) {
+  .frentes .h2.frentes__title { font-size: clamp(40px, 11.6vw, 50px); }
+  .frentes__stage { padding-top: 100px; }
+  .frentes__copy { gap: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .frentes__title .line { transform: none; }
+}
+
+/* rodapé: ® no canto superior direito do GYZA grande, encostado do lado de fora da ponta do A, alinhado ao topo (Vitor, 06/11/2026);
+   ~7% da altura do logo no computador e no mínimo 12 px no celular; o logo do topo e o da abertura não mudam */
+.footer__mark { overflow: visible; }
+.footer__r { transform: translate(756px, 0) scale(.58); }
+.footer__r circle { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.footer__r text { font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; fill: currentColor; }
+.footer__mark { color: var(--gelo); }
+@media (max-width: 900px) { .footer__mark { color: #fff; } .footer__r { transform: translate(753px, 0) scale(1.2); } }
 

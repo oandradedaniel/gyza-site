@@ -22,7 +22,7 @@
   const botao = $('[data-menu-botao]'), menu = $('[data-menu]');
   if (!botao || !menu) return;
   const raiz = document.documentElement;
-  const focaveis = () => [botao, ...$$('a', menu)];
+  const focaveis = () => [botao, ...$$('a, button', menu).filter(el => el.offsetParent !== null)];
   const aberto = () => menu.classList.contains('is-open');
   const abrir = () => {
     menu.classList.add('is-open'); raiz.classList.add('menu-aberto');
@@ -36,7 +36,7 @@
   };
   botao.addEventListener('click', () => (aberto() ? fechar() : abrir()));
   $$('a', menu).forEach(a => a.addEventListener('click', () => fechar(false)));
-  menu.addEventListener('click', e => { if (!e.target.closest('a')) fechar(); });
+  menu.addEventListener('click', e => { if (!e.target.closest('a, button')) fechar(); });
   document.addEventListener('keydown', e => {
     if (!aberto()) return;
     if (e.key === 'Escape') { e.preventDefault(); fechar(); return; }

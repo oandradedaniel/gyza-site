@@ -140,7 +140,8 @@ const glassFrag = /* glsl */`
     vec3 deep = mix(vec3(0.015, 0.045, 0.18), vec3(0.06, 0.07, 0.09), uWhite);
     vec3 blue = mix(vec3(0.13, 0.33, 0.98), vec3(0.78, 0.83, 0.92), uWhite);
     vec3 body = mix(deep, blue, 0.06 + 0.38 * (1.0 - facing));
-    body = mix(body, mix(vec3(0.42, 0.62, 1.0), vec3(0.95, 0.97, 1.0), uWhite), 0.85 * uGlow);
+    // vidro líquido do começo em todas as camadas; a da vez só um pouco mais luminosa por cima (Vitor, 06/11/2026)
+    body = mix(body, mix(vec3(0.3, 0.52, 1.0), vec3(0.9, 0.93, 0.99), uWhite), 0.3 * uGlow);
 
     vec3 col = body + bg * mix(vec3(0.8, 0.9, 1.15), vec3(0.95), uWhite) * 0.95
              + envc * (0.12 + fres * 1.1)
@@ -148,14 +149,14 @@ const glassFrag = /* glsl */`
              + fres * blue * 0.9
              + band * vec3(0.55, 0.7, 1.0);
     if (uBack > 0.5) col *= 0.5;
-    col *= 0.5 + 0.75 * max(uGlow, 0.3);
+    col *= 0.93 + 0.27 * uGlow;
     // fatias que recuam ficam um pouco mais apagadas
-    col *= 1.0 - 0.5 * uDim;
+    col *= 1.0 - 0.05 * uDim;
     // brilho que percorre a fatia ativa quando ela muda (faixa inclinada, de baixo para cima)
     float sy = vP.y + vP.x * 0.12 - uSweep;
     col += exp(-sy * sy / 0.011) * vec3(0.42, 0.58, 0.95) * step(-50.0, uSweep) * (uBack > 0.5 ? 0.45 : 1.0);
 
-    float a = (uBack > 0.5 ? 0.92 : 0.8) * uFade * (1.0 - 0.38 * uDim);
+    float a = (uBack > 0.5 ? 0.92 : 0.8) * uFade;
     if (uRefl > 0.5) {
       a *= 0.32 * smoothstep(uFloor - 1.6, uFloor, vP.y);
     }
@@ -488,8 +489,8 @@ function pyramid() {
         u.uGlow.value = s.glow; u.uDim.value = S.dim.x; u.uFade.value = fade; u.uSweep.value = sweepY;
       }
       for (const m of [...s.edgeMats]) {
-        m.uniforms.uA.value = fade * (1 - 0.6 * S.dim.x) * (1 + 0.8 * S.glow.x);
-        if (m.userData.base) m.uniforms.uColor.value.copy(m.userData.base).lerp(BRANCO, 0.7 * S.glow.x);
+        m.uniforms.uA.value = fade * (1 + 0.35 * S.glow.x);
+        if (m.userData.base) m.uniforms.uColor.value.copy(m.userData.base).lerp(BRANCO, 0.35 * S.glow.x);
       }
     });
     if (OPT) {

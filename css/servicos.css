@@ -19,33 +19,10 @@
 
 /* pirâmide: a assinatura da marca, camada a camada */
 
-/* ---------- trilho das camadas ---------- */
-.s-rail {
-  position: sticky; top: 78px; z-index: 40;
-  width: fit-content; max-width: calc(100% - 24px); margin: -28px auto 0;
-  display: flex; gap: 4px; padding: 5px; border-radius: 999px; color: var(--gelo);
-  background: linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.03) 55%, rgba(255,255,255,.07)), rgba(20,26,38,.45);
-  backdrop-filter: blur(18px) saturate(190%); -webkit-backdrop-filter: blur(18px) saturate(190%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 10px 32px rgba(0,0,0,.35);
-  overflow-x: auto; scrollbar-width: none;
-  transition: color .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease), opacity .4s var(--ease), translate .5s var(--ease-out);
-}
-.s-rail::-webkit-scrollbar { display: none; }
-.s-rail a { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; font-size: 14px; font-weight: 500; opacity: .75; transition: opacity .3s var(--ease), background .3s var(--ease), color .3s var(--ease); }
-.s-rail a b { font-weight: 500; font-size: 12px; opacity: .6; font-variant-numeric: tabular-nums; }
-.s-rail a:hover { opacity: 1; }
-.s-rail a[aria-current="true"] { opacity: 1; background: var(--azul); color: #fff; }
-.s-rail a[aria-current="true"] b { opacity: .85; }
-.s-rail.is-light { color: var(--tinta); background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.5)), rgba(242,244,247,.5); box-shadow: inset 0 1px 0 #fff, 0 10px 32px rgba(10,15,26,.14); }
-/* some quando o fecho aparece */
-.s-rail.is-off { opacity: 0; translate: 0 -12px; pointer-events: none; }
-@media (max-width: 900px) { .s-rail { top: 70px; margin-top: -24px; } .s-rail a { padding: 0 14px; } }
-
 /* ---------- camadas ---------- */
 .camada { position: relative; padding: clamp(96px, 11vw, 168px) 0; border-radius: var(--raio-secao); margin-top: calc(-1 * var(--raio-secao)); }
 .camada--light { background: var(--papel); color: var(--tinta); z-index: 1; }
 .camada--dark { background: var(--preto-2); color: var(--gelo); z-index: 2; }
-.s-rail + .camada { margin-top: calc(-1 * var(--raio-secao)); padding-top: calc(clamp(96px, 11vw, 168px) + 28px); }
 .camada__grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(40px, 7vw, 120px); align-items: start; }
 .camada__head { position: sticky; top: 150px; display: grid; gap: 22px; justify-items: start; }
 .camada__frase { font-size: clamp(20px, 1.9vw, 28px); font-weight: 500; line-height: 1.25; letter-spacing: -.025em; color: var(--azul-claro); max-width: 24ch; }
@@ -112,15 +89,10 @@
 }
 
 /* revisão final (05/11/2026): trilho só com o nome da camada; inativos com contraste de texto; foco visível no tema claro; abas abaixo do topo e com fade na borda no celular */
-.s-rail a { opacity: .82; }
-.s-rail.is-light a:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
 .s-kicker { font-size: 14px; letter-spacing: .02em; }
 .s-hero__t { font-size: var(--fs-h2); line-height: 1; }
 .s-fecho__t { font-size: var(--fs-h2); }
 .s-hero__lead { max-width: 62ch; }
-@media (max-width: 900px) {
-  .s-rail { top: 84px; -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
-}
 
 /* sem as pirâmides grandes da abertura e do fecho (pedido do Vitor, 05/11/2026): o texto ocupa a largura.
    Abertura: título à esquerda e o apoio com os botões à direita, alinhados pela base, como os outros títulos do site. */
@@ -160,13 +132,10 @@
 
 /* abertura de Serviços (Vitor, 05/11/2026): o trilho começa dentro da primeira camada (abaixo da divisa), fica fixo só enquanto as camadas
    passam e pega o tom do fundo que está embaixo dele; divisões retas como no resto do site; botão da abertura no azul da marca */
-.s-rail { margin: 32px auto -86px; }
-.s-rail + .camada { margin-top: 0; padding-top: calc(clamp(96px, 11vw, 168px) + 54px); }
 .camada, .s-fecho { border-radius: 0; margin-top: 0; }
 .s-hero__ctas .pill { --bg: var(--azul); --fg: #fff; }
 .s-hero__ctas .pill::before { background: var(--azul-vivo); }
 .s-hero__ctas .pill:hover { color: #fff; }
-@media (max-width: 900px) { .s-rail { margin: 24px auto -78px; } }
 
 /* abertura enxuta (Vitor, 06/11/2026): sem a historinha; só o título da página e a página entra direto nas camadas */
 .s-hero { padding: clamp(132px, 11vw, 168px) 0 clamp(40px, 4vw, 56px); }
@@ -175,4 +144,6 @@
 @media (max-width: 900px) {
   .s-hero { padding: calc(124px + env(safe-area-inset-top, 0px)) 0 28px; }
 }
-@media (min-width: 901px) { .s-rail + .camada { padding-top: calc(clamp(72px, 7vw, 112px) + 54px); } }
+
+/* sem o trilho (Vitor, 06/11/2026): a primeira camada começa mais perto do título da página */
+.s-hero + .camada { padding-top: clamp(64px, 6vw, 96px); }

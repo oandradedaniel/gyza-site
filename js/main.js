@@ -244,12 +244,13 @@
   /* ---------- linhas e palavras ---------- */
   function reveals() {
     if (reduce) return;   // sem movimento: o texto já aparece no lugar
-    // seção da pirâmide: título e apoio entram como a abertura (linhas subindo da máscara e palavras com leve desfoque)
+    // seção da pirâmide: o título de vidro entra em 3D, girando de leve no eixo X e assentando (Vitor, 06/11/2026)
     const fr = $('.frentes');
     if (fr) {
-      const tf = gsap.timeline({ scrollTrigger: { trigger: fr, start: 'top 70%', once: true } });
-      tf.from($$('.frentes__title .line > span'), { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.07 }, 0)
-        .from($$('.frentes__intro .hw'), { opacity: 0, y: 10, filter: 'blur(6px)', duration: 0.7, ease: 'power3.out', stagger: 0.04 }, 0.45);
+      gsap.from($$('.frentes__title .line > span'), {
+        rotationX: -72, yPercent: 40, opacity: 0, transformOrigin: '50% 100% -20px', duration: 1.4, ease: 'expo.out', stagger: 0.08,
+        scrollTrigger: { trigger: fr, start: 'top 70%', once: true },
+      });
     }
     $$('[data-lines]').forEach(el => {
       if (el.closest('.hero') || el.closest('.frentes')) return;
@@ -340,8 +341,14 @@
         { opacity: 1, yPercent: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.75, delay: 0.1, stagger: 0.08, ease: 'expo.out', clearProps: 'clipPath' });
     };
     // publica o giro para a cena; a camada da vez é a face que está mais de frente
+    const titulo = $('.frentes__title');
     const publica = () => {
       window.__pyrGiro = pos;
+      if (titulo) {
+        const a = pos * Math.PI / 2;
+        titulo.style.setProperty('--incl', `${(Math.sin(a) * 7).toFixed(2)}deg`);
+        titulo.style.setProperty('--luz', `${(mod(pos, 4) / 4 * 200 - 50).toFixed(1)}%`);
+      }
       const c = mod(Math.round(pos), N);
       window.__pyrCamada = c;
       show(c);
@@ -808,7 +815,7 @@
     const botao = $('[data-menu-botao]'), menu = $('[data-menu]');
     if (!botao || !menu) return;
     const raiz = document.documentElement;
-    const focaveis = () => [botao, ...$$('a', menu)];
+    const focaveis = () => [botao, ...$$('a, button', menu).filter(el => el.offsetParent !== null)];
     const aberto = () => menu.classList.contains('is-open');
     const abrir = () => {
       menu.classList.add('is-open'); raiz.classList.add('menu-aberto');
@@ -824,7 +831,7 @@
     // link: fecha e deixa o navegador rolar até a seção
     $$('a', menu).forEach(a => a.addEventListener('click', () => fechar(false)));
     // fundo: toque fora de link fecha
-    menu.addEventListener('click', e => { if (!e.target.closest('a')) fechar(); });
+    menu.addEventListener('click', e => { if (!e.target.closest('a, button')) fechar(); });
     document.addEventListener('keydown', e => {
       if (!aberto()) return;
       if (e.key === 'Escape') { e.preventDefault(); fechar(); return; }

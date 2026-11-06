@@ -10,6 +10,7 @@ Site da GYZA, agência de marketing 360°. No ar em https://gyza.com.br (Vercel,
 - `css/style.css`: o visual de todas as páginas. `css/servicos.css`: só a página de Serviços.
 - `js/main.js`: movimento da home (GSAP). `js/gl.js`: pirâmide 3D (three.js), carregada só perto da seção.
 - `js/form.js`: formulário da análise (home e contato), não depende do GSAP.
+- `404.html`: página de erro (a Vercel serve sozinha). `js/metricas.js`: medição anônima sem cookie (RPC `registrar_evento_site` do Supabase; respeita não rastrear; não envia em localhost, `?metricas=teste` força).
 - `js/menu.js`: menu do celular e tom do topo nas páginas internas. `js/servicos.js`: trilho e entradas de Serviços.
 - `assets/`: fonte DM Sans (WOFF com subconjunto latino), imagens, cases, imagem de compartilhamento `og-gyza.jpg`.
 - `_social/`: fontes HTML dos posts do Instagram (não vão para o site).

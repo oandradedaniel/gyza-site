@@ -1577,7 +1577,7 @@ p, li { text-wrap: pretty; }
 .footer__cols > div:only-child { display: flex; align-items: center; flex-wrap: wrap; column-gap: 32px; row-gap: 0; }
 .footer__cols > div:only-child .footer__h { margin: 0 8px 0 0; }
 @media (max-width: 900px) {
-  .footer__cols > div:only-child { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 44px 44px; grid-auto-flow: column; column-gap: 16px; align-items: center; }
+  .footer__cols > div:only-child { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 44px 44px 44px; grid-auto-flow: column; column-gap: 16px; align-items: center; }
   .footer__cols > div:only-child .footer__h { grid-column: 1 / -1; grid-row: 1; margin: 0; }
   .footer__cols { margin-bottom: 28px; }
 }
@@ -2035,3 +2035,9 @@ p, li { text-wrap: pretty; }
 .socios__head { grid-template-columns: 1fr; }
 .socios__txt { margin-top: var(--r-titulo, 24px); max-width: 58ch; font-size: var(--fs-lead); line-height: 1.5; color: var(--apoio); }
 .socio__tag { padding: 0 13px; }
+
+/* página 404: preto, GYZA grande com ®, frase curta e um caminho de volta (Vitor, 06/11/2026) */
+.e404 { position: relative; min-height: 100svh; display: flex; align-items: center; padding: calc(120px + env(safe-area-inset-top)) 0 80px; background: var(--preto); }
+.e404__in { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(24px, 3vw, 40px); }
+.e404__mark { width: min(100%, 880px); max-width: none; margin: 0; }
+.e404__t { font-size: var(--fs-h2); font-weight: 500; line-height: 1; letter-spacing: -.045em; }

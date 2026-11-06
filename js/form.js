@@ -108,6 +108,7 @@
         return;
       }
       note.textContent = ''; note.classList.remove('is-error');
+      if (window.gyzaMetrica) window.gyzaMetrica('form_etapa2');
       vai(2);
     };
     $('[data-proximo]', f).addEventListener('click', proximo);
@@ -182,7 +183,7 @@
         p_instagram_site: (d.get('perfil') || '').trim(),
         p_site: d.get('site') || '',
       }).then(ok => {
-        if (ok) { vai(3); } else { btnTxt.textContent = 'Abrindo o WhatsApp...'; abreWhats(); }
+        if (ok) { if (window.gyzaMetrica) window.gyzaMetrica('form_enviado'); vai(3); } else { if (window.gyzaMetrica) window.gyzaMetrica('form_whatsapp'); btnTxt.textContent = 'Abrindo o WhatsApp...'; abreWhats(); }
       });
       setTimeout(() => {
         enviando = false;

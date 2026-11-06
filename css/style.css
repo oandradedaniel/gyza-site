@@ -155,7 +155,7 @@ body.is-loading .nav { opacity: 0; }
   overflow: visible;
 }
 .mark__gyz, .mark__a .perna { fill: var(--gelo); }
-/* intro: a ponta do A usa o mesmo degradê do GYZA da abertura (ver o bloco da ponta no fim do arquivo) */
+/* intro: a ponta do A é branca, ver o bloco da ponta no fim do arquivo */
 .intro.is-done { display: none; }
 
 /* ---------- 1. Hero ---------- */
@@ -1522,8 +1522,6 @@ p, li { text-wrap: pretty; }
 }
 
 
-/* ponta do A em degradê do preto ao azul da marca, na intro e no GYZA da abertura (Vitor, 05/11/2026), com um fio finíssimo
-   de luz na aresta para o triângulo não sumir no fundo escuro; logo do topo e do rodapé seguem como estão */
-.hero__mark { --topo: url(#topoGrad); --topo-borda: rgba(127, 166, 255, .55); }
-#logo .topo { vector-effect: non-scaling-stroke; stroke-width: 1; }
-.mark__a .topo { fill: url(#topoGrad); stroke: rgba(127, 166, 255, .55); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+/* ponta do A branca como as letras, na intro e no GYZA da abertura (decisão final do Vitor, 05/11/2026) */
+.hero__mark { --topo: var(--gelo); }
+.mark__a .topo { fill: var(--gelo); }

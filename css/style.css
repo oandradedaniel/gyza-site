@@ -2031,3 +2031,7 @@ p, li { text-wrap: pretty; }
 /* rótulo Quem somos igual aos outros rótulos do site: só texto azul, sem cápsula e sem ponto */
 .socios__kicker { display: block; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--azul-claro); font-size: 14px; letter-spacing: .02em; margin-bottom: 18px; }
 .socios__kicker::before { content: none; }
+/* Quem somos (Dani, 06/11/2026): sem o índice de frentes; título com um texto curto embaixo; etiqueta do cargo sem o ponto */
+.socios__head { grid-template-columns: 1fr; }
+.socios__txt { margin-top: var(--r-titulo, 24px); max-width: 58ch; font-size: var(--fs-lead); line-height: 1.5; color: var(--apoio); }
+.socio__tag { padding: 0 13px; }

@@ -163,6 +163,28 @@
     gsap.to('.hero__mark', { yPercent: 18, ease: 'none', scrollTrigger: st });
   }
 
+  /* ---------- botão do WhatsApp da análise: o brilho do vidro segue o mouse e a rolagem (só quando está na tela) ---------- */
+  function waVidro() {
+    const wa = $('.orcamento__wa');
+    if (!wa || reduce) return;
+    let alvoX = 50, alvoY = 0, x = 50, y = 0, rolou = 0, vivo = false, raf = 0;
+    addEventListener('pointermove', e => {
+      if (!vivo) return;
+      const r = wa.getBoundingClientRect();
+      alvoX = Math.max(-10, Math.min(110, ((e.clientX - r.left) / r.width) * 100));
+      alvoY = Math.max(-40, Math.min(140, ((e.clientY - r.top) / r.height) * 100));
+    }, { passive: true });
+    addEventListener('scroll', () => { rolou = 1; }, { passive: true });
+    const passo = () => {
+      if (rolou) { alvoX = 50 + Math.sin(scrollY / 160) * 45; rolou = 0; }
+      x += (alvoX - x) * 0.12; y += (alvoY - y) * 0.12;
+      wa.style.setProperty('--gx', x.toFixed(1) + '%');
+      wa.style.setProperty('--gy', y.toFixed(1) + '%');
+      raf = vivo ? requestAnimationFrame(passo) : 0;
+    };
+    new IntersectionObserver(([e]) => { vivo = e.isIntersecting; if (vivo && !raf) raf = requestAnimationFrame(passo); }).observe(wa);
+  }
+
   /* ---------- menu: tema e esconder ---------- */
   function navTheme() {
     const nav = $('[data-nav]');
@@ -682,7 +704,8 @@
       const req = $$('input[required]', f);
       let ok = true;
       req.forEach(i => {
-        const bad = !i.value.trim() || (i.name === 'whatsapp' && i.value.replace(/\D/g, '').length < 10);
+        const v = i.value.trim();
+        const bad = !v || (i.name === 'celular' && v.replace(/\D/g, '').length < 10) || (i.name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v));
         i.classList.toggle('is-error', bad);
         i.setAttribute('aria-invalid', String(bad));
         if (bad) i.setAttribute('aria-describedby', 'form-nota'); else i.removeAttribute('aria-describedby');
@@ -694,8 +717,8 @@
       caixas.classList.toggle('is-error', !algum);
       if (!algum) caixas.setAttribute('aria-describedby', 'form-nota'); else caixas.removeAttribute('aria-describedby');
       if (!ok || !algum) {
-        note.textContent = !ok && !algum ? 'Preencha nome, empresa e WhatsApp com DDD e marque pelo menos um serviço.'
-          : !ok ? 'Preencha nome, empresa e WhatsApp com DDD.' : 'Marque pelo menos um serviço desejado.';
+        note.textContent = !ok && !algum ? 'Preencha nome, e-mail, celular com DDD e empresa, e marque pelo menos um serviço.'
+          : !ok ? 'Preencha nome, e-mail, celular com DDD e empresa.' : 'Marque pelo menos um serviço desejado.';
         note.classList.add('is-error');
         ($('input.is-error', f) || $('input[name="servico"]', f)).focus();
         return;
@@ -706,9 +729,9 @@
       const msg = [
         'Olá, GYZA. Quero solicitar a análise gratuita da minha empresa.',
         `Nome: ${d.get('nome')}`,
+        `E-mail: ${d.get('email').trim()}`,
+        `Celular: ${d.get('celular')}`,
         `Empresa: ${d.get('empresa')}`,
-        `WhatsApp: ${d.get('whatsapp')}`,
-        d.get('perfil') ? `Instagram ou site: ${d.get('perfil')}` : '',
         `Serviço desejado: ${d.getAll('servico').join(', ')}`,
       ].filter(Boolean).join('\n');
       if (enviando) return;
@@ -727,7 +750,7 @@
     }));
     $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); }));
     // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
-    const tel = $('input[name="whatsapp"]', f);
+    const tel = $('input[name="celular"]', f);
     tel.maxLength = 15;
     tel.addEventListener('input', () => {
       const n = tel.value.replace(/\D/g, '').slice(0, 11);
@@ -784,6 +807,7 @@
     if (!reduce) {
       heroScroll();
       frentes();
+      waVidro();
       footer();
       pointer();
     }

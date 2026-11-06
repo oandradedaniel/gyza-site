@@ -1497,3 +1497,32 @@ main:focus { outline: none; }
 .orcamento__wa::before { background: #126B33; }
 .orcamento__wa:hover { color: #fff; }
 .orcamento__wa:active::before { background: #0E5A2B; }
+
+/* celular: o botão fixo de baixo fica só com Solicite sua análise, na largura toda com 16 px de margem; o WhatsApp vive só no botão verde da análise (Vitor, 05/11/2026) */
+@media (max-width: 900px) {
+  .cta-grupo { left: 16px; right: 16px; width: auto; margin-inline: 0; }
+  .cta-grupo .cta-baixo { flex: 1; width: 100%; justify-content: space-between; }
+}
+/* sem versão compacta de texto: o botão sempre diz Solicite sua análise */
+.cta-baixo.is-compacto:not(:hover):not(:focus-visible) .cta-baixo__l1 { opacity: 1; }
+
+/* WhatsApp da análise em vidro líquido verde (Vitor, 05/11/2026): base verde firme (letra e logo brancos, 5:1 no tom mais claro),
+   reflexo fino no topo, brilho que segue o mouse e a rolagem (--gx/--gy), borda luminosa de 1 px e sombra verde leve */
+.orcamento__wa {
+  --gx: 50%; --gy: 0%;
+  background:
+    radial-gradient(120px 60px at var(--gx) var(--gy), rgba(255,255,255,.16), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 55%),
+    rgba(21, 128, 61, .97);
+  border: 1px solid rgba(190, 255, 215, .42);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(255,255,255,.08), inset 0 0 18px rgba(120, 240, 170, .16), 0 10px 26px -8px rgba(10, 90, 40, .55);
+  text-shadow: 0 1px 4px rgba(0, 40, 15, .35);
+  transition: scale .35s var(--ease-out), box-shadow .4s var(--ease), color .3s var(--ease);
+}
+.orcamento__wa::before { display: none; }
+.orcamento__wa:hover { scale: 1.02; box-shadow: inset 0 1px 0 rgba(255,255,255,.62), inset 0 -1px 0 rgba(255,255,255,.1), inset 0 0 24px rgba(140, 250, 185, .24), 0 14px 32px -8px rgba(10, 90, 40, .6); }
+.orcamento__wa:active { scale: .99; background: radial-gradient(120px 60px at var(--gx) var(--gy), rgba(255,255,255,.1), transparent 70%), #126B33; }
+@media (prefers-reduced-motion: reduce) {
+  .orcamento__wa { background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 55%), rgba(21, 128, 61, .97); }
+  .orcamento__wa:hover { scale: 1; }
+}

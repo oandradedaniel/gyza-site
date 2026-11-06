@@ -2055,3 +2055,5 @@ p, li { text-wrap: pretty; }
 @media (max-width: 900px), (hover: none) {
   .case__ver { -webkit-backdrop-filter: none; backdrop-filter: none; background: linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.08)), rgba(10,14,24,.62); }
 }
+
+.form__indic{margin:.6em 0 0;font-size:.8125rem;opacity:.7;line-height:1.45}

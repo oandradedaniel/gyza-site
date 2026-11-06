@@ -31,7 +31,6 @@
       if (o && o.p_afiliado) {
         const p = document.createElement('p');
         p.className = 'form__indic';
-        p.style.cssText = 'margin:.6em 0 0;font-size:.8125rem;opacity:.7;line-height:1.45';
         p.textContent = 'Você chegou por uma indicação. Vamos registrar quem indicou junto do seu pedido, só para essa pessoa saber que a indicação funcionou.';
         note.insertAdjacentElement('afterend', p);
       }

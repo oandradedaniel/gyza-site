@@ -459,8 +459,16 @@ function pyramid() {
   const ROT0 = Math.PI / 4;
   const rot = { x: reduce ? ROT0 : ROT0 + 0.9, v: 0 };   // entra girando e assenta na face da Marca
   let lastT = 0, prevAct = -1, sweepAt = -1, step = 0;
-  renderer.setAnimationLoop(time => {
+  // sem movimento: a cena fica parada, então desenha poucos quadros e para; volta só ao arrastar ou mudar o tamanho
+  let quietos = 0;
+  const acorda = () => { quietos = 0; renderer.setAnimationLoop(loop); };
+  if (reduce) {
+    window.addEventListener('resize', acorda);
+    canvas.addEventListener('pointerdown', acorda);
+  }
+  const loop = time => {
     if (!visible) { lastT = 0; return; }
+    if (reduce && !dragging && Math.abs(vel) < 1e-4 && Math.abs(drag) < 1e-3 && ++quietos > 30) { renderer.setAnimationLoop(null); return; }
     const now = time / 1000;
     const dt = lastT ? Math.min(0.05, now - lastT) : 1 / 60;
     lastT = now;
@@ -552,7 +560,8 @@ function pyramid() {
       all.forEach(m => { m.uniforms.uRefl.value = 0; });
     }
     renderer.render(scene, camera);
-  });
+  };
+  renderer.setAnimationLoop(loop);
 }
 
 pyramid();

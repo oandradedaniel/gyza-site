@@ -1420,3 +1420,10 @@ mark.conf { background: rgba(31,79,216,.10); color: var(--azul); padding: 1px 6p
   .trabalhos__lead { grid-column: 2; grid-row: 1; align-self: end; }
   .trabalhos { padding-top: clamp(64px, 6vw, 104px); }
 }
+
+/* pular para o conteúdo (WCAG 2.4.1): só aparece no foco do teclado */
+.pular { position: fixed; left: 16px; top: 12px; z-index: 1000; padding: 12px 18px; border-radius: 999px; background: var(--azul); color: #fff; font-size: 15px; font-weight: 500;
+  transform: translateY(-160%); transition: transform var(--dur-2, .25s) var(--ease-out, ease); }
+.pular:focus, .pular:focus-visible { transform: none; outline: 2px solid #fff; outline-offset: 2px; }
+main:focus { outline: none; }
+@media (prefers-reduced-motion: reduce) { .pular { transition: none; } }

@@ -6,6 +6,37 @@
 
   // o formulário liga antes de tudo e não depende do GSAP: se o cdnjs falhar, o envio continua pelo WhatsApp e nada vai para a URL
   form();
+  // a pirâmide 3D (three.js, gl.js e a textura) só baixa quando a seção chega perto da tela
+  (() => {
+    const sec = document.querySelector('#frentes');
+    if (!sec) return;
+    const v = (document.currentScript && new URL(document.currentScript.src).searchParams.get('v')) || '';
+    const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+    let foi = false;
+    const carrega = () => {
+      if (foi) return; foi = true;
+      // integrity do three.js também pelo modulepreload (para navegador que não lê integrity no importmap)
+      const l = document.createElement('link');
+      l.rel = 'modulepreload'; l.href = THREE_URL; l.crossOrigin = 'anonymous';
+      l.integrity = 'sha384-Qvl1RLjZOCDFOOH2bKcGnaDHMM8MVv3zVtMvhy3juQdiIOs6RgQ/7zYdM1FbpHzI';
+      document.head.appendChild(l);
+      import('./gl.js' + (v ? '?v=' + v : '')).catch(() => {
+        // sem módulo (rede ou CSP): imagem parada no lugar
+        const c = document.querySelector('.pyr-gl'); if (!c || c.dataset.poster) return;
+        const img = new Image(); img.className = 'pyr-poster'; img.alt = '';
+        img.src = c.clientWidth < 600 ? 'assets/img/pyr-poster-m.webp?v=5' : 'assets/img/pyr-poster.webp?v=6';
+        c.after(img); c.style.display = 'none';
+        const lab = document.querySelector('.pyr-labels'); if (lab) lab.style.display = 'none';
+      });
+    };
+    if (!('IntersectionObserver' in window)) { carrega(); return; }
+    // espera a página terminar de carregar (não disputa com a fonte, o CSS e a abertura) e meia tela de antecedência
+    const observa = () => {
+      const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); carrega(); } }, { rootMargin: '50% 0px' });
+      io.observe(sec);
+    };
+    if (document.readyState === 'complete') observa(); else window.addEventListener('load', observa, { once: true });
+  })();
   if (!(window.gsap && window.ScrollTrigger)) {
     // sem GSAP: a página aparece parada, sem a abertura animada
     document.body.classList.remove('is-loading');

@@ -1576,3 +1576,17 @@ p, li { text-wrap: pretty; }
   .contato-topo__grid { gap: var(--r-conteudo); }
   .contato-topo__ctas { margin-top: 28px; }
 }
+
+/* rodapé só com Navegue (os contatos ficam na página Contato, Vitor 05/11/2026): no computador em linha horizontal; no celular em 2 colunas */
+.footer__cols { grid-template-columns: 1fr; margin-bottom: clamp(32px, 4vw, 56px); }
+.footer__cols > div:only-child { display: flex; align-items: center; flex-wrap: wrap; column-gap: 32px; row-gap: 0; }
+.footer__cols > div:only-child .footer__h { margin: 0 8px 0 0; }
+@media (max-width: 900px) {
+  .footer__cols > div:only-child { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 44px 44px; grid-auto-flow: column; column-gap: 16px; align-items: center; }
+  .footer__cols > div:only-child .footer__h { grid-column: 1 / -1; grid-row: 1; margin: 0; }
+  .footer__cols { margin-bottom: 28px; }
+}
+
+/* divisão Cases para Análise (Vitor, 05/11/2026): 64 px de preto limpo depois dos nomes dos cases e uma transição curta e discreta para o azul */
+.trabalhos { padding-bottom: 120px; }
+.trabalhos::after { height: 57px; background: linear-gradient(to bottom, rgba(31,79,216,0), rgba(31,79,216,.35) 45%, var(--azul)); }

@@ -1648,6 +1648,12 @@ p, li { text-wrap: pretty; }
   .hero__content { padding-top: 76px; }
   .hero__mark { bottom: 1.6vw; }
 }
+/* primeira tela do celular organizada (Vitor, 06/11/2026): o GYZA grande inteiro, sem corte nas laterais, com a margem do site
+   e um respiro da base; título e apoio centralizados no espaço que sobra entre o topo e o GYZA */
+@media (max-width: 900px) {
+  .hero { padding-bottom: calc((100vw - 40px) * 200.45 / 750 + 56px); }
+  .hero__mark { width: calc(100vw - 40px); bottom: 32px; }
+}
 /* aberturas das páginas internas no celular: respiro do notch (safe-area) acima do topo fixo */
 @media (max-width: 900px) {
   .nav { top: max(16px, env(safe-area-inset-top)); }

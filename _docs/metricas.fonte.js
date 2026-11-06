@@ -26,20 +26,21 @@
     const nav = navigator, loc = location;
 
     // marca de aparelho da equipe
+    let interno = false;
     const q = (() => { try { return new URLSearchParams(loc.search); } catch (_) { return new URLSearchParams(''); } })();
     try {
       if (q.get('interno') === '1') localStorage.setItem('gyza_interno', '1');
       else if (q.get('interno') === '0') localStorage.removeItem('gyza_interno');
-      if (localStorage.getItem('gyza_interno') === '1') return;
+      interno = localStorage.getItem('gyza_interno') === '1';
     } catch (_) { /* sem localStorage: segue */ }
 
     const dnt = nav.doNotTrack === '1' || window.doNotTrack === '1' || nav.msDoNotTrack === '1' || nav.globalPrivacyControl === true;
-    if (dnt) return;
     const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(loc.hostname);
     const forca = /[?&]metricas=teste(&|$)/.test(loc.search);
-    if (local && !forca) return;
     // navegador automatizado (Playwright, headless): não conta
-    if ((nav.webdriver === true || /HeadlessChrome|Playwright|Lighthouse/i.test(nav.userAgent || ''))) return;
+    const auto = nav.webdriver === true || /HeadlessChrome|Playwright|Lighthouse/i.test(nav.userAgent || '');
+    // estas guardas valem só para ENVIAR eventos; a origem (gyzaOrigem) para o formulário é definida sempre
+    const semEnvio = interno || dnt || (local && !forca) || auto;
 
     // mesma URL e chave publishable do formulário (js/form.js); a chave é pública por natureza
     const URL_RPC = 'https://fpmlsrelubzipxyfsyrf.supabase.co/rest/v1/rpc/registrar_evento_site';
@@ -74,6 +75,7 @@
     };
     // ?ref= também fica 30 dias neste aparelho (só o código e a data de validade, sem renovar a cada visita) para a indicação não se perder
     const refGuardado = () => {
+      if (dnt) return '';
       try {
         const x = JSON.parse(localStorage.getItem('gyza_ref') || 'null');
         if (x && x.r && x.e > Date.now()) return String(x.r);
@@ -81,10 +83,10 @@
       } catch (_) {}
       return '';
     };
-    const guardaRef = r => { try { if (r && !refGuardado()) localStorage.setItem('gyza_ref', JSON.stringify({ r, e: Date.now() + 30 * 864e5 })); } catch (_) {} };
+    const guardaRef = r => { if (dnt) return; try { if (r && !refGuardado()) localStorage.setItem('gyza_ref', JSON.stringify({ r, e: Date.now() + 30 * 864e5 })); } catch (_) {} };
     const origemSessao = () => {
       let o = null;
-      try { o = JSON.parse(sessionStorage.getItem('gyza_o') || 'null'); } catch (_) {}
+      if (!dnt) { try { o = JSON.parse(sessionStorage.getItem('gyza_o') || 'null'); } catch (_) {} }
       const t = toque();
       if (!o) o = { src: t.src, med: t.med, camp: t.camp, ref: t.ref || refGuardado(), refU: '' };
       else {
@@ -93,13 +95,14 @@
         else if (t.ref && t.ref !== o.ref) o.refU = t.ref;
       }
       guardaRef(t.ref);
-      try { sessionStorage.setItem('gyza_o', JSON.stringify(o)); } catch (_) {}
+      if (!dnt) { try { sessionStorage.setItem('gyza_o', JSON.stringify(o)); } catch (_) {} }
       return o;
     };
     const O = origemSessao();
 
     // para o pedido do formulário (js/form.js)
     window.gyzaOrigem = () => ({ p_fonte: O.src, p_fonte_canal: O.med, p_fonte_campanha: O.camp, p_afiliado: O.ref, p_afiliado_ultimo: O.refU });
+    if (semEnvio) return;
 
     const dispositivo = () => {
       const ua = nav.userAgent || '', w = Math.min(window.innerWidth || 0, screen.width || 9999);

@@ -38,6 +38,8 @@
     const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(loc.hostname);
     const forca = /[?&]metricas=teste(&|$)/.test(loc.search);
     if (local && !forca) return;
+    // navegador automatizado (Playwright, headless): não conta
+    if ((nav.webdriver === true || /HeadlessChrome|Playwright|Lighthouse/i.test(nav.userAgent || ''))) return;
 
     // mesma URL e chave publishable do formulário (js/form.js); a chave é pública por natureza
     const URL_RPC = 'https://fpmlsrelubzipxyfsyrf.supabase.co/rest/v1/rpc/registrar_evento_site';

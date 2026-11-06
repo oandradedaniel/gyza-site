@@ -1510,3 +1510,21 @@ p, li { text-wrap: pretty; }
 .hero__mark { --topo: url(#vidroCorpo); --topo-borda: url(#vidroBorda); --topo-brilho: url(#vidroReflexo); }
 .mark__a .topo { fill: url(#vidroCorpo); stroke: url(#vidroBorda); stroke-width: 1.4px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .mark__a .topo-brilho { fill: url(#vidroReflexo); }
+
+/* rodapé clean (Vitor, 05/11/2026): 3 colunas só em texto, alinhadas pelo topo, rótulos pequenos e discretos, links em tamanho único;
+   sem ícones e sem o item de análise; Política de privacidade na linha legal; menos vão vertical */
+.footer { padding-top: clamp(64px, 7vw, 104px); }
+.footer__top { padding-bottom: clamp(32px, 4vw, 48px); margin-bottom: clamp(32px, 4vw, 48px); }
+.footer__cols { align-items: start; gap: 40px; margin-bottom: clamp(40px, 5vw, 72px); }
+.footer__cols > div { display: grid; align-content: start; justify-items: start; gap: 0; }
+.footer__cols .footer__h { font-size: 13px; font-weight: 500; letter-spacing: .04em; color: var(--cinza); margin-bottom: 10px; }
+.footer__cols > div > a, .footer__cols .footer__txt { display: flex; align-items: center; min-height: 44px; padding: 0; font-size: 16px; font-weight: 400; line-height: 1.4; color: var(--apoio); }
+.footer__cols > div > a:hover { color: var(--gelo); }
+.footer__cols > div > a[aria-current="page"] { color: var(--gelo); font-weight: 400; }
+.footer__cols .footer__txt { min-height: 44px; }
+@media (max-width: 900px) {
+  .footer { padding-top: 48px; }
+  .footer__cols { gap: 24px; margin-bottom: 40px; }
+  .footer__cols > div > a { min-height: 44px; }
+  .footer__cols .footer__h { margin-bottom: 4px; }
+}

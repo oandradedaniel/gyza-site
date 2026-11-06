@@ -47,6 +47,8 @@
     return;
   }
   gsap.registerPlugin(ScrollTrigger);
+  // o ScrollTrigger volta o navegador para a rolagem automática; aqui a página sempre começa do topo
+  if (ScrollTrigger.clearScrollMemory) ScrollTrigger.clearScrollMemory('manual');
   window.__pyr = 0;
 
   // a abertura sempre começa do topo; se veio com âncora (ex.: index.html#analise), guarda e rola até ela no fim da abertura
@@ -54,7 +56,11 @@
   const ALIAS = { '#orcamento': '#analise', '#cuidamos': '#frentes', '#servicos': '#frentes', '#sinais': '#frentes' };
   const hashInicial = ALIAS[location.hash] || location.hash;
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  // recarregou com um projeto aberto: limpa o estado do projeto e começa do topo, como a abertura
+  const vinhaDeProjeto = !!(history.state && history.state.proj);
+  if (vinhaDeProjeto) history.replaceState(null, '', location.pathname + location.search);
   window.scrollTo(0, 0);
+  if (vinhaDeProjeto && !hashInicial) window.addEventListener('load', () => window.scrollTo(0, 0), { once: true });
   function irParaHash() {
     if (!hashInicial) return;
     let alvo = null;
@@ -67,7 +73,8 @@
   /* ---------- quebra de texto ---------- */
   $$('[data-lines]').forEach(el => {
     const parts = el.innerHTML.split(/<br\s*\/?>/i);
-    el.innerHTML = parts.map(p => `<span class="line"><span>${p.trim()}</span></span>`).join('');
+    // as linhas ficam separadas por espaço: o leitor de tela e o Google leem as palavras sem colar
+    el.innerHTML = parts.map(p => `<span class="line"><span>${p.trim()}</span></span>`).join(' ');
   });
   $$('[data-words]').forEach(el => {
     el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
@@ -674,6 +681,7 @@
         const bad = !i.value.trim() || (i.name === 'whatsapp' && i.value.replace(/\D/g, '').length < 10);
         i.classList.toggle('is-error', bad);
         i.setAttribute('aria-invalid', String(bad));
+        if (bad) i.setAttribute('aria-describedby', 'form-nota'); else i.removeAttribute('aria-describedby');
         if (bad) ok = false;
       });
       if (!ok) {
@@ -703,7 +711,7 @@
         btnTxt.textContent = btnOriginal;
       }, 3000);
     });
-    $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); }));
+    $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); }));
     // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
     const tel = $('input[name="whatsapp"]', f);
     tel.maxLength = 15;

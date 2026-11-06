@@ -27,14 +27,17 @@
   const abrir = () => {
     menu.classList.add('is-open'); raiz.classList.add('menu-aberto');
     botao.setAttribute('aria-expanded', 'true'); botao.setAttribute('aria-label', 'Fechar menu');
-    setTimeout(() => { if (aberto()) $('a', menu).focus({ preventScroll: true }); }, reduce ? 0 : 320);
+    // pelo teclado o foco vai para o primeiro link; pelo toque vai para o próprio menu (sem o retângulo em volta de Início)
+    const alvo = abrir.teclado ? $('a', menu) : menu;
+    setTimeout(() => { if (aberto()) alvo.focus({ preventScroll: true }); }, reduce ? 0 : 320);
   };
   const fechar = (devolverFoco = true) => {
     menu.classList.remove('is-open'); raiz.classList.remove('menu-aberto');
     botao.setAttribute('aria-expanded', 'false'); botao.setAttribute('aria-label', 'Abrir menu');
     if (devolverFoco) botao.focus({ preventScroll: true });
   };
-  botao.addEventListener('click', () => (aberto() ? fechar() : abrir()));
+  if (!menu.hasAttribute('tabindex')) menu.tabIndex = -1;
+  botao.addEventListener('click', e => { abrir.teclado = e.detail === 0; aberto() ? fechar(abrir.teclado) : abrir(); });
   $$('a', menu).forEach(a => a.addEventListener('click', () => fechar(false)));
   menu.addEventListener('click', e => { if (!e.target.closest('a, button')) fechar(); });
   document.addEventListener('keydown', e => {

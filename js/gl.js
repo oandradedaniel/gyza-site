@@ -403,6 +403,9 @@ function pyramid() {
       // suavização independente da taxa de quadros: a linha se desenha junto com o giro e recolhe rápido
       grow[i] = reduce ? target : lerp(grow[i], target, 1 - Math.exp(-dt * (target ? 5 : 16)));
       const drawn = 1 - Math.pow(1 - grow[i], 3);
+      // rótulo apagado: zera uma vez e não mexe mais no DOM até voltar
+      if (grow[i] < 0.002) { if (!el._off) { el.style.opacity = '0'; el.style.setProperty('--grow', '0'); el._off = true; } continue; }
+      el._off = false;
       el.style.transform = `translate(${x}px, ${py}px)`;
       el.style.opacity = Math.min(1, grow[i] * 3).toFixed(3);
       // borda direita da fatia na tela: o rótulo não pode ficar por cima do vidro
@@ -538,6 +541,10 @@ function pyramid() {
     }
     renderer.render(scene, camera);
   };
+  // compila os shaders já na montagem (com a página parada), e não no primeiro quadro em que a pirâmide aparece
+  try { renderer.compile(bgScene, camera); renderer.compile(scene, camera); } catch (e) { /* segue: compila no primeiro quadro */ }
+  // um quadro de aquecimento fora da tela: as texturas sobem para a placa já na montagem, e não quando a seção aparece
+  { const v = visible; visible = true; try { loop(performance.now()); } catch (e) { /* segue */ } visible = v; lastT = 0; }
   renderer.setAnimationLoop(loop);
 }
 

@@ -2041,3 +2041,17 @@ p, li { text-wrap: pretty; }
 .e404__in { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(24px, 3vw, 40px); }
 .e404__mark { width: min(100%, 880px); max-width: none; margin: 0; }
 .e404__t { font-size: var(--fs-h2); font-weight: 500; line-height: 1; letter-spacing: -.045em; }
+/* celular, acabamento (Dani, 06/11/2026) */
+/* o topo das páginas internas desconta os 28 px que a seção de baixo sobe: o título não encosta mais no canto */
+.topo-sub.priv-hero { padding-bottom: calc(clamp(56px, 7vw, 110px) + var(--raio-secao)); }
+.topo-sub.s-hero { padding-bottom: calc(clamp(44px, 4vw, 60px) + var(--raio-secao)); }
+@media (max-width: 900px) {
+  .topo-sub.s-hero { padding-bottom: calc(40px + var(--raio-secao)); }
+  .topo-sub.priv-hero { padding-bottom: calc(48px + var(--raio-secao)); }
+}
+/* o menu recebe o foco ao abrir pelo toque: sem contorno */
+.mmenu:focus { outline: none; }
+/* celular: o botão de vidro dos cases anda junto com o trilho; sem desfoque de fundo (redesenhar o desfoque a cada quadro pesa) */
+@media (max-width: 900px), (hover: none) {
+  .case__ver { -webkit-backdrop-filter: none; backdrop-filter: none; background: linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.08)), rgba(10,14,24,.62); }
+}

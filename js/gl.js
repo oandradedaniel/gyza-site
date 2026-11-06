@@ -389,7 +389,9 @@ function pyramid() {
       const el = calls[i];
       let k = 0, bz = -2;
       for (let q = 0; q < 4; q++) { const z = Math.cos(faceAng(q) + y); if (z > bz) { bz = z; k = q; } }
-      const a = faceAng(k) + y;
+      // o rótulo fica preso à face em que nasceu enquanto aparece; antes ele pulava para a face seguinte no meio do giro e a linha dava um salto
+      if (grow[i] < 0.01 || el._k === undefined) el._k = k;
+      const a = faceAng(el._k) + y;
       const s = slices[sliceOf(i)];
       const faceD = (half * (1 - s.mid / H)) * (s.grow || 1) + 0.02;
       v3.set(Math.sin(a) * faceD, main.position.y + s.mid + s.off, Math.cos(a) * faceD).project(camera);
@@ -413,7 +415,9 @@ function pyramid() {
       }
       const txtW = el._tw || (el._tw = el.querySelector('.call__txt').offsetWidth);
       const end = Math.max(Math.min(side, w - txtW - 18 - 12), edgeX + 28);
-      if (w < 600 || end + 18 + txtW > w - 8) {
+      // a direção (para o lado ou para baixo) é decidida quando o rótulo nasce e não troca no meio do giro
+      if (grow[i] < 0.01 || el._v === undefined) el._v = w < 600 || end + 18 + txtW > w - 8;
+      if (el._v) {
         // celular, ou fatia larga demais (a base): a linha desce até abaixo da base e o rótulo fica embaixo, centralizado
         el.classList.add('is-v');
         el.style.setProperty('--len', `${Math.max(24, baseY + 26 - py)}px`);

@@ -67,7 +67,8 @@
     try { alvo = document.querySelector(hashInicial); } catch (e) { alvo = null; }
     history.replaceState(null, '', location.pathname + location.search + hashInicial);
     if (!alvo) return;
-    requestAnimationFrame(() => alvo.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }));
+    // chegou com âncora (ex.: Cases vindo de outra página): vai direto para a seção, sem a rolagem desde o topo
+    requestAnimationFrame(() => alvo.scrollIntoView({ behavior: 'instant', block: 'start' }));
   }
 
   /* ---------- quebra de texto ---------- */
@@ -109,6 +110,13 @@
   }
 
   function runIntro() {
+    // veio de uma página interna para uma seção da home (ex.: /#trabalhos): não reabre o site, só mostra a seção
+    if (hashInicial) {
+      try { sessionStorage.setItem('gyza-abertura', '1'); } catch (e) { /* sem sessão: segue igual */ }
+      document.body.classList.add('is-revealed');
+      endIntro();
+      return;
+    }
     gsap.set(heroMark, { autoAlpha: 0 });
 
     if (reduce) {

@@ -1590,3 +1590,36 @@ p, li { text-wrap: pretty; }
 /* divisão Cases para Análise (Vitor, 05/11/2026): 64 px de preto limpo depois dos nomes dos cases e uma transição curta e discreta para o azul */
 .trabalhos { padding-bottom: 120px; }
 .trabalhos::after { height: 57px; background: linear-gradient(to bottom, rgba(31,79,216,0), rgba(31,79,216,.35) 45%, var(--azul)); }
+
+/* cards dos cases (Vitor, 05/11/2026, na linha dos cards da apple.com): fica claro que dá para clicar.
+   Botão "+" de vidro no canto que, no hover ou no foco, vira a pílula "Ver projeto" com o + girando 45 graus;
+   card sobe de leve com sombra e a imagem aproxima; link pequeno "Ver projeto ›" embaixo do nome; no celular a pílula já aparece aberta */
+.case__media { transition: transform .6s var(--ease-out), box-shadow .6s var(--ease-out); }
+.case__ver { display: inline-flex; align-items: center; justify-content: flex-end; gap: 0; width: auto; min-width: 54px; height: 54px; padding: 0 15px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,.28); transform: none; }
+.case__ver-mais { display: grid; place-items: center; width: 24px; height: 24px; flex: none; order: 2; }
+.case__ver-mais svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; transition: transform .5s var(--ease-out); }
+.case__ver-txt { order: 1; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em;
+  transition: max-width .5s var(--ease-out), opacity .3s var(--ease), margin .5s var(--ease-out); }
+.case--open:hover .case__ver, .case__ver:focus-visible { transform: none; }
+.case--open:hover .case__ver svg, .case__ver:focus-visible svg { transform: none; }
+.case--open:hover .case__ver-mais svg, .case__ver:focus-visible .case__ver-mais svg { transform: rotate(45deg); }
+.case--open:hover .case__ver-txt, .case__ver:focus-visible .case__ver-txt { max-width: 120px; opacity: 1; margin-right: 10px; }
+.case__ver:focus-visible { border-radius: 999px; }
+@media (hover: hover) {
+  .case--open:hover .case__media { transform: translateY(-6px); box-shadow: 0 26px 50px -24px rgba(0,0,0,.75), 0 0 0 1px rgba(127,166,255,.18); }
+}
+.case__info { grid-template-columns: 1fr; gap: 4px; }
+.case__link { font-size: 14px; font-weight: 500; color: var(--azul-claro); }
+.case__link-seta { display: inline-block; transition: transform .4s var(--ease-out); }
+.case--open:hover .case__link-seta { transform: translateX(4px); }
+/* sem hover (celular): a pílula já aparece aberta */
+@media (hover: none) {
+  .case__ver-txt { max-width: 120px; opacity: 1; margin-right: 10px; }
+  .case__ver { height: 48px; min-width: 48px; padding: 0 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case__media, .case__ver-txt, .case__ver-mais svg, .case__link-seta { transition: none; }
+  .case--open:hover .case__media { transform: none; }
+}
+.case__info .case__link { color: var(--azul-claro); font-size: 14px; }

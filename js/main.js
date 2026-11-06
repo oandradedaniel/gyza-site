@@ -736,7 +736,7 @@
     trilho($('[data-cases]'), '.case', 'cases');
     trilho($('[data-equipe]'), '.pessoa', 'equipe', -1);
     projetos();
-    caseCursor();
+    // o cursor azul dos cases saiu: a pílula Ver projeto do card já diz que dá para clicar (cursor nativo)
     if (!reduce) {
       heroScroll();
       frentes();

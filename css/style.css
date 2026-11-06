@@ -155,7 +155,7 @@ body.is-loading .nav { opacity: 0; }
   overflow: visible;
 }
 .mark__gyz, .mark__a .perna { fill: var(--gelo); }
-.mark__a .topo { fill: url(#topoLuz); }
+.mark__a .topo { fill: var(--gelo); }   /* intro: a ponta do A branca como as letras; vira azul só no pouso, junto com o GYZA da abertura */
 .intro.is-done { display: none; }
 
 /* ---------- 1. Hero ---------- */
@@ -747,7 +747,6 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
   .mmenu__inner { min-height: 100%; display: flex; flex-direction: column; padding: 104px var(--gutter) 40px; }
   .mmenu__links { display: grid; border-top: 1px solid var(--linha); }
   .mmenu__links a { display: flex; align-items: baseline; gap: 16px; padding: 16px 0 14px; border-bottom: 1px solid var(--linha); }
-  .mmenu__n { flex: none; width: 34px; font-size: 13px; font-weight: 500; color: var(--azul-claro); font-variant-numeric: tabular-nums; }
   .mmenu__t { display: block; overflow: hidden; padding-bottom: .08em; }
   .mmenu__t > span { display: block; font-size: clamp(30px, 8.6vw, 40px); font-weight: 500; line-height: 1.05; letter-spacing: -.04em; }
   .mmenu__pe { margin-top: auto; padding-top: 40px; display: grid; gap: 14px; justify-items: start; }
@@ -760,14 +759,14 @@ body.is-loading .cta-baixo { translate: 0 20px !important; }
 
   /* entrada: as palavras sobem por trás da linha, uma depois da outra; o pé aparece por último */
   .mmenu__t > span { transform: translateY(105%); transition: transform .5s var(--ease-out); }
-  .mmenu__n, .mmenu__pe { opacity: 0; transition: opacity .3s; }
+  .mmenu__pe { opacity: 0; transition: opacity .3s; }
   .mmenu.is-open .mmenu__t > span { transform: none; transition: transform .9s var(--ease-out) calc(.18s + var(--i) * .06s); }
-  .mmenu.is-open .mmenu__n, .mmenu.is-open .mmenu__pe { opacity: 1; transition: opacity .6s var(--ease) calc(.3s + var(--i) * .06s); }
+  .mmenu.is-open .mmenu__pe { opacity: 1; transition: opacity .6s var(--ease) calc(.3s + var(--i) * .06s); }
 }
 @media (max-width: 900px) and (prefers-reduced-motion: reduce) {
   .mmenu, .mmenu.is-open { clip-path: none; }
   .mmenu__t > span { transform: none; }
-  .mmenu__n, .mmenu__pe { opacity: 1; }
+  .mmenu__pe { opacity: 1; }
 }
 
 /* ---------- 7. Quem somos: título à esquerda, dois retratos 4:5 em degrau (estúdio), seção clara entre os cases e o orçamento ---------- */
@@ -1384,7 +1383,7 @@ main:focus { outline: none; }
 .nav__links a { position: relative; }
 .nav__links a[aria-current="page"] { opacity: 1; font-weight: 600; }
 .nav__links a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; border-radius: 2px; background: var(--azul); }
-.mmenu__links a[aria-current="page"] .mmenu__n, .mmenu__links a[aria-current="page"] .mmenu__t { color: var(--azul-claro); }
+.mmenu__links a[aria-current="page"] .mmenu__t { color: var(--azul-claro); }
 .footer__cols a[aria-current="page"] { color: var(--gelo); font-weight: 600; }
 /* âncoras não ficam atrás do topo fixo */
 #analise, #trabalhos { scroll-margin-top: 72px; }

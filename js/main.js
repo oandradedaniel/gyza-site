@@ -149,6 +149,8 @@
         const t = heroMark.getBoundingClientRect();
         // só transform (sem mudar a largura): roda liso no celular
         gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25 / RAPIDO, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
+        // a ponta do A sai do branco e chega azul no pouso, sem salto de cor na troca para o GYZA da abertura
+        gsap.to(topo, { fill: getComputedStyle(document.documentElement).getPropertyValue('--azul').trim() || '#1F4FD8', duration: 1.25 / RAPIDO, ease: 'expo.inOut' });
       }, 2.3)
       .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.9);
     heroIn(tl, 2.8);

@@ -1644,3 +1644,17 @@ main:focus { outline: none; }
 .campo-erro:empty { display: none; }
 .servico-campo .campo-erro { margin-left: 0; }
 .form__aviso { font-size: 14px; color: var(--tinta-2); text-align: center; margin-bottom: -6px; }
+
+/* UX da revisão final (05/11/2026) */
+/* página atual no menu: branco 100%, peso 600 e traço azul de 2 px no computador; número e título azuis no menu do celular */
+.nav__links a { position: relative; }
+.nav__links a[aria-current="page"] { opacity: 1; font-weight: 600; }
+.nav__links a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; border-radius: 2px; background: var(--azul); }
+.mmenu__links a[aria-current="page"] .mmenu__n, .mmenu__links a[aria-current="page"] .mmenu__t { color: var(--azul-claro); }
+.footer__cols a[aria-current="page"] { color: var(--gelo); font-weight: 600; }
+/* âncoras não ficam atrás do topo fixo */
+#analise, #trabalhos { scroll-margin-top: 72px; }
+/* alvos de toque de 44 px: contatos do menu do celular e índice da privacidade */
+.mmenu__contato a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 900px) { .priv-toc a { display: flex; align-items: center; min-height: 44px; padding: 0; } }
+.nav__links { padding-bottom: 4px; margin-bottom: -4px; }   /* espaço para o traço da página atual (o menu corta o que passa da caixa) */

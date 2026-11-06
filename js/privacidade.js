@@ -3,6 +3,11 @@
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  // contato: o botão fixo de baixo some quando o formulário está na tela (como na home)
+  const formSec = $('#analise'), cta = $('.cta-baixo');
+  if (formSec && cta && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => cta.classList.toggle('is-off', e.isIntersecting), { rootMargin: '0px 0px -20% 0px' }).observe(formSec);
+  }
   const botao = $('[data-menu-botao]'), menu = $('[data-menu]');
   if (!botao || !menu) return;
   const raiz = document.documentElement;

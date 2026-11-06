@@ -89,10 +89,8 @@
   const intro = $('.intro');
   const svg = $('.intro__mark');
   const mark = $('.mark');
-  const topo = $('.mark__a .topo');
   const faixa = $('.revela__faixa');
   const heroMark = $('.hero__mark');
-  const ACX = 631.55, ACY = 98.5; // centro do A no viewBox
   const isPhone = window.matchMedia('(max-width: 900px)').matches;
 
   function endIntro() {
@@ -134,25 +132,19 @@
     const w0 = svg.getBoundingClientRect().width;
     const h0 = w0 * 200.45 / 750;
     gsap.set(svg, { x: (W - w0) / 2, y: (H - h0) / 2 });
-    gsap.set(mark, { x: 375 - ACX, svgOrigin: `${ACX} ${ACY}` });
-    gsap.set(faixa, { x: 760 });
+    gsap.set(faixa, { x: -40 });   // a máscara antiga do nome fica aberta: o logo inteiro entra junto
 
     const tl = gsap.timeline();
-    // o A se monta: o topo desce, as pernas sobem pela própria diagonal de 59 graus
-    tl.from(topo, { y: -70, opacity: 0, duration: 1.1, ease: 'expo.out' }, 0.1)
-      .from('.perna--e', { x: -46, y: 77, opacity: 0, duration: 1.1, ease: 'expo.out' }, 0.25)
-      .from('.perna--d', { x: 46, y: 77, opacity: 0, duration: 1.1, ease: 'expo.out' }, 0.32)
-      // o nome nasce a partir do A
-      .to(mark, { x: 0, duration: 1.15, ease: 'expo.inOut' }, 1.05)
-      .to(faixa, { x: -40, duration: 1.15, ease: 'expo.inOut' }, 1.15)
+    // o GYZA entra inteiro: cada letra sobe de dentro de uma máscara, uma depois da outra (o A é uma letra só, sem destaque na ponta)
+    tl.from('.mark__letra', { yPercent: 0, y: 214, duration: 1.15, ease: 'expo.out', stagger: 0.09 }, 0.15)
       // o logo desce e vira o nome gigante da base da tela
       .add(() => {
         const t = heroMark.getBoundingClientRect();
         // só transform (sem mudar a largura): roda liso no celular
         gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25 / RAPIDO, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
-      }, 2.3)
-      .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.9);
-    heroIn(tl, 2.8);
+      }, 1.75)
+      .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.35);
+    heroIn(tl, 2.25);
     tl.timeScale(RAPIDO);
   }
 

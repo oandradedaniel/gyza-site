@@ -1564,3 +1564,14 @@ main:focus { outline: none; }
 .form__note:empty { margin-top: -18px; }   /* vazia não abre vão; continua no layout para o aria-live anunciar */
 
 .priv-fecho { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--linha-papel); font-size: 15px; color: var(--tinta-2); }
+
+/* Outros: o campo abre logo abaixo com transição suave (Vitor, 05/11/2026) */
+.servico-outro { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s var(--ease-out), opacity .3s var(--ease-out); }
+.servico-outro.is-open { grid-template-rows: 1fr; opacity: 1; }
+.servico-outro__in { overflow: hidden; min-height: 0; }
+.servico-outro .field { display: block; padding: 6px 0 2px 36px; }
+@media (prefers-reduced-motion: reduce) { .servico-outro { transition: none; } }
+/* o campo de Outros não herda a caixa invisível das opções: é um campo de texto normal */
+.servico-campo .servico-outro input { position: relative; inset: auto; opacity: 1; cursor: text; width: 100%; height: 52px; margin: 0; }
+.servico-outro .field { padding: 8px 4px 4px 36px; }
+.servico-outro__in { padding: 0 2px; }

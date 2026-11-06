@@ -715,6 +715,13 @@
       // serviço desejado: pelo menos um marcado
       const caixas = $('[data-servicos]', f);
       const algum = !!$('input[name="servico"]:checked', f);
+      // Outros marcado: o campo de texto passa a ser obrigatório
+      const outroInput = $('input[name="servico_outro"]', f);
+      const outroFalta = $('[data-outros]', f).checked && !outroInput.value.trim();
+      outroInput.classList.toggle('is-error', outroFalta);
+      if (outroFalta) { outroInput.setAttribute('aria-invalid', 'true'); outroInput.setAttribute('aria-describedby', 'form-nota'); }
+      else { outroInput.removeAttribute('aria-invalid'); outroInput.removeAttribute('aria-describedby'); }
+      if (outroFalta) ok = false;
       caixas.classList.toggle('is-error', !algum);
       if (!algum) caixas.setAttribute('aria-describedby', 'form-nota'); else caixas.removeAttribute('aria-describedby');
       // política de privacidade: a caixa precisa estar marcada
@@ -724,7 +731,7 @@
       if (!aceite) aceiteBox.setAttribute('aria-describedby', 'form-nota'); else aceiteBox.removeAttribute('aria-describedby');
       if (!ok || !algum || !aceite) {
         const faltas = [];
-        if (!ok) faltas.push('preencha nome, e-mail, celular com DDD e empresa');
+        if (!ok) faltas.push(outroFalta && !$$('input[required].is-error', f).length ? 'conte o que você precisa em Outros' : 'preencha nome, e-mail, celular com DDD e empresa' + (outroFalta ? ' e conte o que você precisa em Outros' : ''));
         if (!algum) faltas.push('marque pelo menos um serviço');
         if (!aceite) faltas.push('confirme que leu a Política de Privacidade');
         const txt = faltas.length > 1 ? faltas.slice(0, -1).join(', ') + ' e ' + faltas[faltas.length - 1] : faltas[0];
@@ -742,7 +749,7 @@
         `E-mail: ${d.get('email').trim()}`,
         `Celular: ${d.get('celular')}`,
         `Empresa: ${d.get('empresa')}`,
-        `Serviço desejado: ${d.getAll('servico').join(', ')}`,
+        `Serviço desejado: ${d.getAll('servico').map(v => v === 'Outros' ? `Outros (${(d.get('servico_outro') || '').trim()})` : v).join(', ')}`,
       ].filter(Boolean).join('\n');
       if (enviando) return;
       enviando = true;
@@ -755,6 +762,17 @@
         btnTxt.textContent = btnOriginal;
       }, 3000);
     });
+    // Outros: abre o campo de texto logo abaixo; desmarcar fecha e o texto não vai
+    const outros = $('[data-outros]', f), outroBox = $('[data-outro-box]', f), outroIn = $('input[name="servico_outro"]', f);
+    outros.addEventListener('change', () => {
+      const on = outros.checked;
+      outros.setAttribute('aria-expanded', String(on));
+      outroBox.classList.toggle('is-open', on);
+      outroIn.disabled = !on;
+      if (on) setTimeout(() => outroIn.focus({ preventScroll: true }), reduce ? 0 : 120);
+      else { outroIn.value = ''; outroIn.classList.remove('is-error'); outroIn.removeAttribute('aria-invalid'); }
+    });
+    outroIn.addEventListener('input', () => { outroIn.classList.remove('is-error'); outroIn.removeAttribute('aria-invalid'); });
     $('input[name="aceite"]', f).addEventListener('change', () => {
       const c = $('[data-aceite]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby');
     });

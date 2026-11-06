@@ -25,7 +25,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF-latin.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793945400">
+<link rel="stylesheet" href="css/style.css?v=1793946300">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" }, "integrity": { "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js": "sha384-Qvl1RLjZOCDFOOH2bKcGnaDHMM8MVv3zVtMvhy3juQdiIOs6RgQ/7zYdM1FbpHzI" } }
 </script>
@@ -371,7 +371,13 @@
             <li><label><input type="checkbox" name="servico" value="Site"><span class="caixa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Site</span></label></li>
             <li><label><input type="checkbox" name="servico" value="Conteúdo"><span class="caixa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Conteúdo</span></label></li>
             <li><label><input type="checkbox" name="servico" value="Performance"><span class="caixa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Performance</span></label></li>
+            <li><label><input type="checkbox" name="servico" value="Outros" aria-controls="servico-outro" aria-expanded="false" data-outros><span class="caixa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Outros</span></label></li>
           </ul>
+          <div class="servico-outro" id="servico-outro" data-outro-box>
+            <div class="servico-outro__in">
+              <label class="field"><span class="sr-only">Outros: </span><input name="servico_outro" placeholder="Conte o que você precisa" aria-label="Conte o que você precisa" disabled></label>
+            </div>
+          </div>
         </fieldset>
         <div class="servico-campo aceite" data-aceite>
           <label><input type="checkbox" name="aceite" value="sim"><span class="caixa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Li e concordo com a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a></span></label>
@@ -563,6 +569,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="js/main.js?v=1793945400"></script>
+<script src="js/main.js?v=1793946300"></script>
 </body>
 </html>

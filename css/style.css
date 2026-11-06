@@ -1465,3 +1465,6 @@ p, li { text-wrap: pretty; }
   .trabalhos { padding-top: 56px; }
 }
 @media (prefers-reduced-motion: reduce) and (max-width: 900px) { .pyr-wrap { min-height: 100vw; } }
+
+/* Instagram ou site (opcional): ocupa a largura toda para não ficar um campo sozinho na grade de 2 colunas */
+.form__row--um { grid-template-columns: 1fr; }

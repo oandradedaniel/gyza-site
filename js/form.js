@@ -32,6 +32,14 @@
         empresa: v => !v && 'Falta o nome da empresa.',
       };
       let ok = true;
+      const perfil = $('input[name="perfil"]', f);
+      if (perfil) {
+        const longo = perfil.value.trim().length > 120;
+        perfil.classList.toggle('is-error', longo);
+        if (longo) perfil.setAttribute('aria-invalid', 'true'); else perfil.removeAttribute('aria-invalid');
+        erro(perfil, perfil, 'perfil', longo ? 'Use até 120 caracteres.' : '');
+        if (longo) ok = false;
+      }
       $$('input[required]', f).forEach(i => {
         const m = (MSG[i.name] || (v => !v && 'Campo obrigatório.'))(i.value.trim()) || '';
         i.classList.toggle('is-error', !!m);
@@ -71,6 +79,7 @@
         `E-mail: ${d.get('email').trim()}`,
         `Celular: ${d.get('celular')}`,
         `Empresa: ${d.get('empresa').trim()}`,
+        (d.get('perfil') || '').trim() ? `Instagram ou site: ${d.get('perfil').trim()}` : '',
         `Serviço desejado: ${d.getAll('servico').map(v => v === 'Outros' ? `Outros (${(d.get('servico_outro') || '').trim()})` : v).join(', ')}`,
       ].filter(Boolean).join('\n');
       if (enviando) return;

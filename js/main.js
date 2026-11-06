@@ -30,6 +30,13 @@
       });
     };
     if (!('IntersectionObserver' in window)) { carrega(); return; }
+    // também baixa e monta antes de a seção chegar, mas só quando a rolagem para por um instante: a montagem não cai no meio do gesto
+    window.addEventListener('load', () => {
+      let t = 0;
+      const quieto = () => { clearTimeout(t); t = setTimeout(() => { removeEventListener('scroll', quieto); carrega(); }, 700); };
+      addEventListener('scroll', quieto, { passive: true });
+      quieto();
+    }, { once: true });
     // espera a página terminar de carregar (não disputa com a fonte, o CSS e a abertura) e meia tela de antecedência
     const observa = () => {
       const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); carrega(); } }, { rootMargin: '50% 0px' });
@@ -352,7 +359,8 @@
     const titulo = $('.frentes__title');
     const publica = () => {
       window.__pyrGiro = pos;
-      if (titulo) {
+      // celular: o reflexo do título fica parado (mexer nele a cada quadro redesenha o texto de vidro inteiro e trava a rolagem)
+      if (titulo && !isPhone) {
         const a = pos * Math.PI / 2;
         titulo.style.setProperty('--incl', `${(Math.sin(a) * 7).toFixed(2)}deg`);
         titulo.style.setProperty('--luz', `${(mod(pos, 4) / 4 * 200 - 50).toFixed(1)}%`);
@@ -828,14 +836,17 @@
     const abrir = () => {
       menu.classList.add('is-open'); raiz.classList.add('menu-aberto');
       botao.setAttribute('aria-expanded', 'true'); botao.setAttribute('aria-label', 'Fechar menu');
-      setTimeout(() => { if (aberto()) $('a', menu).focus({ preventScroll: true }); }, reduce ? 0 : 320);
+      // pelo teclado o foco vai para o primeiro link; pelo toque vai para o próprio menu (sem o retângulo em volta de Início)
+      const alvo = abrir.teclado ? $('a', menu) : menu;
+      setTimeout(() => { if (aberto()) alvo.focus({ preventScroll: true }); }, reduce ? 0 : 320);
     };
     const fechar = (devolverFoco = true) => {
       menu.classList.remove('is-open'); raiz.classList.remove('menu-aberto');
       botao.setAttribute('aria-expanded', 'false'); botao.setAttribute('aria-label', 'Abrir menu');
       if (devolverFoco) botao.focus({ preventScroll: true });
     };
-    botao.addEventListener('click', () => (aberto() ? fechar() : abrir()));
+    if (!menu.hasAttribute('tabindex')) menu.tabIndex = -1;
+    botao.addEventListener('click', e => { abrir.teclado = e.detail === 0; aberto() ? fechar(abrir.teclado) : abrir(); });
     // link: fecha e deixa o navegador rolar até a seção
     $$('a', menu).forEach(a => a.addEventListener('click', () => fechar(false)));
     // fundo: toque fora de link fecha

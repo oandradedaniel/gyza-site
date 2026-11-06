@@ -14,6 +14,7 @@
     let foi = false;
     const carrega = () => {
       if (foi) return; foi = true;
+      if ('requestIdleCallback' in window && !carrega.ocioso) { carrega.ocioso = true; foi = false; requestIdleCallback(carrega, { timeout: 2000 }); return; }
       // integrity do three.js também pelo modulepreload (para navegador que não lê integrity no importmap)
       const l = document.createElement('link');
       l.rel = 'modulepreload'; l.href = THREE_URL; l.crossOrigin = 'anonymous';
@@ -252,6 +253,7 @@
 
   /* ---------- linhas e palavras ---------- */
   function reveals() {
+    if (reduce) return;   // sem movimento: o texto já aparece no lugar
     $$('[data-lines]').forEach(el => {
       if (el.closest('.hero')) return;
       gsap.from($$('.line > span', el), {

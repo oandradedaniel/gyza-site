@@ -134,7 +134,7 @@ ul, ol { list-style: none; }
 }
 .nav__logo svg { display: block; width: 84px; height: auto; fill: currentColor; --topo: currentColor; }
 .nav__links { display: flex; gap: clamp(18px, 2.4vw, 34px); font-size: 14px; }
-.nav__links a { opacity: .75; transition: opacity .3s; }
+.nav__links a { opacity: .75; transition: opacity .3s var(--ease); }
 .nav__links a:hover { opacity: 1; }
 .nav.is-light {
   color: var(--tinta);
@@ -265,7 +265,7 @@ body.is-loading:not(.is-revealed) main > section:not(.hero), body.is-loading:not
   border: 1px solid var(--linha); background: rgba(234,234,234,.03);
 }
 .frentes__dots { display: flex; gap: 8px; }
-.frentes__dots li { width: 28px; height: 2px; background: var(--linha); transition: background .4s; }
+.frentes__dots li { width: 28px; height: 2px; background: var(--linha); transition: background .4s var(--ease); }
 .frentes__dots li.is-on { background: var(--gelo); }
 .pyr-wrap { position: relative; height: 100%; }
 .pyr-gl {
@@ -482,7 +482,7 @@ body.is-proj .nav, body.is-proj .nav__menu, body.is-proj .cta-grupo { opacity: 0
 .footer__sig { font-size: clamp(28px, 3vw, 46px); font-weight: 500; letter-spacing: -.035em; line-height: 1.1; max-width: 18ch; }
 .footer__cols { position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: clamp(60px, 8vw, 110px); }
 .footer__cols h4, .footer__cols .footer__h { font-size: 13px; font-weight: 500; color: var(--cinza); margin-bottom: 16px; }
-.footer__cols > div > a:not(.fi) { display: block; color: var(--apoio); padding: 4px 0; transition: color .3s; }
+.footer__cols > div > a:not(.fi) { display: block; color: var(--apoio); padding: 4px 0; transition: color .3s var(--ease); }
 .footer__cols > div > a:not(.fi):hover { color: var(--gelo); }
 .fi { display: flex; align-items: center; gap: 14px; padding: 8px 0; color: var(--apoio); }
 .fi i {
@@ -1001,7 +1001,7 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 /* rodapé: razão social e política */
 .footer__legal { gap: 16px; flex-wrap: wrap; }
 .footer__links { display: flex; gap: 24px; }
-.footer__links a { transition: color .3s; }
+.footer__links a { transition: color .3s var(--ease); }
 .footer__links a:hover { color: var(--gelo); }
 
 /* tipo: correções do 09 Tipografia */
@@ -1054,7 +1054,7 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 .priv-doc__grid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); }
 .priv-toc { position: sticky; top: 100px; align-self: start; font-size: 14px; }
 .priv-toc h2 { font-size: 13px; font-weight: 500; color: var(--tinta-2); margin-bottom: 14px; }
-.priv-toc a { display: block; padding: 6px 0; color: var(--tinta-2); transition: color .3s; }
+.priv-toc a { display: block; padding: 6px 0; color: var(--tinta-2); transition: color .3s var(--ease); }
 .priv-toc a:hover { color: var(--tinta); }
 .priv-texto { max-width: 68ch; }
 .priv-texto section { padding: clamp(22px, 3vw, 36px) 0; border-top: 1px solid var(--linha-papel); scroll-margin-top: 90px; }

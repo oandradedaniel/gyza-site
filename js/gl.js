@@ -466,10 +466,13 @@ function pyramid() {
     const t = reduce ? 0 : now;
     const p = window.__pyr || 0;
     if (!dragging) { vel *= Math.pow(0.92, dt * 60); drag += vel; drag = lerp(drag, 0, 1 - Math.pow(1 - 0.035, dt * 60)); }
-    // movimento discreto, só ligado à rolagem (Vitor, 05/11/2026): rotação lenta de poucos graus e um leve parallax vertical,
-    // seguidos com amortecimento crítico (sem mola, sem salto); a camada da vez vem da rolagem
-    const alvoRot = ROT0 - p * 0.32;
-    rot.x = reduce ? alvoRot : lerp(rot.x, alvoRot, 1 - Math.exp(-dt * 4));
+    // movimento ligado à rolagem (Vitor, 05/11/2026): o giro das camadas e um leve parallax vertical, com amortecimento crítico; a camada da vez vem da rolagem
+    // giro de 360 graus ao longo da seção: 90 graus por camada, no começo do trecho de cada uma, seguido suave (sem mola nem sobra)
+    const q = Math.min(NS - 0.001, p * NS), kq = Math.floor(q), fq = q - kq;
+    const suave = x => x * x * (3 - 2 * x);
+    const passo = kq === 0 ? 0 : kq - 1 + suave(Math.min(1, fq / 0.4));
+    const alvoRot = ROT0 - passo * Math.PI / 2;
+    rot.x = reduce ? alvoRot : lerp(rot.x, alvoRot, 1 - Math.exp(-dt * 6));
     const y = OPT ? OPT.rotY : rot.x + drag;
     const para = reduce ? 0 : (0.5 - p) * 0.14;
 

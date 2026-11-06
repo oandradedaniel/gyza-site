@@ -18,13 +18,6 @@
 .s-link:hover::after { transform: scaleX(0); }
 
 /* pirâmide: a assinatura da marca, camada a camada */
-.s-hero__pyr, .pyr { display: block; width: 100%; height: auto; overflow: visible; }
-.s-hero__pyr { max-width: 420px; justify-self: end; filter: drop-shadow(0 30px 60px rgba(31,79,216,.35)); }
-.s-hero__pyr polygon, .pyr polygon { fill: rgba(127,166,255,.1); stroke: rgba(127,166,255,.28); stroke-width: .5; transition: fill .6s var(--ease), stroke .6s var(--ease); }
-.s-hero__pyr polygon.on { fill: url(#sg-vidro); stroke: rgba(233,238,252,.7); }
-.s-hero__pyr polygon:nth-child(1) { fill: #3A66F2; }
-.camada .pyr polygon.on { fill: var(--azul); stroke: rgba(233,238,252,.7); }
-.camada--light .pyr polygon:not(.on) { fill: rgba(10,15,26,.07); stroke: rgba(10,15,26,.16); }
 
 /* ---------- trilho das camadas ---------- */
 .s-rail {
@@ -55,11 +48,6 @@
 .s-rail + .camada { margin-top: calc(-1 * var(--raio-secao)); padding-top: calc(clamp(96px, 11vw, 168px) + 28px); }
 .camada__grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(40px, 7vw, 120px); align-items: start; }
 .camada__head { position: sticky; top: 150px; display: grid; gap: 22px; justify-items: start; }
-.camada__sel { display: flex; align-items: flex-end; gap: 18px; }
-.camada__sel .pyr { width: 64px; flex: none; }
-.camada__n { font-size: 15px; font-weight: 500; letter-spacing: .02em; color: var(--azul-claro); font-variant-numeric: tabular-nums; padding-bottom: 2px; }
-.camada--light .camada__n { color: var(--azul); }
-.camada__nome { font-size: var(--fs-h2); font-weight: 500; line-height: .98; letter-spacing: -.05em; }
 .camada__frase { font-size: clamp(20px, 1.9vw, 28px); font-weight: 500; line-height: 1.25; letter-spacing: -.025em; color: var(--azul-claro); max-width: 24ch; }
 .camada--light .camada__frase { color: var(--azul); }
 .camada__txt { max-width: 52ch; font-size: var(--fs-lead); color: var(--apoio); }
@@ -98,9 +86,6 @@
 
 /* ---------- fecho ---------- */
 .s-fecho { position: relative; z-index: 2; overflow: hidden; background: var(--preto); border-radius: var(--raio-secao); margin-top: calc(-1 * var(--raio-secao)); padding: clamp(110px, 13vw, 200px) 0 calc(clamp(110px, 13vw, 200px) + 28px); }
-.s-fecho__pyr { position: absolute; right: var(--gutter); bottom: 15%; width: clamp(150px, 24vw, 340px); height: auto; opacity: .9; pointer-events: none; filter: drop-shadow(0 30px 60px rgba(31,79,216,.3)); }
-.s-fecho__pyr polygon { fill: rgba(127,166,255,.1); stroke: rgba(127,166,255,.28); stroke-width: .5; }
-.s-fecho__pyr polygon.on { fill: url(#sg-vidro); stroke: rgba(233,238,252,.7); }
 .s-fecho__in { position: relative; display: grid; gap: 28px; justify-items: start; }
 .s-fecho__t { font-size: clamp(38px, 5.6vw, 88px); font-weight: 500; line-height: 1; letter-spacing: -.045em; max-width: 16ch; }
 .s-fecho__p { max-width: 52ch; font-size: var(--fs-lead); color: var(--apoio); }
@@ -112,10 +97,9 @@
 @keyframes s-entra { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 .s-hero__copy > * { animation: s-entra .9s var(--ease-out) both; }
 .s-hero__copy > :nth-child(2) { animation-delay: .08s; } .s-hero__copy > :nth-child(3) { animation-delay: .16s; } .s-hero__copy > :nth-child(4) { animation-delay: .24s; }
-.s-hero__pyr { animation: s-entra 1.2s var(--ease-out) .2s both; }
 @media (prefers-reduced-motion: reduce) {
   .rv-on .rv { opacity: 1; transform: none; transition: none; }
-  .s-hero__copy > *, .s-hero__pyr { animation: none; }
+  .s-hero__copy > * { animation: none; }
   .it::details-content { transition: none; }
 }
 
@@ -123,13 +107,11 @@
 @media (max-width: 900px) {
   .s-hero { padding-top: 120px; }
   .s-hero__grid { grid-template-columns: 1fr; }
-  .s-hero__pyr { order: -1; max-width: 150px; justify-self: start; margin-bottom: 8px; }
   .camada__grid { grid-template-columns: 1fr; gap: 36px; }
   .camada__head { position: static; }
   .camada__frase { max-width: none; }
   .it p { padding-right: 0; }
   .s-fecho .pill { width: 100%; }
-  .s-fecho__pyr { display: none; }
   .s-hero__ctas .pill { width: 100%; }
 }
 
@@ -155,3 +137,6 @@
   .s-hero__copy .s-hero__ctas { grid-column: 2; grid-row: 3; }
   .s-fecho__t { max-width: 20ch; }
 }
+
+/* camadas sem a mini pirâmide e sem o número (Vitor, 05/11/2026): o nome grande abre a camada; a coluna da camada sobe para o título não ficar solto */
+.camada__head { gap: 18px; }

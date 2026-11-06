@@ -25,6 +25,17 @@
     const f = $('[data-form]');
     const note = $('[data-form-note]');
     const original = note.innerHTML;
+    // veio por indicação (?ref=): aviso curto de transparência (LGPD), só nesse caso
+    try {
+      const o = window.gyzaOrigem && window.gyzaOrigem();
+      if (o && o.p_afiliado) {
+        const p = document.createElement('p');
+        p.className = 'form__indic';
+        p.style.cssText = 'margin:.6em 0 0;font-size:.8125rem;opacity:.7;line-height:1.45';
+        p.textContent = 'Você chegou por uma indicação. Vamos registrar quem indicou junto do seu pedido, só para essa pessoa saber que a indicação funcionou.';
+        note.insertAdjacentElement('afterend', p);
+      }
+    } catch (_) {}
     // um envio por vez: o botão trava 3 s para não abrir o WhatsApp a cada clique
     const btn = $('[type="submit"]', f), btnTxt = $('span', btn) || btn, btnOriginal = btnTxt.textContent;
     let enviando = false;
@@ -48,6 +59,7 @@
     };
     const avisaFalta = raiz => {
       const n = $$('.campo-erro', raiz).filter(e => e.textContent).length;
+      if (window.gyzaMetrica) { const c = $('.is-error[name]', raiz); window.gyzaMetrica('form_erro', c ? c.name : (raiz.getAttribute('data-etapa') === '2' ? 'etapa2' : 'etapa1')); }
       note.textContent = n > 1 ? `Faltam ${n} itens: veja os campos marcados em vermelho.` : 'Falta 1 item: veja o campo marcado em vermelho.';
       note.classList.add('is-error');
     };
@@ -112,7 +124,7 @@
       vai(2);
     };
     $('[data-proximo]', f).addEventListener('click', proximo);
-    $('[data-voltar]', f).addEventListener('click', () => vai(1));
+    $('[data-voltar]', f).addEventListener('click', () => { if (window.gyzaMetrica) window.gyzaMetrica('form_voltou'); vai(1); });
     // corrigiu tudo: a nota de erro some
     etapas[0].addEventListener('input', () => { if (note.classList.contains('is-error') && !$$('.campo-erro', etapas[0]).some(e => e.textContent)) { note.textContent = ''; note.classList.remove('is-error'); } });
     // Enter num campo da etapa 1 = Próximo (nunca envia)
@@ -187,7 +199,7 @@
       try { origem = (window.gyzaOrigem && window.gyzaOrigem()) || {}; } catch (_) {}
       // origem do primeiro contato (utm, ?ref=): se o banco ainda não conhece estes campos, tenta de novo sem eles
       enviaPainel(Object.assign({}, pedido, origem)).then(ok => ok || !origem.p_fonte && !origem.p_afiliado ? ok : enviaPainel(pedido)).then(ok => {
-        if (ok) { if (window.gyzaMetrica) window.gyzaMetrica('form_enviado'); vai(3); } else { if (window.gyzaMetrica) window.gyzaMetrica('form_whatsapp'); btnTxt.textContent = 'Abrindo o WhatsApp...'; abreWhats(); }
+        if (ok) { if (window.gyzaMetrica) window.gyzaMetrica('form_enviado'); vai(3); } else { if (window.gyzaMetrica) { window.gyzaMetrica('form_erro', 'envio'); window.gyzaMetrica('form_whatsapp'); } btnTxt.textContent = 'Abrindo o WhatsApp...'; abreWhats(); }
       });
       setTimeout(() => {
         enviando = false;

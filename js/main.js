@@ -717,11 +717,20 @@
       const algum = !!$('input[name="servico"]:checked', f);
       caixas.classList.toggle('is-error', !algum);
       if (!algum) caixas.setAttribute('aria-describedby', 'form-nota'); else caixas.removeAttribute('aria-describedby');
-      if (!ok || !algum) {
-        note.textContent = !ok && !algum ? 'Preencha nome, e-mail, celular com DDD e empresa, e marque pelo menos um serviço.'
-          : !ok ? 'Preencha nome, e-mail, celular com DDD e empresa.' : 'Marque pelo menos um serviço desejado.';
+      // política de privacidade: a caixa precisa estar marcada
+      const aceiteBox = $('[data-aceite]', f);
+      const aceite = $('input[name="aceite"]', f).checked;
+      aceiteBox.classList.toggle('is-error', !aceite);
+      if (!aceite) aceiteBox.setAttribute('aria-describedby', 'form-nota'); else aceiteBox.removeAttribute('aria-describedby');
+      if (!ok || !algum || !aceite) {
+        const faltas = [];
+        if (!ok) faltas.push('preencha nome, e-mail, celular com DDD e empresa');
+        if (!algum) faltas.push('marque pelo menos um serviço');
+        if (!aceite) faltas.push('confirme que leu a Política de Privacidade');
+        const txt = faltas.length > 1 ? faltas.slice(0, -1).join(', ') + ' e ' + faltas[faltas.length - 1] : faltas[0];
+        note.textContent = txt.charAt(0).toUpperCase() + txt.slice(1) + '.';
         note.classList.add('is-error');
-        ($('input.is-error', f) || $('input[name="servico"]', f)).focus();
+        ($('input.is-error', f) || (!algum && $('input[name="servico"]', f)) || $('input[name="aceite"]', f)).focus();
         return;
       }
       note.innerHTML = original;
@@ -745,6 +754,9 @@
         btn.disabled = false; btn.removeAttribute('aria-busy');
         btnTxt.textContent = btnOriginal;
       }, 3000);
+    });
+    $('input[name="aceite"]', f).addEventListener('change', () => {
+      const c = $('[data-aceite]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby');
     });
     $$('input[name="servico"]', f).forEach(i => i.addEventListener('change', () => {
       const c = $('[data-servicos]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby');

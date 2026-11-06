@@ -350,6 +350,7 @@
       </div>
       <form class="form" data-form method="post" novalidate>
         <label class="hp" aria-hidden="true">Não preencha<input name="site" tabindex="-1" autocomplete="off"></label>
+        <div class="form__etapa" data-etapa="1">
         <div class="form__row">
           <label class="field"><span>Nome</span><input name="nome" autocomplete="name" placeholder="Seu nome" required></label>
           <label class="field"><span>E-mail</span><input name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="voce@suaempresa.com.br" required></label>
@@ -361,6 +362,10 @@
         <div class="form__row form__row--um">
           <label class="field"><span>Instagram ou site <em>(opcional)</em></span><input name="perfil" maxlength="120" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="@suaempresa ou www.suaempresa.com.br"></label>
         </div>
+        <button class="pill pill--blue form__send" type="button" data-proximo><span>Próximo</span></button>
+        </div>
+        <div class="form__etapa" data-etapa="2" hidden inert aria-hidden="true">
+        <button class="form__voltar" type="button" data-voltar>Voltar</button>
         <fieldset class="servico-campo" data-servicos>
           <legend>Serviço desejado<span aria-hidden="true">*</span><span class="sr-only"> (obrigatório, marque pelo menos um)</span></legend>
           <ul class="servico-campo__lista" role="list">
@@ -383,6 +388,7 @@
         </div>
         <p class="form__aviso">Você será levado ao WhatsApp para enviar o pedido.</p>
         <button class="pill pill--blue form__send" type="submit"><span>Enviar</span></button>
+        </div>
         <p class="form__note" id="form-nota" data-form-note aria-live="polite"></p>
       </form>
     </div>

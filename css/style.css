@@ -1704,3 +1704,15 @@ p, li { text-wrap: pretty; }
   .case__media::after { background: radial-gradient(130% 100% at 50% 45%, rgba(0,0,0,0) 58%, rgba(0,0,0,.3) 100%), linear-gradient(to top, rgba(0,0,0,.38), rgba(0,0,0,0) 32%); }
 }
 
+
+/* ===== Formulário em 2 etapas (Vitor, 06/11/2026): etapa 1 = contato + Próximo; etapa 2 = serviço, política e Enviar. Bloco próprio para facilitar o merge ===== */
+.form__etapa { display: grid; gap: 14px; }
+.form__etapa[hidden] { display: none; }
+.form { transform-origin: 50% 50%; backface-visibility: hidden; }
+.form__voltar {
+  justify-self: start; margin: -4px 0 -4px -6px; padding: 8px 6px; min-height: 36px;
+  background: none; border: 0; cursor: pointer; font: inherit; font-size: 13px; font-weight: 500;
+  color: var(--tinta-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(10,15,26,.28);
+  transition: color .25s var(--ease);
+}
+.form__voltar:hover { color: var(--tinta); }

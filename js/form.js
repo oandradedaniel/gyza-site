@@ -28,24 +28,31 @@
     // um envio por vez: o botão trava 3 s para não abrir o WhatsApp a cada clique
     const btn = $('[type="submit"]', f), btnTxt = $('span', btn) || btn, btnOriginal = btnTxt.textContent;
     let enviando = false;
-    f.addEventListener('submit', e => {
-      e.preventDefault();
-      if (enviando) return;
-      // erro ao lado de cada campo (texto curto), além da nota geral embaixo do botão
-      const erro = (alvo, depois, chave, msg) => {
-        let el = $(`#erro-${chave}`, f);
-        if (!el) { el = document.createElement('p'); el.className = 'campo-erro'; el.id = `erro-${chave}`; depois.after(el); }
-        el.textContent = msg || '';
-        const ids = msg ? `erro-${chave} form-nota` : '';
-        if (ids) alvo.setAttribute('aria-describedby', ids); else alvo.removeAttribute('aria-describedby');
-        return !msg;
-      };
-      const MSG = {
-        nome: v => !v && 'Falta o seu nome.',
-        email: v => !v ? 'Falta o e-mail.' : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) && 'Confira o e-mail (ex.: voce@suaempresa.com.br).',
-        celular: v => v.replace(/\D/g, '').length < 10 && 'Falta o celular com DDD.',
-        empresa: v => !v && 'Falta o nome da empresa.',
-      };
+    // duas etapas: 1 = dados de contato, 2 = serviço, política e envio
+    const etapas = $$('[data-etapa]', f);
+    let etapa = 1, girando = false;
+    // erro ao lado de cada campo (texto curto), além da nota geral embaixo do botão
+    const erro = (alvo, depois, chave, msg) => {
+      let el = $(`#erro-${chave}`, f);
+      if (!el) { el = document.createElement('p'); el.className = 'campo-erro'; el.id = `erro-${chave}`; depois.after(el); }
+      el.textContent = msg || '';
+      const ids = msg ? `erro-${chave} form-nota` : '';
+      if (ids) alvo.setAttribute('aria-describedby', ids); else alvo.removeAttribute('aria-describedby');
+      return !msg;
+    };
+    const MSG = {
+      nome: v => !v && 'Falta o seu nome.',
+      email: v => !v ? 'Falta o e-mail.' : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) && 'Confira o e-mail (ex.: voce@suaempresa.com.br).',
+      celular: v => v.replace(/\D/g, '').length < 10 && 'Falta o celular com DDD.',
+      empresa: v => !v && 'Falta o nome da empresa.',
+    };
+    const avisaFalta = raiz => {
+      const n = $$('.campo-erro', raiz).filter(e => e.textContent).length;
+      note.textContent = n > 1 ? `Faltam ${n} itens: veja os campos marcados em vermelho.` : 'Falta 1 item: veja o campo marcado em vermelho.';
+      note.classList.add('is-error');
+    };
+    // etapa 1: nome, e-mail, celular, empresa e Instagram ou site (opcional)
+    const valida1 = () => {
       let ok = true;
       const perfil = $('input[name="perfil"]', f);
       if (perfil) {
@@ -62,6 +69,66 @@
         erro(i, i, i.name, m);
         if (m) ok = false;
       });
+      return ok;
+    };
+    // troca de etapa: o cartão gira no eixo Y (metade da ida, troca, metade da volta) e a altura acompanha; reduced-motion = fade curto
+    const vai = async para => {
+      if (girando || para === etapa) return;
+      girando = true;
+      const dir = para > etapa ? 1 : -1, h0 = f.offsetHeight;
+      const mostra = () => {
+        etapas.forEach(el => {
+          const on = +el.dataset.etapa === para;
+          el.hidden = !on; el.inert = !on;
+          if (on) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
+        });
+        etapa = para;
+        note.textContent = ''; note.classList.remove('is-error');
+      };
+      const limpa = () => { f.getAnimations().forEach(x => x.cancel()); f.style.overflow = ''; f.style.willChange = ''; };
+      try {
+        if (!f.animate) mostra();
+        else if (reduce) {
+          await f.animate({ opacity: [1, 0] }, { duration: 120, fill: 'forwards' }).finished;
+          mostra();
+          await f.animate({ opacity: [0, 1] }, { duration: 160 }).finished;
+        } else {
+          const p = a => `perspective(1400px) rotateY(${a}deg)`;
+          f.style.overflow = 'hidden'; f.style.willChange = 'transform, height';
+          await f.animate({ transform: [p(0), p(-90 * dir)] }, { duration: 300, easing: 'cubic-bezier(.55,0,.8,.4)', fill: 'forwards' }).finished;
+          mostra();
+          const h1 = f.offsetHeight;
+          const volta = f.animate({ transform: [p(90 * dir), p(0)] }, { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
+          f.animate({ height: [`${h0}px`, `${h1}px`] }, { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
+          await volta.finished;
+        }
+      } catch (_) { mostra(); }
+      limpa();
+      girando = false;
+      const alvo = $('input:not([disabled])', etapas[para - 1]);
+      if (alvo) alvo.focus({ preventScroll: true });
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    };
+    const proximo = () => {
+      if (!valida1()) {
+        avisaFalta(etapas[0]);
+        ($('input.is-error', etapas[0]) || $('input', etapas[0])).focus();
+        return;
+      }
+      note.textContent = ''; note.classList.remove('is-error');
+      vai(2);
+    };
+    $('[data-proximo]', f).addEventListener('click', proximo);
+    $('[data-voltar]', f).addEventListener('click', () => vai(1));
+    // corrigiu tudo: a nota de erro some
+    etapas[0].addEventListener('input', () => { if (note.classList.contains('is-error') && !$$('.campo-erro', etapas[0]).some(e => e.textContent)) { note.textContent = ''; note.classList.remove('is-error'); } });
+    // Enter num campo da etapa 1 = Próximo (nunca envia)
+    etapas[0].addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); proximo(); } });
+    f.addEventListener('submit', e => {
+      e.preventDefault();
+      if (enviando) return;
+      if (etapa === 1) { proximo(); return; }
+      let ok = true;
       // serviço desejado: pelo menos um marcado
       const caixas = $('[data-servicos]', f);
       const algum = !!$('input[name="servico"]:checked', f);
@@ -79,10 +146,8 @@
       aceiteBox.classList.toggle('is-error', !aceite);
       erro($('input[name="aceite"]', f), $('label', aceiteBox), 'aceite', aceite ? '' : 'Confirme que leu a Política de Privacidade.');
       if (!ok || !algum || !aceite || outroFalta) {
-        const n = $$('.campo-erro', f).filter(e => e.textContent).length;
-        note.textContent = n > 1 ? `Faltam ${n} itens: veja os campos marcados em vermelho.` : 'Falta 1 item: veja o campo marcado em vermelho.';
-        note.classList.add('is-error');
-        ($('input.is-error', f) || (!algum && $('input[name="servico"]', f)) || $('input[name="aceite"]', f)).focus();
+        avisaFalta(etapas[1]);
+        ($('input.is-error', etapas[1]) || (!algum && $('input[name="servico"]', f)) || $('input[name="aceite"]', f)).focus();
         return;
       }
       note.innerHTML = original;

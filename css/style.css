@@ -522,7 +522,7 @@ body.is-proj .nav, body.is-proj .nav__menu, body.is-proj .cta-grupo { opacity: 0
 }
 .footer__sig { font-size: clamp(28px, 3vw, 46px); font-weight: 500; letter-spacing: -.035em; line-height: 1.1; max-width: 18ch; }
 .footer__cols { position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: clamp(60px, 8vw, 110px); }
-.footer__cols h4 { font-size: 13px; font-weight: 500; color: var(--cinza); margin-bottom: 16px; }
+.footer__cols h4, .footer__cols .footer__h { font-size: 13px; font-weight: 500; color: var(--cinza); margin-bottom: 16px; }
 .footer__cols > div > a:not(.fi) { display: block; color: var(--apoio); padding: 4px 0; transition: color .3s; }
 .footer__cols > div > a:not(.fi):hover { color: var(--gelo); }
 .fi { display: flex; align-items: center; gap: 14px; padding: 8px 0; color: var(--apoio); }

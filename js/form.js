@@ -6,6 +6,21 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   if (!$('[data-form]')) return;
 
+  // painel da GYZA: a chave publishable é pública por natureza (a mesma do painel); o banco só aceita inserir pedidos por esta função
+  const PAINEL = 'https://fpmlsrelubzipxyfsyrf.supabase.co/rest/v1/rpc/enviar_pedido_site';
+  const CHAVE = 'sb_publishable_wcYfZFDbCeWYl6gltC6CCQ_wMEb62E2';
+  function enviaPainel(dados) {
+    const ctrl = 'AbortController' in window ? new AbortController() : null;
+    const limite = setTimeout(() => ctrl && ctrl.abort(), 4000);
+    return fetch(PAINEL, {
+      method: 'POST',
+      headers: { apikey: CHAVE, Authorization: `Bearer ${CHAVE}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados),
+      signal: ctrl ? ctrl.signal : undefined,
+      keepalive: true,
+    }).then(r => (r.ok ? r.json() : null)).catch(() => null).finally(() => clearTimeout(limite));
+  }
+
   function form() {
     const f = $('[data-form]');
     const note = $('[data-form-note]');
@@ -86,7 +101,25 @@
       enviando = true;
       btn.disabled = true; btn.setAttribute('aria-busy', 'true');
       btnTxt.textContent = 'Abrindo o WhatsApp...';
-      window.open(`https://wa.me/5547992606871?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+      const wa = `https://wa.me/5547992606871?text=${encodeURIComponent(msg)}`;
+      // a aba do WhatsApp abre já no clique (senão o navegador bloqueia) e recebe o endereço depois que o pedido foi para o painel
+      const aba = window.open('', '_blank');
+      if (aba) aba.opener = null;
+      const abreWhats = () => { if (aba && !aba.closed) aba.location.href = wa; else window.open(wa, '_blank', 'noopener'); };
+      // o pedido vai para o painel da GYZA (Supabase); com sucesso, erro ou demora de 4 s, o WhatsApp abre do mesmo jeito
+      const servicos = d.getAll('servico');
+      enviaPainel({
+        p_nome: (d.get('nome') || '').trim(),
+        p_email: (d.get('email') || '').trim(),
+        p_celular: (d.get('celular') || '').trim(),
+        p_empresa: (d.get('empresa') || '').trim(),
+        p_servicos: servicos,
+        p_outros_texto: servicos.includes('Outros') ? (d.get('servico_outro') || '').trim() : '',
+        p_aceite: !!d.get('aceite'),
+        p_origem: /contato/.test(location.pathname) ? 'contato' : 'index',
+        p_instagram_site: (d.get('perfil') || '').trim(),
+        p_site: d.get('site') || '',
+      }).finally(abreWhats);
       setTimeout(() => {
         enviando = false;
         btn.disabled = false; btn.removeAttribute('aria-busy');

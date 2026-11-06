@@ -1631,3 +1631,12 @@ p, li { text-wrap: pretty; }
 .case--open:hover .case__ver-mais .i-seta, .case__ver:focus-visible .case__ver-mais .i-seta { opacity: 1; transform: none; }
 @media (hover: none) { .case__ver-mais .i-mais { opacity: 0; } .case__ver-mais .i-seta { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .case__ver-mais svg path { transition: none; } }
+
+/* campo armadilha contra robôs (honeypot): fora da tela, sem foco, sem leitor de tela */
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* sem o botão fixo de baixo no celular (Vitor, 05/11/2026): o Solicite sua análise fica no menu e nas seções; sai o respiro que era para ele */
+@media (max-width: 900px) {
+  html { scroll-padding-bottom: 0; }
+  .footer__legal { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
+}

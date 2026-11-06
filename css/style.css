@@ -1549,3 +1549,9 @@ main:focus { outline: none; }
   .frente { justify-self: stretch; }
   .frentes__dots { justify-content: center; }
 }
+
+/* celular: o rodapé começa direto nas colunas (sem a frase e o botão do topo, Vitor 05/11/2026) */
+@media (max-width: 900px) {
+  .footer__top { display: none; }
+  .footer { padding-top: 64px; }
+}

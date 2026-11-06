@@ -155,7 +155,7 @@ body.is-loading .nav { opacity: 0; }
   overflow: visible;
 }
 .mark__gyz, .mark__a .perna { fill: var(--gelo); }
-/* intro: a ponta do A é de vidro, ver o bloco da ponta de vidro no fim do arquivo */
+.mark__a .topo { fill: var(--gelo); }   /* intro: a ponta do A branca como as letras, do início ao fim (Vitor, 05/11/2026) */
 .intro.is-done { display: none; }
 
 /* ---------- 1. Hero ---------- */
@@ -1502,14 +1502,6 @@ p, li { text-wrap: pretty; }
 .aceite { padding-top: 18px; }
 .form__aviso { margin-top: 2px; }
 
-/* ponta do A em vidro líquido no GYZA da abertura e já na intro (Vitor, 05/11/2026): corpo translúcido com brilho azul claro no topo e
-   sombra fina na base, reflexo diagonal suave que acompanha o mouse e a rolagem, e borda luminosa de 1,4 px em degradê.
-   Só gradientes no SVG (sem backdrop-filter). O logo do topo e o do rodapé seguem como estão. */
-#logo .topo { vector-effect: non-scaling-stroke; stroke-width: 1.4; }
-#logo .topo-brilho { fill: var(--topo-brilho, none); stroke: none; pointer-events: none; }
-.hero__mark { --topo: url(#vidroCorpo); --topo-borda: url(#vidroBorda); --topo-brilho: url(#vidroReflexo); }
-.mark__a .topo { fill: url(#vidroCorpo); stroke: url(#vidroBorda); stroke-width: 1.4px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
-.mark__a .topo-brilho { fill: url(#vidroReflexo); }
 
 /* rodapé clean (Vitor, 05/11/2026): 3 colunas só em texto, alinhadas pelo topo, rótulos pequenos e discretos, links em tamanho único;
    sem ícones e sem o item de análise; Política de privacidade na linha legal; menos vão vertical */
@@ -1529,8 +1521,6 @@ p, li { text-wrap: pretty; }
   .footer__cols .footer__h { margin-bottom: 4px; }
 }
 
-/* intro: a ponta nasce branca e vira vidro no pouso (Vitor, 05/11/2026); o vidro fica por baixo, o branco por cima é derretido pela máscara */
-.mark__a .topo-branco { fill: var(--gelo); }
-.mark__a .topo-onda { opacity: 0; }
-.mark__a .topo-aresta { fill: none; stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;
-  stroke-dasharray: 16 84; stroke-dashoffset: 100; opacity: 0; filter: drop-shadow(0 0 3px rgba(190, 210, 255, .9)); }
+
+/* GYZA da abertura: a ponta do A branca como as letras (Vitor, 05/11/2026; o vidro foi cancelado) */
+.hero__mark { --topo: var(--gelo); }

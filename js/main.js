@@ -89,7 +89,7 @@
   const intro = $('.intro');
   const svg = $('.intro__mark');
   const mark = $('.mark');
-  const topo = $$('.mark__a .topo, .mark__a .topo-brilho, .mark__a .topo-branco');
+  const topo = $('.mark__a .topo');
   const faixa = $('.revela__faixa');
   const heroMark = $('.hero__mark');
   const ACX = 631.55, ACY = 98.5; // centro do A no viewBox
@@ -149,39 +149,11 @@
       .add(() => {
         const t = heroMark.getBoundingClientRect();
         // só transform (sem mudar a largura): roda liso no celular
-        // a intro só sai quando o logo pousou e a ponta já virou vidro
-        let falta = 2;
-        const pronto = () => { if (--falta === 0) endIntro(); };
-        gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25 / RAPIDO, ease: 'expo.inOut', force3D: true, onComplete: pronto });
-        // no pouso, a ponta branca vira vidro: o branco derrete de baixo para cima, uma onda de luz sobe junto,
-        // a borda acende e um brilho corre pela aresta (o acabamento do vidro vem dos degradês vidroCorpo, vidroReflexo e vidroBorda)
-        const vira = gsap.timeline({ delay: 0.35 / RAPIDO, onComplete: pronto });
-        vira.to('.derrete__rect', { attr: { y: -112 }, duration: 0.95, ease: 'expo.inOut' }, 0)
-          .fromTo('.topo-onda rect', { attr: { y: 74 } }, { attr: { y: -16 }, duration: 0.95, ease: 'expo.inOut' }, 0)
-          .fromTo('.topo-onda', { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0)
-          .to('.topo-onda', { opacity: 0, duration: 0.3, ease: 'power1.in' }, 0.7)
-          .fromTo('.mark__a .topo', { attr: { 'stroke-opacity': 0 } }, { attr: { 'stroke-opacity': 1 }, duration: 0.6, ease: 'expo.out' }, 0.45)
-          .fromTo('.topo-aresta', { opacity: 1, attr: { 'stroke-dashoffset': 100 } }, { attr: { 'stroke-dashoffset': 0 }, duration: 0.55, ease: 'power2.inOut' }, 0.8)
-          .to('.topo-aresta', { opacity: 0, duration: 0.25, ease: 'power1.out' }, 1.25);
+        gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25 / RAPIDO, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
       }, 2.3)
       .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.9);
     heroIn(tl, 2.8);
     tl.timeScale(RAPIDO);
-  }
-
-  /* ---------- abertura: o reflexo da ponta de vidro acompanha o mouse e a rolagem ---------- */
-  function vidroHero() {
-    const g = document.getElementById('vidroReflexo');
-    if (!g || reduce) return;
-    let alvo = 0, ang = 0, raf = 0;
-    const passo = () => {
-      ang += (alvo - ang) * 0.12;
-      g.setAttribute('gradientTransform', `rotate(${ang.toFixed(2)} .5 .5)`);
-      raf = Math.abs(alvo - ang) > 0.05 ? requestAnimationFrame(passo) : 0;
-    };
-    const pede = () => { if (!raf) raf = requestAnimationFrame(passo); };
-    addEventListener('pointermove', e => { if (scrollY > innerHeight) return; alvo = (e.clientX / innerWidth - 0.5) * 40; pede(); }, { passive: true });
-    addEventListener('scroll', () => { if (scrollY > innerHeight) return; alvo = Math.sin(scrollY / 220) * 20; pede(); }, { passive: true });
   }
 
   /* ---------- abertura: rolagem ---------- */
@@ -764,7 +736,6 @@
     projetos();
     caseCursor();
     if (!reduce) {
-      vidroHero();
       heroScroll();
       frentes();
       waVidro();

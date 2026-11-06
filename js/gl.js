@@ -140,7 +140,7 @@ const glassFrag = /* glsl */`
     vec3 deep = mix(vec3(0.015, 0.045, 0.18), vec3(0.06, 0.07, 0.09), uWhite);
     vec3 blue = mix(vec3(0.13, 0.33, 0.98), vec3(0.78, 0.83, 0.92), uWhite);
     vec3 body = mix(deep, blue, 0.06 + 0.38 * (1.0 - facing));
-    body = mix(body, mix(vec3(0.18, 0.42, 1.0), vec3(0.86, 0.9, 0.98), uWhite), 0.6 * uGlow);
+    body = mix(body, mix(vec3(0.42, 0.62, 1.0), vec3(0.95, 0.97, 1.0), uWhite), 0.85 * uGlow);
 
     vec3 col = body + bg * mix(vec3(0.8, 0.9, 1.15), vec3(0.95), uWhite) * 0.95
              + envc * (0.12 + fres * 1.1)
@@ -148,14 +148,14 @@ const glassFrag = /* glsl */`
              + fres * blue * 0.9
              + band * vec3(0.55, 0.7, 1.0);
     if (uBack > 0.5) col *= 0.5;
-    col *= 0.55 + 0.45 * max(uGlow, 0.35);
+    col *= 0.5 + 0.75 * max(uGlow, 0.3);
     // fatias que recuam ficam um pouco mais apagadas
-    col *= 1.0 - 0.3 * uDim;
+    col *= 1.0 - 0.5 * uDim;
     // brilho que percorre a fatia ativa quando ela muda (faixa inclinada, de baixo para cima)
     float sy = vP.y + vP.x * 0.12 - uSweep;
     col += exp(-sy * sy / 0.011) * vec3(0.42, 0.58, 0.95) * step(-50.0, uSweep) * (uBack > 0.5 ? 0.45 : 1.0);
 
-    float a = (uBack > 0.5 ? 0.92 : 0.8) * uFade * (1.0 - 0.1 * uDim);
+    float a = (uBack > 0.5 ? 0.92 : 0.8) * uFade * (1.0 - 0.38 * uDim);
     if (uRefl > 0.5) {
       a *= 0.32 * smoothstep(uFloor - 1.6, uFloor, vP.y);
     }
@@ -336,6 +336,7 @@ function pyramid() {
     const e = i === 0 ? em : edgeMat(0);
     if (i) e.uniforms.uColor.value.lerp(new THREE.Color(0xe6ecf7), WHITE[i]);
     const eg = edges(s.geo, e);
+    eg.userData.mats.forEach(m => { m.userData.base = m.uniforms.uColor.value.clone(); });
     s.group.add(b, fr, eg);
     s.edgeMats = eg.userData.mats;
     // molas por fatia: elevação, escala, brilho, recuo, entrada
@@ -448,6 +449,7 @@ function pyramid() {
     for (let j = 0; j < n; j++) { o.v += (k * (target - o.x) - c * o.v) * h; o.x += o.v * h; }
   };
   const ROT0 = Math.PI / 4;
+  const BRANCO = new THREE.Color(0xffffff);
   const rot = { x: ROT0, v: 0 };   // quase parada: sem entrada girando
   let lastT = 0;
   // sem movimento: a cena fica parada, então desenha poucos quadros e para; volta só ao arrastar ou mudar o tamanho
@@ -489,10 +491,12 @@ function pyramid() {
       const S = s.sp;
       // sem montagem, sem pulo e sem crescer: a camada da vez só clareia, devagar (amortecimento crítico, sem sobra)
       S.app.x = 1;
-      spring(S.glow, i === act ? 1 : 0, dt, 22, 1);
-      spring(S.dim, act >= 0 && i !== act ? 0.6 : 0, dt, 22, 1);
-      S.grow.x = 1; S.lift.x = 0;
-      s.off = S.lift.x - (1 - S.app.x) * 0.9;
+      spring(S.glow, i === act ? 1 : 0, dt, 26, 1);
+      spring(S.dim, act >= 0 && i !== act ? 1 : 0, dt, 26, 1);
+      S.grow.x = 1;
+      // leve elevação da camada da vez e uma fenda fina com as vizinhas, sem mola (amortecimento crítico)
+      spring(S.lift, act < 0 ? 0 : i === act ? 0.03 : i < act ? 0.07 : -0.03, dt, 26, 1);
+      s.off = S.lift.x;
       s.grow = S.grow.x * (1 - 0.012 * S.dim.x);
       s.glow = OPT ? OPT.glow[i] : S.glow.x;
       s.group.position.y = s.off;
@@ -504,7 +508,10 @@ function pyramid() {
         const u = m.uniforms;
         u.uGlow.value = s.glow; u.uDim.value = S.dim.x; u.uFade.value = fade; u.uSweep.value = sweepY;
       }
-      for (const m of [...s.edgeMats]) m.uniforms.uA.value = fade * (1 - 0.35 * S.dim.x);
+      for (const m of [...s.edgeMats]) {
+        m.uniforms.uA.value = fade * (1 - 0.6 * S.dim.x) * (1 + 0.8 * S.glow.x);
+        if (m.userData.base) m.uniforms.uColor.value.copy(m.userData.base).lerp(BRANCO, 0.7 * S.glow.x);
+      }
     });
     if (OPT) {
       // ponto mais à direita de cada fatia, na meia altura, em pixels do canvas

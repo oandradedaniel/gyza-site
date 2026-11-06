@@ -327,7 +327,7 @@
       dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
     };
     ScrollTrigger.create({
-      trigger: '.frentes', start: 'top top', end: '+=400%', pin: true, scrub: true,
+      trigger: '.frentes', start: 'top top', end: '+=400%', pin: true, scrub: true, anticipatePin: 1,
       onUpdate: s => {
         window.__pyr = s.progress;
         show(Math.min(N - 1, Math.floor(s.progress * N)));

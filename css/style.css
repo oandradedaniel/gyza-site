@@ -1484,3 +1484,20 @@ p, li { text-wrap: pretty; }
 
 /* rodapé: GYZA grande com a ponta do A branca como as letras e uns 18% menor, centralizado (Vitor, 05/11/2026); o da abertura não muda */
 .footer__mark { --topo: var(--gelo); width: calc((100% - 2 * var(--gutter)) * .82); max-width: calc((var(--max) - 2 * var(--gutter)) * .82); }
+
+/* bloco Solicite sua análise gratuita (index e contato), acabamento (Vitor, 05/11/2026):
+   coluna da esquerda fixa enquanto o formulário rola, com a conversa pelo WhatsApp logo abaixo do subtítulo;
+   serviços em 2 colunas de 3 e Outros numa linha própria; card mais justo, alvos de 44 px mantidos */
+@media (min-width: 901px) {
+  .orcamento__inner { align-items: start; }
+  .orcamento__copy { position: sticky; top: 112px; gap: 22px; }
+}
+.orcamento__conversa { display: grid; gap: 12px; justify-items: start; margin-top: 8px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.22); }
+.orcamento__ou { font-size: 15px; color: rgba(255,255,255,.88); }
+.form { gap: 14px; padding: clamp(22px, 2.6vw, 36px); }
+.servico-campo__lista { grid-template-rows: repeat(3, auto); }
+.servico-campo__lista li:last-child { grid-column: 1 / -1; grid-row: 4; }
+.servico-campo__lista label { padding: 10px 0; min-height: 44px; }
+.servico-campo legend { margin-bottom: 4px; }
+.aceite { padding-top: 18px; }
+.form__aviso { margin-top: 2px; }

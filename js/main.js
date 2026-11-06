@@ -79,6 +79,18 @@
       endIntro();
       return;
     }
+    // já viu a abertura nesta sessão: pula a montagem do logo e o título entra na hora
+    let visto = false;
+    try { visto = sessionStorage.getItem('gyza-abertura') === '1'; sessionStorage.setItem('gyza-abertura', '1'); } catch (e) { visto = false; }
+    if (visto) {
+      endIntro();
+      const t0 = gsap.timeline();
+      t0.fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' }, 0);
+      heroIn(t0, 0.15);
+      return;
+    }
+    // celular: a mesma abertura, mais curta (o título chega perto de 1,3 s)
+    const RAPIDO = isPhone ? 2.1 : 1;
 
     const W = window.innerWidth, H = window.innerHeight;
     const w0 = svg.getBoundingClientRect().width;
@@ -99,10 +111,11 @@
       .add(() => {
         const t = heroMark.getBoundingClientRect();
         // só transform (sem mudar a largura): roda liso no celular
-        gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
+        gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25 / RAPIDO, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
       }, 2.3)
       .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.9);
     heroIn(tl, 2.8);
+    tl.timeScale(RAPIDO);
   }
 
   /* ---------- abertura: rolagem ---------- */

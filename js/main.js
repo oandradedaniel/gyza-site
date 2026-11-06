@@ -89,7 +89,7 @@
   const intro = $('.intro');
   const svg = $('.intro__mark');
   const mark = $('.mark');
-  const topo = $('.mark__a .topo');
+  const topo = $$('.mark__a .topo, .mark__a .topo-brilho');
   const faixa = $('.revela__faixa');
   const heroMark = $('.hero__mark');
   const ACX = 631.55, ACY = 98.5; // centro do A no viewBox
@@ -150,12 +150,26 @@
         const t = heroMark.getBoundingClientRect();
         // só transform (sem mudar a largura): roda liso no celular
         gsap.to(svg, { x: t.left, y: t.top, scale: t.width / w0, transformOrigin: '0 0', duration: 1.25 / RAPIDO, ease: 'expo.inOut', force3D: true, onComplete: endIntro });
-        // a ponta do A sai do branco e chega azul no pouso, sem salto de cor na troca para o GYZA da abertura
-        gsap.to(topo, { fill: getComputedStyle(document.documentElement).getPropertyValue('--azul').trim() || '#1F4FD8', duration: 1.25 / RAPIDO, ease: 'expo.inOut' });
+        // a ponta do A já nasce em vidro na intro e pousa igual no GYZA da abertura: nada troca de cor
       }, 2.3)
       .fromTo('.nav', { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 2.9);
     heroIn(tl, 2.8);
     tl.timeScale(RAPIDO);
+  }
+
+  /* ---------- abertura: o reflexo da ponta de vidro acompanha o mouse e a rolagem ---------- */
+  function vidroHero() {
+    const g = document.getElementById('vidroReflexo');
+    if (!g || reduce) return;
+    let alvo = 0, ang = 0, raf = 0;
+    const passo = () => {
+      ang += (alvo - ang) * 0.12;
+      g.setAttribute('gradientTransform', `rotate(${ang.toFixed(2)} .5 .5)`);
+      raf = Math.abs(alvo - ang) > 0.05 ? requestAnimationFrame(passo) : 0;
+    };
+    const pede = () => { if (!raf) raf = requestAnimationFrame(passo); };
+    addEventListener('pointermove', e => { if (scrollY > innerHeight) return; alvo = (e.clientX / innerWidth - 0.5) * 40; pede(); }, { passive: true });
+    addEventListener('scroll', () => { if (scrollY > innerHeight) return; alvo = Math.sin(scrollY / 220) * 20; pede(); }, { passive: true });
   }
 
   /* ---------- abertura: rolagem ---------- */
@@ -738,6 +752,7 @@
     projetos();
     caseCursor();
     if (!reduce) {
+      vidroHero();
       heroScroll();
       frentes();
       waVidro();

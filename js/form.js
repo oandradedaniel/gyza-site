@@ -67,10 +67,10 @@
       const d = new FormData(f);
       const msg = [
         'Olá, GYZA. Quero solicitar a análise gratuita da minha empresa.',
-        `Nome: ${d.get('nome')}`,
+        `Nome: ${d.get('nome').trim()}`,
         `E-mail: ${d.get('email').trim()}`,
         `Celular: ${d.get('celular')}`,
-        `Empresa: ${d.get('empresa')}`,
+        `Empresa: ${d.get('empresa').trim()}`,
         `Serviço desejado: ${d.getAll('servico').map(v => v === 'Outros' ? `Outros (${(d.get('servico_outro') || '').trim()})` : v).join(', ')}`,
       ].filter(Boolean).join('\n');
       if (enviando) return;
@@ -102,7 +102,7 @@
       const c = $('[data-servicos]', f); c.classList.remove('is-error'); c.removeAttribute('aria-describedby'); const e = $('#erro-servico', f); if (e) e.textContent = '';
     }));
     $$('input[required]', f).forEach(i => i.addEventListener('input', () => { i.classList.remove('is-error'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); const e = $(`#erro-${i.name}`, f); if (e) e.textContent = ''; }));
-    // WhatsApp: os parênteses e o traço aparecem enquanto digita, (41) 99177-6871
+    // WhatsApp: os parênteses e o traço aparecem enquanto digita, (11) 91234-5678
     const tel = $('input[name="celular"]', f);
     tel.maxLength = 15;
     tel.addEventListener('input', () => {

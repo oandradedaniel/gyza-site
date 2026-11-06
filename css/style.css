@@ -1075,8 +1075,8 @@ body.is-loading .cta-grupo { opacity: 0; translate: 0 20px; }
 /* marcador [A CONFIRMAR]: visível de propósito, para ninguém publicar sem conferir */
 
 @media (max-width: 900px) { .priv-doc__grid { grid-template-columns: 1fr; } .priv-toc { display: none; } }
-.priv .nav { background: rgba(5,5,5,.85); padding: 7px 7px 7px 22px; backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 12px 40px rgba(0,0,0,.25); }
-@media (max-width: 900px) { .priv .nav { padding: 6px 16px; } .priv .nav__logo { padding: 0; } }
+@media (min-width: 901px) { .priv .nav { background: rgba(5,5,5,.85); padding: 7px 7px 7px 22px; backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 12px 40px rgba(0,0,0,.25); } }
+/* celular: o topo das páginas internas é igual ao da home (sem cápsula), ver o bloco da revisão final */
 .field em { color: var(--tinta-2); }
 
 /* Reconhece algum desses?: tracinho no lugar do número e fecho depois da lista */
@@ -1392,3 +1392,76 @@ main:focus { outline: none; }
 .mmenu__contato a { display: inline-flex; align-items: center; min-height: 44px; }
 @media (max-width: 900px) { .priv-toc a { display: flex; align-items: center; min-height: 44px; padding: 0; } }
 .nav__links { padding-bottom: 4px; margin-bottom: -4px; }   /* espaço para o traço da página atual (o menu corta o que passa da caixa) */
+
+/* Método: linha do tempo sem números; o ponto azul é pequeno, a linha se preenche com a rolagem e cada etapa entra (Vitor, 05/11/2026) */
+.etapas-m__lista { --pl: 52px; --p: 0; padding-left: var(--pl); }
+.etapas-m__lista::before { left: 6px; top: 10px; bottom: 10px; width: 2px; background: rgba(234, 234, 234, .12); }
+.etapas-m__lista::after { content: ""; position: absolute; left: 6px; top: 10px; bottom: 10px; width: 2px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--azul-claro), var(--azul)); transform-origin: top; transform: scaleY(var(--p)); }
+.etapa-m__n { left: calc(-1 * var(--pl)); top: 12px; width: 14px; height: 14px; font-size: 0; background: #2a3550;
+  box-shadow: 0 0 0 5px var(--preto); transition: background .6s var(--ease-out), box-shadow .8s var(--ease-out); }
+.etapa-m.is-in .etapa-m__n { background: var(--azul-claro); box-shadow: 0 0 0 5px var(--preto), 0 0 18px 2px rgba(127, 166, 255, .55); }
+.linha-on .etapa-m { opacity: 0; transform: translateY(24px); transition: opacity 1s var(--ease-out), transform 1.1s var(--ease-out); }
+.linha-on .etapa-m.is-in { opacity: 1; transform: none; }
+@media (max-width: 900px) {
+  .etapas-m__lista { --pl: 40px; padding-left: var(--pl); }
+  .etapa-m__n { left: calc(-1 * var(--pl)); width: 14px; height: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .etapas-m__lista { --p: 1; }
+  .etapa-m, .etapa-m__n { transition: none; }
+}
+
+/* =====================================================================
+   Revisão final, lote 2 e 3 (05/11/2026): tipografia, cor, marca, celular e alvos de toque
+   ===================================================================== */
+/* tipografia: sem palavra sozinha na última linha */
+h1, h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+/* largura de leitura */
+.priv-texto p, .priv-texto li, .priv-fecho { max-width: 66ch; }
+.priv-hero__lead { max-width: 62ch; }
+/* uma escala só: rótulo pequeno (kicker) 14 px; título de fechamento igual ao h2 */
+.priv-kicker { font-size: 14px; letter-spacing: .02em; }
+.contato__title, .fecho-m__title { font-size: var(--fs-h2); line-height: 1; letter-spacing: -.045em; }
+/* rodapé e rótulos pequenos em 14 px */
+.footer__cols h4, .footer__cols .footer__h, .footer__legal { font-size: 14px; }
+.fi span { line-height: 1.5; }
+.priv-toc h2 { font-size: 14px; letter-spacing: .04em; }
+.priv-fecho, .aceite label { font-size: 16px; }
+.form__send { line-height: 1.55; }
+.cta-baixo .cta-baixo__l1 { font-size: 16px; }
+@media (max-width: 900px) { .manifesto-m__txt { font-size: 22px; } }
+/* menu do computador: alvo de 44 px sem mudar o desenho; o traço da página atual acompanha */
+@media (min-width: 901px) {
+  .nav__links { padding-bottom: 0; margin-bottom: 0; }
+  .nav__links a { display: inline-flex; align-items: center; min-height: 44px; padding-block: 11px; }
+  .nav__links a[aria-current="page"]::after { bottom: 8px; }
+}
+/* cor: foco branco no fecho azul do Método */
+.fecho-m :focus-visible { outline-color: #fff; }
+/* fecho azul do Método alinhado à esquerda no mesmo container do resto */
+.fecho-m__inner { max-width: var(--max); }
+.fecho-m__inner > * { max-width: 900px; }
+/* alvos de toque de 44 px */
+.footer__cols a { display: flex; align-items: center; min-height: 44px; }
+.footer__cols a.fi { min-height: 44px; }
+.footer__links a { display: inline-flex; align-items: center; min-height: 44px; }
+.nav__logo { display: inline-flex; align-items: center; min-height: 44px; }
+.contato__lista a { display: inline-flex; align-items: center; min-height: 44px; }
+.priv-link { padding-block: 12px; }
+/* rodapé: logo oficial do WhatsApp em branco no item de contato */
+.fi .wa-logo--fi { width: 18px; height: 18px; fill: #fff; stroke: none; }
+/* celular: topo igual ao da home nas 5 páginas, com um degradê do fundo atrás do logo (sem caixa) para o texto não colidir */
+@media (max-width: 900px) {
+  .nav::after { content: ""; position: absolute; z-index: -1; top: -16px; left: -16px; right: -16px; height: 88px; pointer-events: none;
+    background: linear-gradient(180deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.6) 55%, rgba(5,5,5,0) 100%); transition: opacity .4s var(--ease); }
+  .nav.is-light::after { background: linear-gradient(180deg, rgba(242,244,247,.95) 0%, rgba(242,244,247,.6) 55%, rgba(242,244,247,0) 100%); }
+  .menu-aberto .nav::after { opacity: 0; }
+  /* o foco não fica atrás do botão fixo de baixo */
+  html { scroll-padding-bottom: 96px; }
+  .footer__legal { padding-bottom: 40px; }
+  /* home: menos preto entre a pirâmide e os cases */
+  .trabalhos { padding-top: 56px; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 900px) { .pyr-wrap { min-height: 100vw; } }

@@ -3,10 +3,21 @@
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  // contato: o botão fixo de baixo some quando o formulário está na tela (como na home)
-  const formSec = $('#analise'), cta = $('.cta-baixo');
-  if (formSec && cta && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => cta.classList.toggle('is-off', e.isIntersecting), { rootMargin: '0px 0px -20% 0px' }).observe(formSec);
+  // botão fixo de baixo: some sobre o formulário do contato e no rodapé (como na home)
+  const cta = $('.cta-baixo');
+  if (cta && 'IntersectionObserver' in window) {
+    const vistos = new Set();
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => e.isIntersecting ? vistos.add(e.target) : vistos.delete(e.target));
+      cta.classList.toggle('is-off', vistos.size > 0);
+    }, { rootMargin: '0px 0px -20% 0px' });
+    [$('#analise'), $('#fecho'), $('.footer')].forEach(el => el && io.observe(el));
+  }
+  // topo: troca de tom sobre as seções claras, para o logo não se perder no fundo (a página de Serviços tem o seu)
+  const nav = $('.nav');
+  if (nav && !document.body.classList.contains('serv') && 'IntersectionObserver' in window) {
+    const o = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) nav.classList.toggle('is-light', e.target.dataset.theme === 'light'); }), { rootMargin: '-4% 0px -95% 0px' });
+    $$('main > section[data-theme], footer[data-theme]').forEach(s => o.observe(s));
   }
   const botao = $('[data-menu-botao]'), menu = $('[data-menu]');
   if (!botao || !menu) return;

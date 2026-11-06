@@ -35,5 +35,5 @@
 
   // botão fixo some quando o fecho aparece
   const fecho = $('#fecho');
-  if (fecho) new IntersectionObserver(es => es.forEach(e => { if (cta) cta.classList.toggle('is-off', e.isIntersecting); if (rail) rail.classList.toggle('is-off', e.isIntersecting); }), { rootMargin: '0px 0px -30% 0px' }).observe(fecho);
+  if (fecho) new IntersectionObserver(es => es.forEach(e => { if (rail) rail.classList.toggle('is-off', e.isIntersecting); }), { rootMargin: '0px 0px -30% 0px' }).observe(fecho);
 })();

@@ -23,7 +23,7 @@
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/DMSans-VF-latin.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=1793951000">
+<link rel="stylesheet" href="css/style.css?v=1793952000">
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "GYZA", "item": "https://gyza.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Método", "item": "https://gyza.com.br/metodo"}]}
 </script>
@@ -64,11 +64,12 @@
 <div class="mmenu" id="menu-celular" role="dialog" aria-modal="true" aria-label="Menu" data-menu>
   <div class="mmenu__inner">
     <nav class="mmenu__links" aria-label="Seções">
-      <a href="/servicos" style="--i:0"><span class="mmenu__n">01.</span><span class="mmenu__t"><span>Serviços</span></span></a>
-      <a href="/metodo" aria-current="page" style="--i:1"><span class="mmenu__n">02.</span><span class="mmenu__t"><span>Método</span></span></a>
-      <a href="/contato" style="--i:2"><span class="mmenu__n">03.</span><span class="mmenu__t"><span>Contato</span></span></a>
+      <a href="/" style="--i:0"><span class="mmenu__n">01.</span><span class="mmenu__t"><span>Início</span></span></a>
+      <a href="/servicos" style="--i:1"><span class="mmenu__n">02.</span><span class="mmenu__t"><span>Serviços</span></span></a>
+      <a href="/metodo" aria-current="page" style="--i:2"><span class="mmenu__n">03.</span><span class="mmenu__t"><span>Método</span></span></a>
+      <a href="/contato" style="--i:3"><span class="mmenu__n">04.</span><span class="mmenu__t"><span>Contato</span></span></a>
     </nav>
-    <div class="mmenu__pe" style="--i:4">
+    <div class="mmenu__pe" style="--i:5">
       <a class="pill mmenu__cta" href="/contato#analise"><span>Solicite sua análise</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a class="pill orcamento__wa mmenu__wa" href="https://wa.me/5547992606871?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GYZA%20e%20quero%20a%20an%C3%A1lise%20gratuita%20da%20minha%20empresa." target="_blank" rel="noopener"><svg class="wa-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg><span>Falar no WhatsApp</span></a>
       <p class="mmenu__rot">Contato</p>
@@ -87,7 +88,7 @@
 </div>
 
 <main id="conteudo" tabindex="-1">
-  <section class="priv-hero sub-hero" id="topo">
+  <section class="priv-hero sub-hero" id="topo" data-theme="dark">
     <div class="priv-hero__halo" aria-hidden="true"></div>
     <div class="wrap">
       <p class="priv-kicker">Método</p>
@@ -96,60 +97,60 @@
     </div>
   </section>
 
-  <section class="manifesto-m" aria-label="Manifesto">
+  <section class="manifesto-m" data-theme="light" aria-label="Manifesto">
     <div class="wrap manifesto-m__grid">
       <p class="manifesto-m__txt">Por isso a GYZA não tem um pacote fechado que serve para todo mundo. O que temos é uma forma de trabalhar: olhar com atenção, entender o momento da empresa e construir o plano que cabe nela. Cada projeto é montado a partir do ponto em que a sua empresa está.</p>
       <p class="manifesto-m__fecho">Cuidar de cada cliente como se fosse único é o nosso método.</p>
     </div>
   </section>
 
-  <section class="etapas-m" aria-labelledby="etapas-t">
+  <section class="etapas-m" data-theme="dark" aria-labelledby="etapas-t">
     <div class="wrap etapas-m__grid">
       <div class="etapas-m__head">
         <h2 class="h2" id="etapas-t">Como funciona na prática.</h2>
         <p class="etapas-m__lead">Cinco passos, sempre na ordem que o momento da sua empresa pede.</p>
       </div>
-      <ol class="etapas-m__lista" role="list">
+      <ol class="etapas-m__lista" role="list" data-linha>
           <li class="etapa-m">
-            <span class="etapa-m__n" aria-hidden="true">01</span>
+            <span class="etapa-m__n" aria-hidden="true"></span>
             <div class="etapa-m__corpo">
               <h3>Análise gratuita.</h3>
-              <p>Tudo começa com a análise gratuita, sem custo e sem compromisso. Olhamos a sua empresa como o seu cliente olha: o Google, o site, o Instagram e a marca. Assim entendemos de onde você parte antes de propor qualquer coisa.</p>
+              <p>Tudo começa com a análise gratuita, sem custo e sem compromisso. A GYZA olha a sua empresa como o seu cliente olha: o Google, o site, o Instagram e a marca. Assim fica claro de onde você parte antes de propor qualquer coisa.</p>
             </div>
           </li>
           <li class="etapa-m">
-            <span class="etapa-m__n" aria-hidden="true">02</span>
+            <span class="etapa-m__n" aria-hidden="true"></span>
             <div class="etapa-m__corpo">
               <h3>Plano de ação para o seu momento.</h3>
-              <p>Com a análise em mãos, montamos um plano feito para o momento da sua empresa. Pode ser começar pela base da marca, renovar o site ou colocar campanhas no ar. A ordem e a quantidade de frentes dependem do que o seu negócio pede agora.</p>
+              <p>Com a análise em mãos, a GYZA monta um plano feito para o momento da sua empresa. Pode ser começar pela base da marca, renovar o site ou colocar campanhas no ar. A ordem e a quantidade de frentes dependem do que o seu negócio pede agora.</p>
             </div>
           </li>
           <li class="etapa-m">
-            <span class="etapa-m__n" aria-hidden="true">03</span>
+            <span class="etapa-m__n" aria-hidden="true"></span>
             <div class="etapa-m__corpo">
               <h3>Criação.</h3>
-              <p>Com o plano aprovado, a equipe da GYZA coloca a mão na massa. Você acompanha o que está sendo feito, opina nas decisões importantes e fala sempre com quem cuida do seu projeto.</p>
+              <p>Com o plano aprovado, a equipe da GYZA começa a criar. Você acompanha o que está sendo feito, opina nas decisões importantes e fala sempre com quem cuida do seu projeto.</p>
             </div>
           </li>
           <li class="etapa-m">
-            <span class="etapa-m__n" aria-hidden="true">04</span>
+            <span class="etapa-m__n" aria-hidden="true"></span>
             <div class="etapa-m__corpo">
               <h3>Lançamento.</h3>
-              <p>Quando tudo está pronto, colocamos no ar: o site, a identidade, o conteúdo ou as campanhas. Cuidamos dos detalhes técnicos para que a entrada em cena aconteça do jeito planejado.</p>
+              <p>Quando tudo está pronto, a GYZA coloca no ar: o site, a identidade, o conteúdo ou as campanhas. A equipe cuida dos detalhes técnicos para que a entrada em cena aconteça do jeito planejado.</p>
             </div>
           </li>
           <li class="etapa-m">
-            <span class="etapa-m__n" aria-hidden="true">05</span>
+            <span class="etapa-m__n" aria-hidden="true"></span>
             <div class="etapa-m__corpo">
               <h3>Acompanhamento.</h3>
-              <p>O trabalho continua depois do lançamento. Acompanhamos o que está funcionando, ajustamos o que precisa de ajuste e voltamos ao plano sempre que a empresa mudar de momento.</p>
+              <p>O trabalho continua depois do lançamento. A GYZA acompanha o que está funcionando, ajusta o que precisa de ajuste e volta ao plano sempre que a empresa mudar de momento.</p>
             </div>
           </li>
       </ol>
     </div>
   </section>
 
-  <section class="fecho-m" aria-labelledby="fecho-t">
+  <section class="fecho-m" data-theme="dark" aria-labelledby="fecho-t">
     <div class="wrap fecho-m__inner">
       <h2 class="fecho-m__title" id="fecho-t">O primeiro passo é conhecer a sua empresa.</h2>
       <p class="fecho-m__lead">Solicite a análise gratuita e conte um pouco sobre o seu negócio.</p>
@@ -170,19 +171,20 @@
     </div>
     <div>
       <p class="footer__h">Contato</p>
-      <a class="fi" href="https://wa.me/5547992606871" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6z"/><path d="M9 8.6c.2-.5.6-.6 1-.6l.6 1.4-.6.8c.5 1.1 1.4 2 2.5 2.5l.8-.6 1.4.6c0 .4-.1.8-.6 1-1 .5-3-.2-4.3-1.5S8.5 9.6 9 8.6z"/></svg></i><span><b>WhatsApp</b>Fale com a equipe</span></a>
-      <a class="fi" href="/contato#analise"><i><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></svg></i><span><b>Análise</b>Gratuita, sem compromisso</span></a>
+      <a class="fi" href="https://wa.me/5547992606871" target="_blank" rel="noopener"><i><svg class="wa-logo wa-logo--fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></i><span><b>WhatsApp</b> Fale com a equipe</span></a>
+      <a class="fi" href="/contato#analise"><i><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></svg></i><span><b>Análise</b> Gratuita, sem compromisso</span></a>
     </div>
     <div>
       <p class="footer__h">Onde estamos</p>
-      <a class="fi" href="https://www.instagram.com/gyza.ag/" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/></svg></i><span><b>Instagram</b>@gyza.ag</span></a>
-      <span class="fi"><i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></i><span><b>GYZA é o nome fantasia da Glory Digital LTDA</b>CNPJ 43.637.282/0001-45</span></span>
+      <a class="fi" href="https://www.instagram.com/gyza.ag/" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" class="dot"/></svg></i><span><b>Instagram</b> @gyza.ag</span></a>
+      <span class="fi"><i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></i><span><b>Balneário Camboriú</b> Santa Catarina</span></span>
     </div>
   </div>
   <svg class="footer__mark" viewBox="0 0 750 200.45" aria-hidden="true"><use href="#logo"/></svg>
-  <div class="wrap footer__legal"><span>© 2026 Glory Digital LTDA.</span><span class="footer__links"><a href="/privacidade">Política de privacidade</a><a href="#topo">Voltar ao topo</a></span></div>
+  <div class="wrap footer__legal"><span>© 2026 Glory Digital LTDA. GYZA é o nome fantasia da Glory Digital LTDA, CNPJ 43.637.282/0001-45.</span><span class="footer__links"><a href="/privacidade">Política de privacidade</a><a href="#topo">Voltar ao topo</a></span></div>
 </footer>
 
-<script src="js/menu.js?v=1793951000"></script>
+<script src="js/menu.js?v=1793952000"></script>
+<script src="js/metodo.js?v=1793952000"></script>
 </body>
 </html>

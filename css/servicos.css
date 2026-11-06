@@ -132,3 +132,14 @@
   .s-fecho__pyr { display: none; }
   .s-hero__ctas .pill { width: 100%; }
 }
+
+/* revisão final (05/11/2026): trilho só com o nome da camada; inativos com contraste de texto; foco visível no tema claro; abas abaixo do topo e com fade na borda no celular */
+.s-rail a { opacity: .82; }
+.s-rail.is-light a:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+.s-kicker { font-size: 14px; letter-spacing: .02em; }
+.s-hero__t { font-size: var(--fs-h2); line-height: 1; }
+.s-fecho__t { font-size: var(--fs-h2); }
+.s-hero__lead { max-width: 62ch; }
+@media (max-width: 900px) {
+  .s-rail { top: 84px; -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+}

@@ -1458,7 +1458,7 @@ p, li { text-wrap: pretty; }
 .form__row--um { grid-template-columns: 1fr; }
 
 /* Serviço desejado em 2 colunas, no computador e no celular (3 e 3, lendo de cima para baixo); nome longo quebra alinhado ao texto (Vitor, 05/11/2026) */
-.servico-campo__lista { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(3, auto); grid-auto-flow: column; column-gap: 16px; row-gap: 2px; }
+.servico-campo__lista { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(4, auto); grid-auto-flow: column; column-gap: 16px; row-gap: 2px; }
 .servico-campo__lista label { align-items: flex-start; padding: 11px 0; line-height: 22px; }
 .servico-campo__lista .caixa { margin-top: 0; }
 @media (max-width: 400px) { .servico-campo__lista { column-gap: 10px; } .servico-campo__lista label { gap: 10px; font-size: 15px; } }
